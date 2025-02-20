@@ -49,15 +49,14 @@ namespace FlashcardXpApi.StudySets
         )
         {
             var response = await _studySetService.DeleteStudySet(userId, studySetId);
-
             return response.ToHttpResponse();
         }
-
-        [HttpGet]
-        public void GetById()
-
+        
+        [HttpGet("studyset/{id}")]
+        public async Task<IResult> GetById(int id)
         {
-
+            var response = await _studySetService.GetStudySet(id);
+            return response.ToHttpResponse();
         }
     }
 }

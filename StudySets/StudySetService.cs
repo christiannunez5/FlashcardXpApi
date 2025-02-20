@@ -192,5 +192,20 @@ namespace FlashcardXpApi.FlashcardSets
 
         }
 
+        public async Task<ResultGeneric<StudySetDto>> GetStudySet(int id)
+        {
+            var studySet = await _studySetRepo.GetByIdAsync(id);
+
+            if (studySet is null)
+            {
+                return ResultGeneric<StudySetDto>.Failure(
+                    StudySetError.StudySetNotFoundError
+                );
+            }
+
+            return ResultGeneric<StudySetDto>.Success(
+                _mapper.Map<StudySetDto>(studySet)
+            );
+        }
     }
 }
