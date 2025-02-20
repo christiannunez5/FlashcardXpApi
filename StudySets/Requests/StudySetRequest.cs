@@ -1,0 +1,22 @@
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+
+namespace FlashcardXpApi.StudySets.Requests
+{
+    public record StudySetRequest(
+        string Title,
+        string Description
+    );
+
+    public class StudySetRequestValidator : AbstractValidator<StudySetRequest>
+    {
+        public StudySetRequestValidator()
+        {
+            RuleFor(x => x.Title)
+                .NotEmpty()
+                    .WithMessage("Title can't be empty.");
+        }
+    }
+
+
+}
