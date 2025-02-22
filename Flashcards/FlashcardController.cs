@@ -23,10 +23,16 @@ namespace FlashcardXpApi.Flashcards
         }
 
         [HttpPost("{studySetId}/flashcards")]
-        public async Task<IResult> AddNewFlashcard(int studySetId, FlashcardRequest request)
+        public async Task<IResult> AddNewFlashcard(
+            int studySetId,
+            List<FlashcardRequest> request
+        )
         {
+             
             var response = await _flashcardService.AddNewFlashcard(studySetId, request);
             return response.ToHttpResponse();
+            
+            // return Results.Ok("hello");
         }
 
 

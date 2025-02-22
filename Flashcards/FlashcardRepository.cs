@@ -32,6 +32,12 @@ namespace FlashcardXpApi.Flashcards
             await _context.SaveChangesAsync();
         }
 
+        public async Task InsertAllAsync(List<Flashcard> flashcards)
+        {
+            await _context.AddRangeAsync(flashcards);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(Flashcard flashcard)
         {
             _context.Flashcards.Update(flashcard);
@@ -43,8 +49,6 @@ namespace FlashcardXpApi.Flashcards
             _context.Flashcards.Remove(flashcard);
             await _context.SaveChangesAsync();
         }
-
-        
 
        
     }

@@ -45,39 +45,42 @@ namespace FlashcardXpApi.Flashcards
             );
         }
 
-        public async Task<ResultGeneric<FlashcardDto>> AddNewFlashcard (
+        public async Task<ResultGeneric<List<FlashcardDto>>> AddNewFlashcard (
             int studySetId,
-            FlashcardRequest request
+            List<FlashcardRequest> requests
         )
         {
-            var validationResult = _validator.Validate(request);
-
-            if (!validationResult.IsValid)
+            foreach (var request in requests)
             {
-                var errorMessage = validationResult.Errors
-                    .Select(x => x.ErrorMessage)
-                    .First();
-                _logger.LogInformation($"Validation error: {errorMessage}");
-                return ResultGeneric<FlashcardDto>.Failure(FlashcardErrors.FlashcardValidationError(errorMessage));
+                var validationResult = _validator.Validate(request);
+                if (!validationResult.IsValid)
+                {
+                    var errorMessage = validationResult.Errors
+                        .Select(x => x.ErrorMessage)
+                        .First();
+                    _logger.LogInformation($"Validation error: {errorMessage}");
+                    return ResultGeneric<List<FlashcardDto>>.Failure(FlashcardErrors.FlashcardValidationError(errorMessage));
+                }
             }
 
             var studySet = await _studySetRepo.GetByIdAsync(studySetId);
 
             if (studySet is null)
             {
-                return ResultGeneric<FlashcardDto>.Failure(FlashcardErrors.StudySetNotFoundError);
+                return ResultGeneric<List<FlashcardDto>>.Failure(FlashcardErrors.StudySetNotFoundError);
             }
 
 
-            var newFlashcard = _mapper.Map<Flashcard>(request);
-            newFlashcard.StudySet = studySet;
+            var newFlashcards = _mapper.Map<List<Flashcard>>(requests);
+            newFlashcards.ForEach(f => f.StudySet = studySet);
+
 
             _logger.LogInformation("Adding new flashcard");
-            await _flashcardRepo.InsertAsync(newFlashcard);
+            await _flashcardRepo.InsertAllAsync(newFlashcards);
             _logger.LogInformation("Flashcard added.");
 
-            return ResultGeneric<FlashcardDto>.Success(
-                _mapper.Map<FlashcardDto>(newFlashcard)
+            return ResultGeneric<List<FlashcardDto>>.Success(
+                _mapper.Map<List<FlashcardDto>>(newFlashcards)
             );
         }
     }

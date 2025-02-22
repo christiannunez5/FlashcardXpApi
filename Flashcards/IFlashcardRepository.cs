@@ -9,5 +9,7 @@ namespace FlashcardXpApi.Flashcards
         Task InsertAsync(Flashcard flashcard);
         Task DeleteAsync(Flashcard flashcard);
         Task UpdateAsync(Flashcard flashcard);
+        
+        Task InsertAllAsync(List<Flashcard> flashcards);
     }
 }
