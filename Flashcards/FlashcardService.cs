@@ -83,5 +83,23 @@ namespace FlashcardXpApi.Flashcards
                 _mapper.Map<List<FlashcardDto>>(newFlashcards)
             );
         }
+
+        public async Task<ResultGeneric<FlashcardDto>> DeleteFlashcard (
+            int flashcardId
+        )
+        {
+            var flashcard = await _flashcardRepo.GetByIdAsync(flashcardId);
+
+            if (flashcard is null)
+            {
+                return ResultGeneric<FlashcardDto>.Failure(FlashcardErrors.FlashcardNotFoundError);
+            }
+
+            await _flashcardRepo.DeleteAsync(flashcard);
+
+            return ResultGeneric<FlashcardDto>.Success (
+                _mapper.Map<FlashcardDto>(flashcard)
+            );
+        }
     }
 }

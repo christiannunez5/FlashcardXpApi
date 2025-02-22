@@ -32,8 +32,24 @@ namespace FlashcardXpApi.Flashcards
             var response = await _flashcardService.AddNewFlashcard(studySetId, request);
             return response.ToHttpResponse();
             
-            // return Results.Ok("hello");
         }
+        
+        [HttpDelete("flashcards/{flashcardId}")]
+        public async Task<IResult> DeleteFlashcard(int flashcardId)
+        {
+            var response = await _flashcardService.DeleteFlashcard(flashcardId); 
+            return response.ToHttpResponse();
+        }
+
+        /*
+        [HttpGet("flashcards/{flashcardId}")]
+        public async Task<IResult> GetFlashcard(int flashcardId)
+        {
+            var response = await _flashcardService.Get
+        }
+
+        */
+
 
 
     }
