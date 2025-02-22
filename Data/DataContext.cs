@@ -1,4 +1,4 @@
-﻿using FlashcardXpApi.Flashcard;
+﻿using FlashcardXpApi.Flashcards;
 using FlashcardXpApi.Users;
 using Microsoft.EntityFrameworkCore;
 using FlashcardXpApi.FlashcardSets;
@@ -15,7 +15,7 @@ namespace FlashcardXpApi.Data
         public DbSet<User> Users { get; set; }
         public DbSet<StudySet> StudySets { get; set; }
 
-        public DbSet<FlashcardModel> Flashcards  { get; set; }
+        public DbSet<Flashcard> Flashcards  { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()

@@ -1,6 +1,7 @@
-﻿using FlashcardXpApi.Flashcard;
+﻿
 using FlashcardXpApi.Users;
 using System.ComponentModel.DataAnnotations.Schema;
+using FlashcardXpApi.Flashcards;
 
 namespace FlashcardXpApi.FlashcardSets
 {
@@ -12,11 +13,11 @@ namespace FlashcardXpApi.FlashcardSets
         public string? Description  { get; set; }
 
         public DateOnly CreatedAt { get; set; }
-
+        
         // navigations
         public int CreatedById { get; set; }
         public required User CreatedBy { get; set; }
 
-        public ICollection<FlashcardModel> Flashcards { get; set; } = new List<FlashcardModel>();
+        public ICollection<Flashcard> Flashcards { get; set; } = new List<Flashcard>();
     }
 }
