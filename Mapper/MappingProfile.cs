@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using FlashcardXpApi.Auth.Requests;
+using FlashcardXpApi.Flashcards;
+using FlashcardXpApi.Flashcards.Requests;
 using FlashcardXpApi.FlashcardSets;
 using FlashcardXpApi.Users;
 
@@ -16,8 +18,9 @@ namespace FlashcardXpApi.Mapper
 
             CreateMap<StudySet, StudySetDto>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
-            
-                
+
+            CreateMap<Flashcard, FlashcardDto>();
+            CreateMap<FlashcardRequest, Flashcard>();
         }
     }
 }

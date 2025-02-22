@@ -3,6 +3,7 @@ using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Common;
 using FlashcardXpApi.Data;
 using FlashcardXpApi.Exceptions;
+using FlashcardXpApi.Flashcards;
 using FlashcardXpApi.FlashcardSets;
 using FlashcardXpApi.Mapper;
 using FlashcardXpApi.Users;
@@ -31,6 +32,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<IStudySetRepository, StudySetRepository>();
     builder.Services.AddScoped<StudySetService>();
+    builder.Services.AddScoped<IFlashcardRepository, FlashcardRepository>();
+    builder.Services.AddScoped<FlashcardService>();
 
     builder.Services.AddAutoMapper(typeof(MappingProfile));
 
