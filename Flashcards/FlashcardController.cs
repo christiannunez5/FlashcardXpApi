@@ -28,7 +28,7 @@ namespace FlashcardXpApi.Flashcards
             List<FlashcardRequest> request
         )
         {
-             
+          
             var response = await _flashcardService.AddNewFlashcard(studySetId, request);
             return response.ToHttpResponse();
             

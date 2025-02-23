@@ -13,6 +13,8 @@ namespace FlashcardXpApi.FlashcardSets
         public string? Description  { get; set; }
 
         public DateOnly CreatedAt { get; set; }
+
+        public bool IsPublic { get; set; }
         
         // navigations
         public int CreatedById { get; set; }

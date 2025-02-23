@@ -1,6 +1,7 @@
 ﻿using FlashcardXpApi.Extensions;
 using FlashcardXpApi.FlashcardSets;
 using FlashcardXpApi.StudySets.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardXpApi.StudySets
@@ -10,11 +11,19 @@ namespace FlashcardXpApi.StudySets
     public class StudySetController : ControllerBase
     {
 
+
         private readonly StudySetService _studySetService;
 
         public StudySetController(StudySetService flashcardSetService)
         {
             _studySetService = flashcardSetService;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IResult Test()
+        {
+            return Results.Ok("Hello world");
         }
 
         [HttpGet("user/{id}/studyset")]

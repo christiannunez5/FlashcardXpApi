@@ -2,7 +2,7 @@
 
 namespace FlashcardXpApi.FlashcardSets
 {
-    public class StudySetError
+    public class StudySetErrors
     {
         public static Error UserNotFoundError =>
             new Error(ErrorTypeConstant.NOT_FOUND, "User not found.");

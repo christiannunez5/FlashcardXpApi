@@ -34,7 +34,7 @@ namespace FlashcardXpApi.FlashcardSets
             if (user is null)
             {
                 _logger.LogError($"Can't find user with an id of {userId}");
-                return ResultGeneric<List<StudySetDto>>.Failure(StudySetError.UserNotFoundError);
+                return ResultGeneric<List<StudySetDto>>.Failure(StudySetErrors.UserNotFoundError);
             }
 
             var flashcardSetsDto = _mapper.Map<List<StudySetDto>>(
@@ -60,7 +60,7 @@ namespace FlashcardXpApi.FlashcardSets
                     .First();
 
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.ValidationError(errorMessage)
+                    StudySetErrors.ValidationError(errorMessage)
                 );
             }
 
@@ -70,7 +70,7 @@ namespace FlashcardXpApi.FlashcardSets
             {
                 _logger.LogInformation($"User with id {userId} does not exist.");
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.UserNotFoundError
+                    StudySetErrors.UserNotFoundError
                 );
             }
 
@@ -105,7 +105,7 @@ namespace FlashcardXpApi.FlashcardSets
                     .First();
 
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.ValidationError(errorMessage)
+                    StudySetErrors.ValidationError(errorMessage)
                 );
             }
 
@@ -115,7 +115,7 @@ namespace FlashcardXpApi.FlashcardSets
             {
                 _logger.LogInformation($"User with id {userId} does not exist.");
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.UserNotFoundError
+                    StudySetErrors.UserNotFoundError
                 );
             }
 
@@ -125,7 +125,7 @@ namespace FlashcardXpApi.FlashcardSets
             {
                 _logger.LogInformation($"Study set with id {studySetId} does not exist.");
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.StudySetNotFoundError
+                    StudySetErrors.StudySetNotFoundError
                 );
             }
 
@@ -133,7 +133,7 @@ namespace FlashcardXpApi.FlashcardSets
             {
                 _logger.LogInformation($"User {user.Username} is not allowed to perform this action.");
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.StudySetAccessDeniedError
+                    StudySetErrors.StudySetAccessDeniedError
                 );
             }
 
@@ -160,7 +160,7 @@ namespace FlashcardXpApi.FlashcardSets
             {
                 _logger.LogInformation($"User with id {userId} does not exist.");
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.UserNotFoundError
+                    StudySetErrors.UserNotFoundError
                 );
             }
 
@@ -170,7 +170,7 @@ namespace FlashcardXpApi.FlashcardSets
             {
                 _logger.LogInformation($"Study set with id {studySetId} does not exist.");
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.StudySetNotFoundError
+                    StudySetErrors.StudySetNotFoundError
                 );
             }
 
@@ -178,7 +178,7 @@ namespace FlashcardXpApi.FlashcardSets
             {
                 _logger.LogInformation($"User {user.Username} is not allowed to perform this action.");
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.StudySetAccessDeniedError
+                    StudySetErrors.StudySetAccessDeniedError
                 );
             }
 
@@ -199,7 +199,7 @@ namespace FlashcardXpApi.FlashcardSets
             if (studySet is null)
             {
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetError.StudySetNotFoundError
+                    StudySetErrors.StudySetNotFoundError
                 );
             }
 

@@ -37,8 +37,11 @@ namespace FlashcardXpApi.Data
             modelBuilder.Entity<StudySet>()
                 .Property(fs => fs.CreatedAt)
                 .HasDefaultValueSql("getDate()");
-            
-            
+
+            modelBuilder.Entity<StudySet>()
+                .Property(s => s.IsPublic)
+                .HasDefaultValue(true);
+                
         }
     }
 }

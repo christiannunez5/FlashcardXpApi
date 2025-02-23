@@ -21,7 +21,7 @@ namespace FlashcardXpApi.Auth
 
         
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IResult> Register(
             CreateUserRequest request
         )
@@ -30,7 +30,15 @@ namespace FlashcardXpApi.Auth
             return response.ToHttpResponse();
         }
 
-       
-        
+        [HttpPost("login")]
+        public IResult Login(UserLoginRequest request)
+        {
+            var response = _authService.Login(request);
+
+            return Results.Ok(response);
+        }
+
+
+
     }
 }
