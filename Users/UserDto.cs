@@ -2,5 +2,5 @@
 
 namespace FlashcardXpApi.Users
 {
-    public record UserDto(int Id, string Username, string Email, string ProfilePicUrl);
+    public record UserDto(string Id, string Username, string Email, string ProfilePicUrl);
 }

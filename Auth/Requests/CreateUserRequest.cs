@@ -8,17 +8,5 @@ namespace FlashcardXpApi.Auth.Requests
         string Email , 
         string Username, 
         string Password, 
-        string? ProfilePicUrl)
-    {   
-        public static User ToUser(CreateUserRequest request)
-        {
-            return new User()
-            {
-                Email = request.Email,
-                Username = request.Username,
-                Password = request.Password,
-                ProfilePicUrl = request.ProfilePicUrl
-            };
-        }
-    }
+        string? ProfilePicUrl);
 }

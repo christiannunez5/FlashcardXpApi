@@ -1,5 +1,5 @@
 ﻿namespace FlashcardXpApi.Auth.Requests
 {
-    public record UserLoginRequest(string Username, string Password);
+    public record UserLoginRequest(string Email, string Password);
    
 }

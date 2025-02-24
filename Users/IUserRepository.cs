@@ -6,7 +6,7 @@
 
         void Update(User user);
 
-        Task<User?> GetById(int id);
+        Task<User?> GetById(string id);
         
         Task<List<User>> GetAll();
 

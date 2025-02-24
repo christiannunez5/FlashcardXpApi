@@ -3,6 +3,7 @@ using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Users;
 using FlashcardXpApi.Validations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,36 +19,48 @@ namespace FlashcardXpApi.Auth
         private readonly ILogger _logger;
         private readonly CreateUserRequestValidator _createUserValidator;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _config;
         private readonly TokenProvider _tokenProvider;
-
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         public AuthService(IUserRepository userRepo, 
             ILogger<AuthService> logger, CreateUserRequestValidator createUserValidator, 
-            IMapper mapper, IConfiguration config, TokenProvider tokenProvider)
+            IMapper mapper, TokenProvider tokenProvider, 
+            IPasswordHasher passwordHasher,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
             _userRepo = userRepo;
             _logger = logger;
             _createUserValidator = createUserValidator;
             _mapper = mapper;
-            _config = config;
             _tokenProvider = tokenProvider;
+            _passwordHasher = passwordHasher;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
+   
 
-        public string Login(UserLoginRequest request)
+        public async Task<Result> Login(UserLoginRequest request)
         {
-            var user = AuthenticateUser(request);
+            var user = await _userManager.FindByEmailAsync(request.Email);
 
-            return _tokenProvider.Create(user);
+            if (user is null)
+            {
+                return Result.Failure(AuthErrors.InvalidLoginRequest);
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+
+            if (!result.Succeeded)
+            {
+                return Result.Failure(AuthErrors.UserNotFoundError);
+            }
+
+            return Result.Success;
         }
 
-        private User AuthenticateUser(UserLoginRequest request)
-        {
-            var user = _mapper.Map<User>(request);
-            user.Id = 29;
-            return _mapper.Map<User>(request);
-        }
-
-        public async Task<Result> Register(CreateUserRequest request)
+        public async Task<ResultGeneric<IdentityResult>> Register(CreateUserRequest request)
         {
             var validationResult = await _createUserValidator.ValidateAsync(request);
             
@@ -57,7 +70,7 @@ namespace FlashcardXpApi.Auth
                     .Select(x => x.ErrorMessage)
                     .First();
 
-                return Result.Failure(AuthErrors.CreateUserRequestError(errorMessage));
+                return ResultGeneric<IdentityResult>.Failure(AuthErrors.CreateUserRequestError(errorMessage));
             }
 
             bool IsEmailUnique = await _userRepo.IsEmailUnique(request.Email);
@@ -65,15 +78,19 @@ namespace FlashcardXpApi.Auth
             if (!IsEmailUnique)
             {
                 _logger.LogInformation($"The email {request.Email} is not unique.");
-                return Result.Failure(AuthErrors.EmailMustBeUnique);
+                return ResultGeneric<IdentityResult>.Failure(AuthErrors.EmailMustBeUnique);
             }
 
-            var newUser = _mapper.Map<User>(request);
-                
-            _userRepo.Insert(newUser);
-            _userRepo.SaveChangesAsync();
+            var newUser = new User
+            { 
+                Email = request.Email,
+                UserName = request.Username,
+               ProfilePicUrl = request.ProfilePicUrl,
+            };  
 
-            return Result.Success;
+            var createdUser = await _userManager.CreateAsync(newUser, request.Password);
+
+            return ResultGeneric<IdentityResult>.Success(createdUser);
         }
 
              

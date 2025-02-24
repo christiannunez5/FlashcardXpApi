@@ -46,6 +46,10 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<AuthService>();
+    builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+    builder.Services.AddIdentityApiEndpoints<User>()
+          .AddEntityFrameworkStores<DataContext>();
+
     builder.Services.AddSingleton<TokenProvider>();
     builder.Services.AddScoped<IStudySetRepository, StudySetRepository>();
     builder.Services.AddScoped<StudySetService>();
@@ -55,7 +59,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddAutoMapper(typeof(MappingProfile));
 
     builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
-
+    
 }
 
 var app = builder.Build();

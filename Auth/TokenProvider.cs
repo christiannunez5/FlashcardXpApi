@@ -24,6 +24,7 @@ namespace FlashcardXpApi.Auth
                     new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, user.UserName),
                 ]),   
+
                 Expires = DateTime.UtcNow.AddHours(6),
                 SigningCredentials = credentials,
                 Issuer = configuration["JwtSettings:Issuer"],

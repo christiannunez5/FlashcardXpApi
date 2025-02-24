@@ -27,25 +27,10 @@ namespace FlashcardXpApi.FlashcardSets
             _validator = validator;
         }
 
-        public async Task<ResultGeneric<List<StudySetDto>>> GetAllByUserId(int userId)
-        {
-            var user = await _userRepo.GetById(userId);
-
-            if (user is null)
-            {
-                _logger.LogError($"Can't find user with an id of {userId}");
-                return ResultGeneric<List<StudySetDto>>.Failure(StudySetErrors.UserNotFoundError);
-            }
-
-            var flashcardSetsDto = _mapper.Map<List<StudySetDto>>(
-                await _studySetRepo.GetAllByUserId(userId)
-            );   
-
-            return ResultGeneric<List<StudySetDto>>.Success(flashcardSetsDto);
-        }
+        
 
         public async Task<ResultGeneric<StudySetDto>> AddNewStudySet(
-            int userId, StudySetRequest request
+            string userId, StudySetRequest request
         )
         {
 
@@ -91,7 +76,7 @@ namespace FlashcardXpApi.FlashcardSets
         }
 
         public async Task<ResultGeneric<StudySetDto>> UpdateStudySet(
-            int userId, 
+            string userId, 
             int studySetId,
             StudySetRequest request)
         {
@@ -131,7 +116,7 @@ namespace FlashcardXpApi.FlashcardSets
 
             if (studySet.CreatedById != userId)
             {
-                _logger.LogInformation($"User {user.Username} is not allowed to perform this action.");
+                _logger.LogInformation($"User {user.UserName} is not allowed to perform this action.");
                 return ResultGeneric<StudySetDto>.Failure(
                     StudySetErrors.StudySetAccessDeniedError
                 );
@@ -150,7 +135,7 @@ namespace FlashcardXpApi.FlashcardSets
         }
 
         public async Task<ResultGeneric<StudySetDto>> DeleteStudySet(
-            int userId,
+            string userId,
             int studySetId
         )
         {
@@ -176,7 +161,7 @@ namespace FlashcardXpApi.FlashcardSets
 
             if (studySet.CreatedById != userId)
             {
-                _logger.LogInformation($"User {user.Username} is not allowed to perform this action.");
+                _logger.LogInformation($"User {user.UserName} is not allowed to perform this action.");
                 return ResultGeneric<StudySetDto>.Failure(
                     StudySetErrors.StudySetAccessDeniedError
                 );

@@ -17,7 +17,7 @@ namespace FlashcardXpApi.Users
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User?> GetById(int id)
+        public async Task<User?> GetById(string id)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
@@ -25,6 +25,7 @@ namespace FlashcardXpApi.Users
         public void Insert(User user)
         {
             _context.Users.Add(user);
+            _context.SaveChangesAsync();
         }
 
         public async Task<bool> IsEmailUnique(string email)

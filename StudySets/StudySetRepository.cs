@@ -24,7 +24,7 @@ namespace FlashcardXpApi.FlashcardSets
             return await _context.StudySets.ToListAsync();
         }
 
-        public async Task<List<StudySet>> GetAllByUserId(int id)
+        public async Task<List<StudySet>> GetAllByUserId(string id)
         {
             return await _context.StudySets
                 .Where(fs => fs.CreatedById == id)

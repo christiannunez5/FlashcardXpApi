@@ -9,7 +9,7 @@ namespace FlashcardXpApi.FlashcardSets
 
         Task<StudySet?> GetByIdAsync(int id);
 
-        Task<List<StudySet>> GetAllByUserId(int id);
+        Task<List<StudySet>> GetAllByUserId(string id);
 
         Task InsertAsync(StudySet studySet);
             

@@ -1,9 +1,10 @@
 ﻿using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Extensions;
 using FlashcardXpApi.Users;
-using FluentValidation;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.HttpSys;
+using System.Net;
 
 namespace FlashcardXpApi.Auth
 {
@@ -13,29 +14,30 @@ namespace FlashcardXpApi.Auth
     {
 
         private readonly AuthService _authService;
+        private readonly UserManager<User> _userManager;
 
-        public AuthController(AuthService authService)
+        public AuthController(AuthService authService, UserManager<User> userManager)
         {
             _authService = authService;
+            _userManager = userManager;
         }
 
-        
-
         [HttpPost("register")]
-        public async Task<IResult> Register(
+        public async Task<IResult> Register (
             CreateUserRequest request
         )
         {
+
             var response = await _authService.Register(request);
             return response.ToHttpResponse();
         }
 
         [HttpPost("login")]
-        public IResult Login(UserLoginRequest request)
+        public async Task<IResult> Login(UserLoginRequest request)
         {
-            var response = _authService.Login(request);
+            var response = await _authService.Login(request);
 
-            return Results.Ok(response);
+            return response.ToHttpResponse();
         }
 
 

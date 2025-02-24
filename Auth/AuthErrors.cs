@@ -11,6 +11,8 @@ namespace FlashcardXpApi.Auth
         public static Error EmailMustBeUnique =>
             new Error(ErrorTypeConstant.CONFLICT, "Email already exists.");
 
+        public static Error UserNotFoundError =>
+            new Error(ErrorTypeConstant.NOT_FOUND, "User does not exist.");
         public static Error CreateUserRequestError (string message) =>
             new Error(ErrorTypeConstant.VALIDATION_ERROR, message);
     }

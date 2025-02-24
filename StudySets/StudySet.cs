@@ -15,9 +15,9 @@ namespace FlashcardXpApi.FlashcardSets
         public DateOnly CreatedAt { get; set; }
 
         public bool IsPublic { get; set; }
-        
+
         // navigations
-        public int CreatedById { get; set; }
+        public string CreatedById { get; set; } = string.Empty;
         public required User CreatedBy { get; set; }
 
         public ICollection<Flashcard> Flashcards { get; set; } = new List<Flashcard>();

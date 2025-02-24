@@ -4,12 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlashcardXpApi.Users
 {
-    [Table("User")]
-    public class User : IdentityUser<int>
+    [Table("AppUser")]
+    public class User : IdentityUser
     {
-
-        public required string Username { get; set; }
-        public required string Password { get; set; }
         public string? ProfilePicUrl { get; set; }
 
         // navigations
