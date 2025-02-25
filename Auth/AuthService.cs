@@ -20,42 +20,44 @@ namespace FlashcardXpApi.Auth
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly TokenProvider _tokenProvider;
+        private readonly JwtHandler _jwtHandler;
 
         public AuthService(CreateUserRequestValidator createUserValidator,
                            IMapper mapper,
                            UserManager<User> userManager,
                            SignInManager<User> signInManager,
-                           TokenProvider tokenProvider)
+                           TokenProvider tokenProvider,
+                           JwtHandler jwtHandler)
         {
             _createUserValidator = createUserValidator;
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenProvider = tokenProvider;
+            _jwtHandler = jwtHandler;
         }
 
-
-
-        public async Task<Result> Login(UserLoginRequest request, HttpContext context)
+        public async Task<ResultGeneric<string>> Login(UserLoginRequest request, HttpContext context)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user is null)
             {
-                return Result.Failure(AuthErrors.UserNotFoundError);
+                return ResultGeneric<string>.Failure(AuthErrors.UserNotFoundError);
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
             if (!result.Succeeded)
             {
-                return Result.Failure(AuthErrors.InvalidLoginRequest);
+                return ResultGeneric<string>.Failure(AuthErrors.InvalidLoginRequest);
             }
+            
+            var accessToken = _jwtHandler.CreateToken(user);
 
-            var accessToken = _tokenProvider.Create(user);
             SetTokenInsideCookie(accessToken, context);
 
-            return Result.Success;
+            return ResultGeneric<string>.Success(accessToken);
         }
 
         public async Task<ResultGeneric<string>> Register(CreateUserRequest request)

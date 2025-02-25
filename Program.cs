@@ -8,10 +8,10 @@ using FlashcardXpApi.Mapper;
 using FlashcardXpApi.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 
@@ -19,36 +19,65 @@ var builder = WebApplication.CreateBuilder(args);
 {
     var config = builder.Configuration;
 
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(o =>
+    builder.Services.AddAuthentication(opt =>
+    {
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(o =>
+    {
+        o.TokenValidationParameters = new TokenValidationParameters
         {
-            o.RequireHttpsMetadata = false;
-            o.TokenValidationParameters = new TokenValidationParameters
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = config["JwtSettings:Issuer"],
+            ValidAudience = config["JwtSettings:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
+  
+        };
+        o.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = ctx =>
             {
-
-                ValidIssuer = config["JwtSettings:Issuer"],
-                ValidAudience = config["JwtSettings:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
-                ClockSkew = TimeSpan.Zero,
-            };
-            o.Events = new JwtBearerEvents
-            {
-                OnMessageReceived = ctx =>
+                ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                if (!string.IsNullOrEmpty(accessToken))
                 {
-                    ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
-                    if (!string.IsNullOrEmpty(accessToken))
-                    {
-                        ctx.Token = accessToken;
-                    }
-
-                    return Task.CompletedTask;
+                    ctx.Token = accessToken;
                 }
-            };
+
+                return Task.CompletedTask;
+            }
+        };
         });
     
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+        {
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Scheme = "Bearer"
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+    });
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
     builder.Services.AddProblemDetails();
     builder.Services.AddDbContext<DataContext>(options =>
@@ -61,6 +90,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<AuthService>();
+    builder.Services.AddSingleton<JwtHandler>();
     builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
     builder.Services.AddIdentityApiEndpoints<User>(options =>
     {
@@ -101,7 +131,6 @@ var app = builder.Build();
     app.UseAuthorization();
     app.MapControllers();
     app.UseExceptionHandler();
-    app.MapIdentityApi<User>();
 
     app.Run();
 

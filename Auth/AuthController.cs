@@ -1,6 +1,7 @@
 ﻿using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Extensions;
 using FlashcardXpApi.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.HttpSys;
@@ -18,6 +19,14 @@ namespace FlashcardXpApi.Auth
         public AuthController(AuthService authService)
         {
             _authService = authService;
+        }
+
+        [HttpGet("test")]
+        [Authorize]
+        public IResult Test()
+        {
+           
+            return Results.Ok("Authorized :))");
         }
 
         [HttpPost("register")]
