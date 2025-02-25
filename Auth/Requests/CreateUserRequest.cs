@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace FlashcardXpApi.Auth.Requests
 {
-    public record CreateUserRequest(
+    public record CreateUserRequest (
         string Email , 
         string Username, 
         string Password, 

@@ -8,6 +8,8 @@ using FlashcardXpApi.Mapper;
 using FlashcardXpApi.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -29,8 +31,21 @@ var builder = WebApplication.CreateBuilder(args);
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
                 ClockSkew = TimeSpan.Zero,
             };
+            o.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = ctx =>
+                {
+                    ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        ctx.Token = accessToken;
+                    }
+
+                    return Task.CompletedTask;
+                }
+            };
         });
-  
+    
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -47,8 +62,20 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
-    builder.Services.AddIdentityApiEndpoints<User>()
-          .AddEntityFrameworkStores<DataContext>();
+    builder.Services.AddIdentityApiEndpoints<User>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 0;
+    })
+        .AddErrorDescriber<AppErrorDescriber>()
+        .AddEntityFrameworkStores<DataContext>();
+   
 
     builder.Services.AddSingleton<TokenProvider>();
     builder.Services.AddScoped<IStudySetRepository, StudySetRepository>();
@@ -59,7 +86,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddAutoMapper(typeof(MappingProfile));
 
     builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
-    
+
 }
 
 var app = builder.Build();
@@ -74,6 +101,7 @@ var app = builder.Build();
     app.UseAuthorization();
     app.MapControllers();
     app.UseExceptionHandler();
+    app.MapIdentityApi<User>();
 
     app.Run();
 

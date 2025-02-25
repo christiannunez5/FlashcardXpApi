@@ -1,7 +1,6 @@
-﻿using FlashcardXpApi.Auth.Requests;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace FlashcardXpApi.Validations
+namespace FlashcardXpApi.Auth.Requests
 {
     public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
     {
@@ -13,12 +12,7 @@ namespace FlashcardXpApi.Validations
 
             RuleFor(x => x.Username)
                .NotEmpty()
-                    .WithMessage("Username can't be empty.");
-
-            RuleFor(x => x.Password)
-                .NotEmpty()
-                    .WithMessage("Password can't be null.");
-                
+                    .WithMessage("Username can't be empty."); 
 
         }
     }

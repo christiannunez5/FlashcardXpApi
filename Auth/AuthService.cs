@@ -2,9 +2,9 @@
 using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Users;
-using FlashcardXpApi.Validations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,84 +15,94 @@ namespace FlashcardXpApi.Auth
     public class AuthService
     {
 
-        private readonly IUserRepository _userRepo;
-        private readonly ILogger _logger;
         private readonly CreateUserRequestValidator _createUserValidator;
         private readonly IMapper _mapper;
-        private readonly TokenProvider _tokenProvider;
-        private readonly IPasswordHasher _passwordHasher;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        public AuthService(IUserRepository userRepo, 
-            ILogger<AuthService> logger, CreateUserRequestValidator createUserValidator, 
-            IMapper mapper, TokenProvider tokenProvider, 
-            IPasswordHasher passwordHasher,
-            UserManager<User> userManager,
-            SignInManager<User> signInManager)
+        private readonly TokenProvider _tokenProvider;
+
+        public AuthService(CreateUserRequestValidator createUserValidator,
+                           IMapper mapper,
+                           UserManager<User> userManager,
+                           SignInManager<User> signInManager,
+                           TokenProvider tokenProvider)
         {
-            _userRepo = userRepo;
-            _logger = logger;
             _createUserValidator = createUserValidator;
             _mapper = mapper;
-            _tokenProvider = tokenProvider;
-            _passwordHasher = passwordHasher;
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenProvider = tokenProvider;
         }
-   
 
-        public async Task<Result> Login(UserLoginRequest request)
+
+
+        public async Task<Result> Login(UserLoginRequest request, HttpContext context)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user is null)
             {
-                return Result.Failure(AuthErrors.InvalidLoginRequest);
+                return Result.Failure(AuthErrors.UserNotFoundError);
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
             if (!result.Succeeded)
             {
-                return Result.Failure(AuthErrors.UserNotFoundError);
+                return Result.Failure(AuthErrors.InvalidLoginRequest);
             }
+
+            var accessToken = _tokenProvider.Create(user);
+            SetTokenInsideCookie(accessToken, context);
 
             return Result.Success;
         }
 
-        public async Task<ResultGeneric<IdentityResult>> Register(CreateUserRequest request)
+        public async Task<ResultGeneric<string>> Register(CreateUserRequest request)
         {
-            var validationResult = await _createUserValidator.ValidateAsync(request);
-            
+
+            var validationResult = _createUserValidator.Validate(request);
+
             if (!validationResult.IsValid)
             {
+
                 var errorMessage = validationResult.Errors
                     .Select(x => x.ErrorMessage)
                     .First();
 
-                return ResultGeneric<IdentityResult>.Failure(AuthErrors.CreateUserRequestError(errorMessage));
-            }
-
-            bool IsEmailUnique = await _userRepo.IsEmailUnique(request.Email);
-
-            if (!IsEmailUnique)
-            {
-                _logger.LogInformation($"The email {request.Email} is not unique.");
-                return ResultGeneric<IdentityResult>.Failure(AuthErrors.EmailMustBeUnique);
-            }
+                return ResultGeneric<string>.Failure(AuthErrors.CreateUserValidationError(errorMessage));
+            }      
 
             var newUser = new User
             { 
                 Email = request.Email,
                 UserName = request.Username,
-               ProfilePicUrl = request.ProfilePicUrl,
+                ProfilePicUrl = request.ProfilePicUrl,
             };  
 
             var createdUser = await _userManager.CreateAsync(newUser, request.Password);
 
-            return ResultGeneric<IdentityResult>.Success(createdUser);
+            if (!createdUser.Succeeded)
+            {
+                var errorMessage = createdUser.Errors.First().Description;  
+                return ResultGeneric<string>.Failure(
+                    AuthErrors.CreateUserValidationError(errorMessage));
+            }
+
+            return ResultGeneric<string>.Success("Registered successfully.");
         }
 
-             
+        private void SetTokenInsideCookie(string token, HttpContext context)
+        {
+            context.Response.Cookies.Append("accessToken", token, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                IsEssential = true,
+            });
+        }
+         
     }
 }

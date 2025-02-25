@@ -14,12 +14,10 @@ namespace FlashcardXpApi.Auth
     {
 
         private readonly AuthService _authService;
-        private readonly UserManager<User> _userManager;
 
-        public AuthController(AuthService authService, UserManager<User> userManager)
+        public AuthController(AuthService authService)
         {
             _authService = authService;
-            _userManager = userManager;
         }
 
         [HttpPost("register")]
@@ -35,8 +33,7 @@ namespace FlashcardXpApi.Auth
         [HttpPost("login")]
         public async Task<IResult> Login(UserLoginRequest request)
         {
-            var response = await _authService.Login(request);
-
+            var response = await _authService.Login(request, HttpContext);
             return response.ToHttpResponse();
         }
 
