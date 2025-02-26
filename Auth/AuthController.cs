@@ -21,12 +21,12 @@ namespace FlashcardXpApi.Auth
             _authService = authService;
         }
 
-        [HttpGet("test")]
+        [HttpGet("me")]
         [Authorize]
-        public IResult Test()
+        public async Task<IResult> GetCurrentLoggedInUser()
         {
-           
-            return Results.Ok("Authorized :))");
+            var loggedInUser = await _authService.GetLoggedInUser(HttpContext);
+            return Results.Ok(loggedInUser);
         }
 
         [HttpPost("register")]
@@ -34,7 +34,6 @@ namespace FlashcardXpApi.Auth
             CreateUserRequest request
         )
         {
-
             var response = await _authService.Register(request);
             return response.ToHttpResponse();
         }

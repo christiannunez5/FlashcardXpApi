@@ -3,12 +3,10 @@ using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Users;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
+
+
+
 
 namespace FlashcardXpApi.Auth
 {
@@ -19,45 +17,42 @@ namespace FlashcardXpApi.Auth
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly TokenProvider _tokenProvider;
         private readonly JwtHandler _jwtHandler;
 
         public AuthService(CreateUserRequestValidator createUserValidator,
                            IMapper mapper,
                            UserManager<User> userManager,
                            SignInManager<User> signInManager,
-                           TokenProvider tokenProvider,
                            JwtHandler jwtHandler)
         {
             _createUserValidator = createUserValidator;
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
-            _tokenProvider = tokenProvider;
             _jwtHandler = jwtHandler;
         }
 
-        public async Task<ResultGeneric<string>> Login(UserLoginRequest request, HttpContext context)
+        public async Task<Result> Login(UserLoginRequest request, HttpContext context)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user is null)
             {
-                return ResultGeneric<string>.Failure(AuthErrors.UserNotFoundError);
+                return Result.Failure(AuthErrors.UserNotFoundError);
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
             if (!result.Succeeded)
             {
-                return ResultGeneric<string>.Failure(AuthErrors.InvalidLoginRequest);
+                return Result.Failure(AuthErrors.InvalidLoginRequest);
             }
             
             var accessToken = _jwtHandler.CreateToken(user);
 
             SetTokenInsideCookie(accessToken, context);
 
-            return ResultGeneric<string>.Success(accessToken);
+            return Result.Success;
         }
 
         public async Task<ResultGeneric<string>> Register(CreateUserRequest request)
@@ -104,6 +99,12 @@ namespace FlashcardXpApi.Auth
                 SameSite = SameSiteMode.None,
                 IsEssential = true,
             });
+        }
+
+        public async Task<UserDto?> GetLoggedInUser(HttpContext context)
+        {
+            var user = _mapper.Map<UserDto>(await _userManager.GetUserAsync(context.User));
+            return user;
         }
          
     }

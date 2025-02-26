@@ -34,7 +34,6 @@ var builder = WebApplication.CreateBuilder(args);
             ValidIssuer = config["JwtSettings:Issuer"],
             ValidAudience = config["JwtSettings:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
-  
         };
         o.Events = new JwtBearerEvents
         {
@@ -47,11 +46,13 @@ var builder = WebApplication.CreateBuilder(args);
                 }
 
                 return Task.CompletedTask;
-            }
+            },
+
         };
-        });
+    });
     
     builder.Services.AddControllers();
+    builder.Services.AddHttpContextAccessor();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(options =>
     {
