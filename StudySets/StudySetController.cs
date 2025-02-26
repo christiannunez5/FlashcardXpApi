@@ -1,4 +1,5 @@
-﻿using FlashcardXpApi.Extensions;
+﻿using FlashcardXpApi.Auth;
+using FlashcardXpApi.Extensions;
 using FlashcardXpApi.FlashcardSets;
 using FlashcardXpApi.StudySets.Requests;
 using Microsoft.AspNetCore.Authorization;
@@ -6,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardXpApi.StudySets
 {
+    [Authorize]
     [ApiController]
-    [Route("api/")]
+    [Route("api/[controller]")]
     public class StudySetController : ControllerBase
     {
-
 
         private readonly StudySetService _studySetService;
 
@@ -19,30 +20,52 @@ namespace FlashcardXpApi.StudySets
             _studySetService = flashcardSetService;
         }
 
-        [Authorize]
+        
         [HttpGet]
-        public IResult Test()
+        public async Task<IResult> GetStudySetsByUser()
         {
-            return Results.Ok("Hello world");
+            var response = await _studySetService.GetAllByUser();
+            return response.ToHttpResponse();
+        }
+            
+        [HttpPost]
+        public async Task<IResult> Add(StudySetRequest request)
+        {
+            var response = await _studySetService.AddNewStudySet(request);
+            return response.ToHttpResponse();
         }
 
+        [HttpPost("{studySetId}/user/{userId}")]
+        public async Task<IResult> AddUserToStudySet(
+          string studySetId,
+          string userId
+        )
+        {
+            var response = await _studySetService.AddUserToStudySet(studySetId, userId);
+            return response.ToHttpResponse();
+        }
+
+
+        [HttpPatch("{studySetId}")]
+        public async Task<IResult> UpdateStudySet(
+          string studySetId,
+          StudySetRequest request
+        )
+        {
+            var response = await _studySetService.UpdateStudySet(studySetId, request);
+            return response.ToHttpResponse();
+        }
+
+        [HttpDelete("{studySetId}")]
+        public async Task<IResult> DeleteStudySet (
+          string studySetId
+        )
+        {
+            var response = await _studySetService.DeleteStudySet(studySetId);
+            return response.ToHttpResponse();
+        }
 
         /*
-        [HttpGet("user/{id}/studyset")]
-        public async Task<IResult> GetAllByUserId(string id)
-        {
-            var response = await _studySetService.GetAllByUserId(id);
-            return response.ToHttpResponse();
-        }
-        */
-
-        [HttpPost("user/{userId}/studyset")]
-        public async Task<IResult> Add(string userId, StudySetRequest request)
-        {
-            var response = await _studySetService.AddNewStudySet(userId, request);
-            return response.ToHttpResponse();
-        }
-
 
         [HttpGet("studyset/{id}")]
         public async Task<IResult> GetById(int id)
@@ -51,16 +74,7 @@ namespace FlashcardXpApi.StudySets
             return response.ToHttpResponse();
         }
         
-        [HttpPatch("user/{userId}/studyset/{studySetId}")]
-        public async Task<IResult> UpdateStudySet(
-           string userId,
-           int studySetId,
-           StudySetRequest request
-        )
-        {
-            var response = await _studySetService.UpdateStudySet(userId, studySetId, request);
-            return response.ToHttpResponse();
-        }
+       
 
         [HttpDelete("user/{userId}/studyset/{studySetId}")]
         public async Task<IResult> DeleteStudySet(
@@ -72,5 +86,6 @@ namespace FlashcardXpApi.StudySets
             return response.ToHttpResponse();
         }
         
+        */
     }
 }

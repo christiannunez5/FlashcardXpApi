@@ -4,6 +4,7 @@ using FlashcardXpApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlashcardXpApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250226103600_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +28,6 @@ namespace FlashcardXpApi.Migrations
             modelBuilder.Entity("FlashcardXpApi.FlashcardSets.StudySet", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateOnly>("CreatedAt")
@@ -34,6 +36,7 @@ namespace FlashcardXpApi.Migrations
                         .HasDefaultValueSql("getDate()");
 
                     b.Property<string>("CreatedById")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -77,21 +80,6 @@ namespace FlashcardXpApi.Migrations
                     b.HasIndex("StudySetId");
 
                     b.ToTable("Flashcard");
-                });
-
-            modelBuilder.Entity("FlashcardXpApi.StudySets.StudySetParticipant", b =>
-                {
-                    b.Property<string>("StudySetId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("StudySetId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("StudySetParticipant");
                 });
 
             modelBuilder.Entity("FlashcardXpApi.Users.User", b =>
@@ -304,7 +292,8 @@ namespace FlashcardXpApi.Migrations
                     b.HasOne("FlashcardXpApi.Users.User", "CreatedBy")
                         .WithMany("StudySets")
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedBy");
                 });
@@ -318,25 +307,6 @@ namespace FlashcardXpApi.Migrations
                         .IsRequired();
 
                     b.Navigation("StudySet");
-                });
-
-            modelBuilder.Entity("FlashcardXpApi.StudySets.StudySetParticipant", b =>
-                {
-                    b.HasOne("FlashcardXpApi.FlashcardSets.StudySet", "StudySet")
-                        .WithMany("StudySetParticipants")
-                        .HasForeignKey("StudySetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FlashcardXpApi.Users.User", "User")
-                        .WithMany("StudySetParticipants")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("StudySet");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -393,14 +363,10 @@ namespace FlashcardXpApi.Migrations
             modelBuilder.Entity("FlashcardXpApi.FlashcardSets.StudySet", b =>
                 {
                     b.Navigation("Flashcards");
-
-                    b.Navigation("StudySetParticipants");
                 });
 
             modelBuilder.Entity("FlashcardXpApi.Users.User", b =>
                 {
-                    b.Navigation("StudySetParticipants");
-
                     b.Navigation("StudySets");
                 });
 #pragma warning restore 612, 618

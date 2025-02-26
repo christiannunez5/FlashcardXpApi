@@ -35,7 +35,7 @@ namespace FlashcardXpApi.Extensions
                 ErrorTypeConstant.NOT_FOUND => Results.NotFound(result),
                 ErrorTypeConstant.BAD_REQUEST => Results.BadRequest(result),
                 ErrorTypeConstant.CONFLICT => Results.Conflict(result),
-                ErrorTypeConstant.FORBIDDEN => Results.Forbid(),
+                ErrorTypeConstant.FORBIDDEN => Results.Json(result, statusCode: 401),
                 _ => Results.Problem(detail: error.Message, statusCode: 500)
             };
         }

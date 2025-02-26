@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlashcardXpApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250224115859_InitialDbCreate")]
-    partial class InitialDbCreate
+    [Migration("20250226122628_ManyToManyStudySetParticipant")]
+    partial class ManyToManyStudySetParticipant
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,20 +27,14 @@ namespace FlashcardXpApi.Migrations
 
             modelBuilder.Entity("FlashcardXpApi.FlashcardSets.StudySet", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateOnly>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
                         .HasDefaultValueSql("getDate()");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -56,25 +50,21 @@ namespace FlashcardXpApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.ToTable("StudySet");
                 });
 
             modelBuilder.Entity("FlashcardXpApi.Flashcards.Flashcard", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Definition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StudySetId")
-                        .HasColumnType("int");
+                    b.Property<string>("StudySetId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Term")
                         .IsRequired()
@@ -85,6 +75,21 @@ namespace FlashcardXpApi.Migrations
                     b.HasIndex("StudySetId");
 
                     b.ToTable("Flashcard");
+                });
+
+            modelBuilder.Entity("FlashcardXpApi.StudySets.StudySetParticipant", b =>
+                {
+                    b.Property<string>("StudySetId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("StudySetId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StudySetParticipant");
                 });
 
             modelBuilder.Entity("FlashcardXpApi.Users.User", b =>
@@ -292,17 +297,6 @@ namespace FlashcardXpApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FlashcardXpApi.FlashcardSets.StudySet", b =>
-                {
-                    b.HasOne("FlashcardXpApi.Users.User", "CreatedBy")
-                        .WithMany("StudySets")
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
-                });
-
             modelBuilder.Entity("FlashcardXpApi.Flashcards.Flashcard", b =>
                 {
                     b.HasOne("FlashcardXpApi.FlashcardSets.StudySet", "StudySet")
@@ -312,6 +306,25 @@ namespace FlashcardXpApi.Migrations
                         .IsRequired();
 
                     b.Navigation("StudySet");
+                });
+
+            modelBuilder.Entity("FlashcardXpApi.StudySets.StudySetParticipant", b =>
+                {
+                    b.HasOne("FlashcardXpApi.FlashcardSets.StudySet", "StudySet")
+                        .WithMany("StudySetParticipants")
+                        .HasForeignKey("StudySetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FlashcardXpApi.Users.User", "User")
+                        .WithMany("StudySetParticipants")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudySet");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -368,11 +381,13 @@ namespace FlashcardXpApi.Migrations
             modelBuilder.Entity("FlashcardXpApi.FlashcardSets.StudySet", b =>
                 {
                     b.Navigation("Flashcards");
+
+                    b.Navigation("StudySetParticipants");
                 });
 
             modelBuilder.Entity("FlashcardXpApi.Users.User", b =>
                 {
-                    b.Navigation("StudySets");
+                    b.Navigation("StudySetParticipants");
                 });
 #pragma warning restore 612, 618
         }

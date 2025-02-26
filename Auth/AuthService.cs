@@ -3,33 +3,32 @@ using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Users;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-
-
 
 
 namespace FlashcardXpApi.Auth
 {
     public class AuthService
     {
-
         private readonly CreateUserRequestValidator _createUserValidator;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly JwtHandler _jwtHandler;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public AuthService(CreateUserRequestValidator createUserValidator,
                            IMapper mapper,
                            UserManager<User> userManager,
                            SignInManager<User> signInManager,
-                           JwtHandler jwtHandler)
+                           JwtHandler jwtHandler,
+                           IHttpContextAccessor contextAccessor)
         {
             _createUserValidator = createUserValidator;
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtHandler = jwtHandler;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<Result> Login(UserLoginRequest request, HttpContext context)
@@ -55,9 +54,8 @@ namespace FlashcardXpApi.Auth
             return Result.Success;
         }
 
-        public async Task<ResultGeneric<string>> Register(CreateUserRequest request)
+        public async Task<Result> Register(CreateUserRequest request)
         {
-
             var validationResult = _createUserValidator.Validate(request);
 
             if (!validationResult.IsValid)
@@ -67,7 +65,7 @@ namespace FlashcardXpApi.Auth
                     .Select(x => x.ErrorMessage)
                     .First();
 
-                return ResultGeneric<string>.Failure(AuthErrors.CreateUserValidationError(errorMessage));
+                return Result.Failure(AuthErrors.CreateUserValidationError(errorMessage));
             }      
 
             var newUser = new User
@@ -82,11 +80,11 @@ namespace FlashcardXpApi.Auth
             if (!createdUser.Succeeded)
             {
                 var errorMessage = createdUser.Errors.First().Description;  
-                return ResultGeneric<string>.Failure(
+                return Result.Failure(
                     AuthErrors.CreateUserValidationError(errorMessage));
             }
 
-            return ResultGeneric<string>.Success("Registered successfully.");
+            return Result.Success;
         }
 
         private void SetTokenInsideCookie(string token, HttpContext context)
@@ -101,10 +99,23 @@ namespace FlashcardXpApi.Auth
             });
         }
 
-        public async Task<UserDto?> GetLoggedInUser(HttpContext context)
+        public async Task<ResultGeneric<UserDto>> GetLoggedInUserHttp()
         {
-            var user = _mapper.Map<UserDto>(await _userManager.GetUserAsync(context.User));
-            return user;
+            var loggedInUser = await GetLoggedInUser();
+            var user = _mapper.Map<UserDto>(loggedInUser);
+            return ResultGeneric<UserDto>.Success(user);
+        }
+
+        public async Task<User?> GetLoggedInUser()
+        {
+            if (_contextAccessor.HttpContext != null)
+            {
+                var user = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
+                return user;
+            }
+
+            return null;
+            
         }
          
     }

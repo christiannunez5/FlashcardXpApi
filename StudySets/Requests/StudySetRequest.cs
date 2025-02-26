@@ -5,7 +5,8 @@ namespace FlashcardXpApi.StudySets.Requests
 {
     public record StudySetRequest(
         string Title,
-        string Description
+        string Description,
+        bool IsPublic
     );
 
     public class StudySetRequestValidator : AbstractValidator<StudySetRequest>

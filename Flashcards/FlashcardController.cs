@@ -15,6 +15,7 @@ namespace FlashcardXpApi.Flashcards
             _flashcardService = flashcardService;
         }
 
+        /*
         [HttpGet("{studySetId}/flashcards")]
         public async Task<IResult> GetByStudySet(int studySetId)
         {

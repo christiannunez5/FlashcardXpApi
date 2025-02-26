@@ -28,8 +28,9 @@ namespace FlashcardXpApi.Flashcards
             _validator = validator;
         }
 
+        /*
         public async Task<ResultGeneric<List<FlashcardDto>>> GetAllByStudySet(
-            int studySetId
+            string studySetId
         )
         {
             var studySet = await _studySetRepo.GetByIdAsync(studySetId);
@@ -46,7 +47,7 @@ namespace FlashcardXpApi.Flashcards
         }
 
         public async Task<ResultGeneric<List<FlashcardDto>>> AddNewFlashcard (
-            int studySetId,
+            string studySetId,
             List<FlashcardRequest> requests
         )
         {
@@ -85,7 +86,7 @@ namespace FlashcardXpApi.Flashcards
         }
 
         public async Task<ResultGeneric<FlashcardDto>> DeleteFlashcard (
-            int flashcardId
+            string flashcardId
         )
         {
             var flashcard = await _flashcardRepo.GetByIdAsync(flashcardId);
@@ -101,5 +102,7 @@ namespace FlashcardXpApi.Flashcards
                 _mapper.Map<FlashcardDto>(flashcard)
             );
         }
+        
+        */
     }
 }

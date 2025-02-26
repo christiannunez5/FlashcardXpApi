@@ -13,9 +13,9 @@ namespace FlashcardXpApi.FlashcardSets
             _context = context;
         }
 
-        public async Task InsertAsync(StudySet flashcardSet)
+        public async Task InsertAsync(StudySet studySet)
         {
-            _context.Add(flashcardSet);
+            _context.Add(studySet);
             await _context.SaveChangesAsync();
         }
 
@@ -24,16 +24,18 @@ namespace FlashcardXpApi.FlashcardSets
             return await _context.StudySets.ToListAsync();
         }
 
-        public async Task<List<StudySet>> GetAllByUserId(string id)
+        public async Task<List<StudySet>> GetAllByUser(User user)
         {
             return await _context.StudySets
-                .Where(fs => fs.CreatedById == id)
+                .Include(s => s.Flashcards)
+                .Where(s => s.CreatedById == user.Id)
                 .ToListAsync();
         }
-
-        public async Task<StudySet?> GetByIdAsync(int id)
+        
+        public async Task<StudySet?> GetByIdAsync(string id)
         {
             return await _context.StudySets
+                .Include(s => s.StudySetParticipants)
                 .FirstOrDefaultAsync(fs => fs.Id == id);
         }
 
@@ -51,5 +53,7 @@ namespace FlashcardXpApi.FlashcardSets
 
             await _context.SaveChangesAsync();
         }
+
+       
     }
 }

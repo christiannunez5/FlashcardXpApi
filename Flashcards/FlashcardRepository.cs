@@ -20,7 +20,7 @@ namespace FlashcardXpApi.Flashcards
                 .ToListAsync();
         }
 
-        public async Task<Flashcard?> GetByIdAsync(int id)
+        public async Task<Flashcard?> GetByIdAsync(string id)
         {
             return await _context.Flashcards
                 .FirstOrDefaultAsync(f => f.Id == id);

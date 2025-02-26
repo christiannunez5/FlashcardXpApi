@@ -4,14 +4,19 @@ namespace FlashcardXpApi.FlashcardSets
 {
     public class StudySetErrors
     {
-        public static Error UserNotFoundError =>
-            new Error(ErrorTypeConstant.NOT_FOUND, "User not found.");
+     
 
         public static Error StudySetNotFoundError =>
             new Error(ErrorTypeConstant.NOT_FOUND, "Study set not found.");
 
+        public static Error UserNotFoundError =>
+            new Error(ErrorTypeConstant.NOT_FOUND, "User not found.");
+
         public static Error StudySetAccessDeniedError =>
-            new Error(ErrorTypeConstant.UNAUTHORIZED, "Unauthorized access to the study set.");
+            new Error(ErrorTypeConstant.FORBIDDEN, "Unauthorized access to the study set.");
+
+        public static Error UserIsAlreadyParticipant =>
+            new Error(ErrorTypeConstant.BAD_REQUEST, "User is already participant.");
 
         public static Error ValidationError (string message) =>
            new Error(ErrorTypeConstant.VALIDATION_ERROR, message);

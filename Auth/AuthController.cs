@@ -25,10 +25,10 @@ namespace FlashcardXpApi.Auth
         [Authorize]
         public async Task<IResult> GetCurrentLoggedInUser()
         {
-            var loggedInUser = await _authService.GetLoggedInUser(HttpContext);
-            return Results.Ok(loggedInUser);
+            var response = await _authService.GetLoggedInUserHttp();
+            return response.ToHttpResponse();
         }
-
+        
         [HttpPost("register")]
         public async Task<IResult> Register (
             CreateUserRequest request

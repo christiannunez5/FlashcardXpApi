@@ -14,14 +14,15 @@ namespace FlashcardXpApi.Mapper
 
             // users
             CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
+
             CreateMap<CreateUserRequest, User>();
             CreateMap<UserLoginRequest, User>();
             CreateMap<UserLoginRequest, UserDto>();
 
-
             CreateMap<StudySet, StudySetDto>()
-                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
-
+                .ForMember(dest => dest.createdBy, opt => opt.MapFrom(src => src.CreatedBy));
+            
             CreateMap<Flashcard, FlashcardDto>();
             CreateMap<FlashcardRequest, Flashcard>();
         }

@@ -7,13 +7,13 @@ namespace FlashcardXpApi.Flashcards
     [Table("Flashcard")]
     public class Flashcard
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         public required string Term { get; set; }
 
         public required string Definition { get; set; }
 
-        public int StudySetId { get; set; }
+        public string StudySetId { get; set; } = string.Empty;
         public required StudySet StudySet { get; set; }
 
     }

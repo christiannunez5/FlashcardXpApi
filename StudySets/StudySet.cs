@@ -2,13 +2,15 @@
 using FlashcardXpApi.Users;
 using System.ComponentModel.DataAnnotations.Schema;
 using FlashcardXpApi.Flashcards;
+using FlashcardXpApi.StudySets;
+using System.Text.Json.Serialization;
 
 namespace FlashcardXpApi.FlashcardSets
 {
     [Table("StudySet")]
     public class StudySet
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public required string Title  { get; set; }
         public string? Description  { get; set; }
 
@@ -17,9 +19,29 @@ namespace FlashcardXpApi.FlashcardSets
         public bool IsPublic { get; set; }
 
         // navigations
-        public string CreatedById { get; set; } = string.Empty;
-        public required User CreatedBy { get; set; }
+        public string? CreatedById { get; set; }
+        public User? CreatedBy { get; set; }
 
         public ICollection<Flashcard> Flashcards { get; set; } = new List<Flashcard>();
+
+        public ICollection<StudySetParticipant> StudySetParticipants { get; set; } =
+           new List<StudySetParticipant>();
+
+
+        // functions
+        public void AddParticipant(User user)
+        {
+            StudySetParticipants.Add(new StudySetParticipant { UserId = user.Id, StudySetId = Id });
+        }
+
+        public bool IsParticipant(string userId)
+        {
+            return StudySetParticipants
+                .Any(sp => sp.UserId == userId);
+
+        }
+
+        [NotMapped]
+        public int FlashcardsCount => Flashcards.Count;
     }
 }

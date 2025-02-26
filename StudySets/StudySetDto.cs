@@ -3,11 +3,12 @@
 namespace FlashcardXpApi.FlashcardSets
 {
     public record StudySetDto (
-        int Id,
+        string Id,
         string Title,
         string Description,
         DateOnly CreatedAt,
-        UserDto CreatedBy
+        UserDto createdBy,
+        int FlashcardsCount
     );
 
 }

@@ -9,7 +9,6 @@ using FlashcardXpApi.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -89,7 +88,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-    builder.Services.AddScoped<IUserRepository, UserRepository>();
+    builder.Services.AddTransient<IUserRepository, UserRepository>();
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddSingleton<JwtHandler>();
     builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
@@ -106,9 +105,8 @@ var builder = WebApplication.CreateBuilder(args);
     })
         .AddErrorDescriber<AppErrorDescriber>()
         .AddEntityFrameworkStores<DataContext>();
-   
-
     builder.Services.AddSingleton<TokenProvider>();
+
     builder.Services.AddScoped<IStudySetRepository, StudySetRepository>();
     builder.Services.AddScoped<StudySetService>();
     builder.Services.AddScoped<IFlashcardRepository, FlashcardRepository>();

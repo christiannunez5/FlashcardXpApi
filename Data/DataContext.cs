@@ -4,6 +4,7 @@ using FlashcardXpApi.FlashcardSets;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using FlashcardXpApi.Users;
 using Microsoft.AspNetCore.Identity;
+using FlashcardXpApi.StudySets;
 
 namespace FlashcardXpApi.Data
 {
@@ -23,20 +24,24 @@ namespace FlashcardXpApi.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.StudySets)
-                .WithOne(f => f.CreatedBy)
-                .HasForeignKey(f => f.CreatedById)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<User>()
                .HasIndex(u => u.Email)
                .IsUnique();
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.StudySets)
+                .WithOne(s => s.CreatedBy)
+                .HasForeignKey(u => u.CreatedById);
+
             modelBuilder.Entity<StudySet>()
-                .HasMany(fs => fs.Flashcards)
-                .WithOne(f => f.StudySet)
-                .HasForeignKey(f => f.StudySetId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(s => s.CreatedBy)
+                .WithMany(u => u.StudySets)
+                .HasForeignKey(s => s.CreatedById)
+                .OnDelete(DeleteBehavior.SetNull);
+
+ 
+            modelBuilder.Entity<StudySet>()
+                .Property(s => s.Id)
+                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<StudySet>()
                 .Property(fs => fs.CreatedAt)
@@ -45,7 +50,21 @@ namespace FlashcardXpApi.Data
             modelBuilder.Entity<StudySet>()
                 .Property(s => s.IsPublic)
                 .HasDefaultValue(true);
-                
+
+            modelBuilder.Entity<StudySetParticipant>()
+                .HasKey(sp => new { sp.StudySetId, sp.UserId });
+
+            modelBuilder.Entity<StudySetParticipant>()
+                .HasOne(sp => sp.User)
+                .WithMany(u => u.StudySetParticipants)
+                .HasForeignKey(sp => sp.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<StudySetParticipant>()
+                .HasOne(sp => sp.StudySet)
+                .WithMany(s => s.StudySetParticipants)
+                .HasForeignKey(sp => sp.StudySetId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
