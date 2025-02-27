@@ -46,7 +46,7 @@ namespace FlashcardXpApi.StudySets
         }
         
         [HttpPatch("{studySetId}")]
-        public async Task<IResult> UpdateStudySet(
+        public async Task<IResult> UpdateStudySet (
           string studySetId,
           StudySetRequest request
         )
@@ -54,7 +54,7 @@ namespace FlashcardXpApi.StudySets
             var response = await _studySetService.UpdateStudySet(studySetId, request);
             return response.ToHttpResponse();
         }
-
+            
         [HttpDelete("{studySetId}")]
         public async Task<IResult> DeleteStudySet (
           string studySetId
