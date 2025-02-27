@@ -7,7 +7,6 @@ namespace FlashcardXpApi.FlashcardSets
         string Title,
         string Description,
         DateOnly CreatedAt,
-        UserDto createdBy,
         int FlashcardsCount
     );
 

@@ -40,7 +40,7 @@ namespace FlashcardXpApi.FlashcardSets
             if (user is null)
             {
                 return ResultGeneric<List<StudySetDto>>.Failure(
-                    StudySetErrors.StudySetAccessDeniedError
+                    StudySetErrors.AuthenticationRequiredError
                 );
             };
 
@@ -77,7 +77,7 @@ namespace FlashcardXpApi.FlashcardSets
             if (user is null)
             {
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.StudySetAccessDeniedError
+                    StudySetErrors.AuthenticationRequiredError
                 );
             };
 
@@ -121,7 +121,7 @@ namespace FlashcardXpApi.FlashcardSets
             if (user is null)
             {
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.StudySetAccessDeniedError
+                    StudySetErrors.AuthenticationRequiredError
                 );
             };
 
@@ -134,16 +134,17 @@ namespace FlashcardXpApi.FlashcardSets
                     StudySetErrors.StudySetNotFoundError
                 );
             }
-             
-            if (!studySet.IsParticipant(user.Id))
+
+            if (studySet.CreatedById != user.Id)
             {
                 _logger.LogInformation($"User {user.UserName} is not authorized to perform this action.");
                 return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.StudySetAccessDeniedError
+                    StudySetErrors.AuthorizationFailedError
                 );
-            }           
-
+            }
+                               
             studySet.Title = request.Title;
+            studySet.IsPublic = request.IsPublic;
             studySet.Description = 
                 request.Description is not null ? request.Description : studySet.Description;
 
@@ -183,9 +184,15 @@ namespace FlashcardXpApi.FlashcardSets
             return Result.Success;
         }
 
-
         public async Task<Result> DeleteStudySet(string studySetId)
         {
+            var user = await _authService.GetLoggedInUser();
+
+            if (user is null)
+            {
+                return Result.Failure(StudySetErrors.AuthenticationRequiredError);
+            }
+
             var studySet = await _studySetRepo.GetByIdAsync(studySetId);
 
             if (studySet is null)
@@ -193,71 +200,16 @@ namespace FlashcardXpApi.FlashcardSets
                 return Result.Failure(StudySetErrors.StudySetNotFoundError);
             }
 
+
+            if (studySet.CreatedById != user.Id)
+            {
+                return Result.Failure(StudySetErrors.AuthorizationFailedError);
+            }
+
             await _studySetRepo.DeleteAsync(studySet);
 
             return Result.Success;
         }
-
-        /*
-        public async Task<ResultGeneric<StudySetDto>> DeleteStudySet(
-            string userId,
-            int studySetId
-        )
-        {
-            var user = await _userRepo.GetById(userId);
-
-            if (user is null)
-            {
-                _logger.LogInformation($"User with id {userId} does not exist.");
-                return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.UserNotFoundError
-                );
-            }
-
-            var studySet = await _studySetRepo.GetByIdAsync(studySetId);
-
-            if (studySet is null)
-            {
-                _logger.LogInformation($"Study set with id {studySetId} does not exist.");
-                return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.StudySetNotFoundError
-                );
-            }
-
-            if (studySet.CreatedById != userId)
-            {
-                _logger.LogInformation($"User {user.UserName} is not allowed to perform this action.");
-                return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.StudySetAccessDeniedError
-                );
-            }
-
-            _logger.LogInformation("Deleting study set....");
-            await _studySetRepo.DeleteAsync(studySet);
-            _logger.LogInformation("Study set deleted.");
-
-            return ResultGeneric<StudySetDto>.Success(
-                _mapper.Map<StudySetDto>(studySet)
-            );
-
-        }
-
-        public async Task<ResultGeneric<StudySetDto>> GetStudySet(int id)
-        {
-            var studySet = await _studySetRepo.GetByIdAsync(id);
-
-            if (studySet is null)
-            {
-                return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.StudySetNotFoundError
-                );
-            }
-
-            return ResultGeneric<StudySetDto>.Success(
-                _mapper.Map<StudySetDto>(studySet)
-            );
-        }
-
-        */
+      
     }
 }

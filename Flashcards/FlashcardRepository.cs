@@ -23,6 +23,7 @@ namespace FlashcardXpApi.Flashcards
         public async Task<Flashcard?> GetByIdAsync(string id)
         {
             return await _context.Flashcards
+                .Include(f => f.StudySet)
                 .FirstOrDefaultAsync(f => f.Id == id);
         }
 

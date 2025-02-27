@@ -1,11 +1,13 @@
 ﻿using FlashcardXpApi.Extensions;
 using FlashcardXpApi.Flashcards.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardXpApi.Flashcards
 {
     [ApiController]
     [Route("/api")]
+    [Authorize]
     public class FlashcardController : ControllerBase
     {
         private readonly FlashcardService _flashcardService;
@@ -14,18 +16,19 @@ namespace FlashcardXpApi.Flashcards
         {
             _flashcardService = flashcardService;
         }
+        
 
-        /*
-        [HttpGet("{studySetId}/flashcards")]
-        public async Task<IResult> GetByStudySet(int studySetId)
+        [AllowAnonymous]
+        [HttpGet("studysets/{studySetId}/flashcards")]
+        public async Task<IResult> GetByStudySet(string studySetId)
         {
             var response = await _flashcardService.GetAllByStudySet(studySetId);
             return response.ToHttpResponse();
         }
 
-        [HttpPost("{studySetId}/flashcards")]
+        [HttpPost("studysets/{studySetId}/flashcards")]
         public async Task<IResult> AddNewFlashcard(
-            int studySetId,
+            string studySetId,
             List<FlashcardRequest> request
         )
         {
@@ -36,19 +39,21 @@ namespace FlashcardXpApi.Flashcards
         }
         
         [HttpDelete("flashcards/{flashcardId}")]
-        public async Task<IResult> DeleteFlashcard(int flashcardId)
+        public async Task<IResult> DeleteFlashcard(string flashcardId)
         {
             var response = await _flashcardService.DeleteFlashcard(flashcardId); 
             return response.ToHttpResponse();
         }
 
+        
         /*
         [HttpGet("flashcards/{flashcardId}")]
-        public async Task<IResult> GetFlashcard(int flashcardId)
+        public async Task<IResult> GetFlashcard(string flashcardId)
         {
             var response = await _flashcardService.Get
         }
 
+        
         */
 
 

@@ -12,5 +12,8 @@ namespace FlashcardXpApi.Flashcards
 
         public static Error FlashcardValidationError (string error) =>
             new Error(ErrorTypeConstant.VALIDATION_ERROR, error);
+
+        public static Error NotAuthorizedError =>
+            new Error(ErrorTypeConstant.UNAUTHORIZED, "Unauthorized to perform this action.");
     }
 }

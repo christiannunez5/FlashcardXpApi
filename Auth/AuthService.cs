@@ -60,7 +60,6 @@ namespace FlashcardXpApi.Auth
 
             if (!validationResult.IsValid)
             {
-
                 var errorMessage = validationResult.Errors
                     .Select(x => x.ErrorMessage)
                     .First();
@@ -86,7 +85,6 @@ namespace FlashcardXpApi.Auth
 
             return Result.Success;
         }
-
         private void SetTokenInsideCookie(string token, HttpContext context)
         {
             context.Response.Cookies.Append("accessToken", token, new CookieOptions

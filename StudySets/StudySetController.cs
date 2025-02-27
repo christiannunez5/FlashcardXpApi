@@ -34,7 +34,7 @@ namespace FlashcardXpApi.StudySets
             var response = await _studySetService.AddNewStudySet(request);
             return response.ToHttpResponse();
         }
-
+            
         [HttpPost("{studySetId}/user/{userId}")]
         public async Task<IResult> AddUserToStudySet(
           string studySetId,
@@ -44,8 +44,7 @@ namespace FlashcardXpApi.StudySets
             var response = await _studySetService.AddUserToStudySet(studySetId, userId);
             return response.ToHttpResponse();
         }
-
-
+        
         [HttpPatch("{studySetId}")]
         public async Task<IResult> UpdateStudySet(
           string studySetId,
@@ -64,7 +63,7 @@ namespace FlashcardXpApi.StudySets
             var response = await _studySetService.DeleteStudySet(studySetId);
             return response.ToHttpResponse();
         }
-
+        
         /*
 
         [HttpGet("studyset/{id}")]
