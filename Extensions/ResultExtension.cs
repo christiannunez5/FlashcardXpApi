@@ -25,7 +25,6 @@ namespace FlashcardXpApi.Extensions
             return MapErrorResponse(result.Error, result);
 
         }
-
         private static IResult MapErrorResponse(Error error, object result)
         {
             return error.Code switch

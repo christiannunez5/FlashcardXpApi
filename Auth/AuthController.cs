@@ -1,4 +1,5 @@
-﻿using FlashcardXpApi.Auth.Requests;
+﻿using FlashcardXpApi.Auth.Interfaces;
+using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Extensions;
 using FlashcardXpApi.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -14,13 +15,16 @@ namespace FlashcardXpApi.Auth
     public class AuthController : ControllerBase
     {
 
-        private readonly AuthService _authService;
+        private readonly IAuthService _authService;
+        private readonly ITokenService _tokenService;
 
-        public AuthController(AuthService authService)
+        public AuthController(IAuthService authService, ITokenService tokenService)
         {
             _authService = authService;
+            _tokenService = tokenService;
         }
-
+        
+        /*
         [HttpGet("me")]
         [Authorize]
         public async Task<IResult> GetCurrentLoggedInUser()
@@ -28,6 +32,8 @@ namespace FlashcardXpApi.Auth
             var response = await _authService.GetLoggedInUserHttp();
             return response.ToHttpResponse();
         }
+        */
+        
         
         [HttpPost("register")]
         public async Task<IResult> Register (
@@ -37,11 +43,12 @@ namespace FlashcardXpApi.Auth
             var response = await _authService.Register(request);
             return response.ToHttpResponse();
         }
-
+            
         [HttpPost("login")]
         public async Task<IResult> Login(UserLoginRequest request)
         {
-            var response = await _authService.Login(request, HttpContext);
+            var response = await _authService.Login(request);
+            
             return response.ToHttpResponse();
         }
 

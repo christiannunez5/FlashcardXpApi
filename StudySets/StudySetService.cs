@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FlashcardXpApi.Auth;
+using FlashcardXpApi.Auth.Interfaces;
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.StudySets.Requests;
 using FlashcardXpApi.Users;
@@ -11,7 +12,8 @@ namespace FlashcardXpApi.FlashcardSets
     public class StudySetService
     {
         private readonly IStudySetRepository _studySetRepo;
-        private readonly AuthService _authService;
+
+        private readonly ICurrentUserService _currentUserService;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly StudySetRequestValidator 
@@ -19,23 +21,23 @@ namespace FlashcardXpApi.FlashcardSets
         private readonly UserManager<User> _userManager;
 
         public StudySetService(IStudySetRepository studySetRepo,
-                               AuthService authService,
                                ILogger<AuthService> logger,
                                IMapper mapper,
                                StudySetRequestValidator validator,
-                               UserManager<User> userManager)
+                               UserManager<User> userManager,
+                               ICurrentUserService currentUserService)
         {
             _studySetRepo = studySetRepo;
-            _authService = authService;
             _logger = logger;
             _mapper = mapper;
             _validator = validator;
             _userManager = userManager;
+            _currentUserService = currentUserService;
         }
 
         public async Task<ResultGeneric<List<StudySetDto>>> GetAllByUser()
         {
-            var user = await _authService.GetLoggedInUser();
+            var user = await _currentUserService.GetCurrentUser();
 
             if (user is null)
             {
@@ -72,7 +74,7 @@ namespace FlashcardXpApi.FlashcardSets
                 );
             }
 
-            var user = await _authService.GetLoggedInUser();
+            var user = await _currentUserService.GetCurrentUser();
 
             if (user is null)
             {
@@ -116,7 +118,7 @@ namespace FlashcardXpApi.FlashcardSets
                 );
             }
 
-            var user = await _authService.GetLoggedInUser();
+            var user = await _currentUserService.GetCurrentUser();
 
             if (user is null)
             {
@@ -157,8 +159,10 @@ namespace FlashcardXpApi.FlashcardSets
         }
 
 
-        public async Task<Result> AddUserToStudySet(string studySetId, string userId)
+        
+        public Task<Result> AddUserToStudySet(string studySetId, string userId)
         {
+            /*
             var studySet = await _studySetRepo.GetByIdAsync(studySetId);
 
             if (studySet is null)
@@ -182,11 +186,14 @@ namespace FlashcardXpApi.FlashcardSets
             await _studySetRepo.UpdateAsync(studySet);
 
             return Result.Success;
+            */
+
+            throw new NotImplementedException();
         }
 
         public async Task<Result> DeleteStudySet(string studySetId)
         {
-            var user = await _authService.GetLoggedInUser();
+            var user = await _currentUserService.GetCurrentUser();
 
             if (user is null)
             {

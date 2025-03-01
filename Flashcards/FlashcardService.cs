@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FlashcardXpApi.Auth;
+using FlashcardXpApi.Auth.Interfaces;
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Flashcards.Requests;
 using FlashcardXpApi.FlashcardSets;
@@ -14,7 +15,7 @@ namespace FlashcardXpApi.Flashcards
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly FlashcardRequestValidator _validator;
-        private readonly AuthService _authService;
+        private readonly ICurrentUserService _currentUserService;
 
         public FlashcardService (
             IFlashcardRepository flashcardRepo, 
@@ -22,7 +23,7 @@ namespace FlashcardXpApi.Flashcards
             ILogger<FlashcardService> logger, 
             IMapper mapper, 
             FlashcardRequestValidator validator,
-            AuthService authService
+            ICurrentUserService currentUserService
         )
         {
             _flashcardRepo = flashcardRepo;
@@ -30,7 +31,7 @@ namespace FlashcardXpApi.Flashcards
             _logger = logger;
             _mapper = mapper;
             _validator = validator;
-            _authService = authService;
+            _currentUserService = currentUserService;
         }
 
         
@@ -38,7 +39,7 @@ namespace FlashcardXpApi.Flashcards
             string studySetId
         )
         {
-            var user = await _authService.GetLoggedInUser();
+            var user = await _currentUserService.GetCurrentUser();
 
             var studySet = await _studySetRepo.GetByIdAsync(studySetId);
 
@@ -88,7 +89,7 @@ namespace FlashcardXpApi.Flashcards
                 return ResultGeneric<List<FlashcardDto>>.Failure(FlashcardErrors.StudySetNotFoundError);
             }
 
-            var user = await _authService.GetLoggedInUser();
+            var user = await _currentUserService.GetCurrentUser();
 
             if (user is not null && studySet.CreatedById != user.Id)
             {
@@ -118,7 +119,7 @@ namespace FlashcardXpApi.Flashcards
                 return ResultGeneric<FlashcardDto>.Failure(FlashcardErrors.FlashcardNotFoundError);
             }
 
-            var user = await _authService.GetLoggedInUser();
+            var user = await _currentUserService.GetCurrentUser();
 
             if (user is not null && flashcard.StudySet.CreatedById != user.Id)
             {

@@ -1,4 +1,5 @@
 ﻿using FlashcardXpApi.Auth;
+using FlashcardXpApi.Auth.Interfaces;
 using FlashcardXpApi.Data;
 using FlashcardXpApi.Exceptions;
 using FlashcardXpApi.Flashcards;
@@ -79,9 +80,10 @@ namespace FlashcardXpApi.Extensions
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
-            services.AddScoped<AuthService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddSingleton<JwtHandler>();
-            services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<ITokenService, CookieTokenService>();
             services.AddHttpContextAccessor();
 
             return services;

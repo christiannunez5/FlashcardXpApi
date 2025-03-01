@@ -1,4 +1,5 @@
 ﻿using FlashcardXpApi.Users;
+using FluentValidation;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
@@ -9,4 +10,19 @@ namespace FlashcardXpApi.Auth.Requests
         string Username, 
         string Password, 
         string? ProfilePicUrl);
+
+    public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
+    {
+        public CreateUserRequestValidator()
+        {
+            RuleFor(x => x.Email)
+                .EmailAddress()
+                    .WithMessage("Invalid email address.");
+
+            RuleFor(x => x.Username)
+               .NotEmpty()
+                    .WithMessage("Username can't be empty.");
+
+        }
+    }
 }

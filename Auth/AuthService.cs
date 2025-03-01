@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FlashcardXpApi.Auth.Interfaces;
 using FlashcardXpApi.Auth.Requests;
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Users;
@@ -7,31 +8,29 @@ using Microsoft.AspNetCore.Identity;
 
 namespace FlashcardXpApi.Auth
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly CreateUserRequestValidator _createUserValidator;
-        private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly JwtHandler _jwtHandler;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly ITokenService _tokenService;
 
         public AuthService(CreateUserRequestValidator createUserValidator,
-                           IMapper mapper,
                            UserManager<User> userManager,
                            SignInManager<User> signInManager,
                            JwtHandler jwtHandler,
-                           IHttpContextAccessor contextAccessor)
+                           ITokenService tokenService)
         {
             _createUserValidator = createUserValidator;
-            _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtHandler = jwtHandler;
-            _contextAccessor = contextAccessor;
+            _tokenService = tokenService;
         }
 
-        public async Task<Result> Login(UserLoginRequest request, HttpContext context)
+
+        public async Task<Result> Login(UserLoginRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -48,12 +47,11 @@ namespace FlashcardXpApi.Auth
             }
             
             var accessToken = _jwtHandler.CreateToken(user);
-
-            SetTokenInsideCookie(accessToken, context);
+            _tokenService.StoreToken(accessToken);
 
             return Result.Success;
         }
-
+        
         public async Task<Result> Register(CreateUserRequest request)
         {
             var validationResult = _createUserValidator.Validate(request);
@@ -85,36 +83,8 @@ namespace FlashcardXpApi.Auth
 
             return Result.Success;
         }
-        private void SetTokenInsideCookie(string token, HttpContext context)
-        {
-            context.Response.Cookies.Append("accessToken", token, new CookieOptions
-            {
-                Expires = DateTimeOffset.UtcNow.AddMinutes(30),
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
-                IsEssential = true,
-            });
-        }
 
-        public async Task<ResultGeneric<UserDto>> GetLoggedInUserHttp()
-        {
-            var loggedInUser = await GetLoggedInUser();
-            var user = _mapper.Map<UserDto>(loggedInUser);
-            return ResultGeneric<UserDto>.Success(user);
-        }
+        
 
-        public async Task<User?> GetLoggedInUser()
-        {
-            if (_contextAccessor.HttpContext != null)
-            {
-                var user = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
-                return user;
-            }
-
-            return null;
-            
-        }
-         
     }
 }
