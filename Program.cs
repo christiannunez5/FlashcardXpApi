@@ -1,11 +1,8 @@
-using FlashcardXpApi.Auth;
 using FlashcardXpApi.Common;
 using FlashcardXpApi.Data;
-using FlashcardXpApi.Exceptions;
 using FlashcardXpApi.Extensions;
-using FlashcardXpApi.Flashcards;
-using FlashcardXpApi.FlashcardSets;
-using FlashcardXpApi.Mapper;
+
+using FlashcardXpApi.Shared.Mapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 

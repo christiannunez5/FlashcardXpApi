@@ -1,10 +1,9 @@
-﻿using FlashcardXpApi.Flashcards;
-using Microsoft.EntityFrameworkCore;
-using FlashcardXpApi.FlashcardSets;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using FlashcardXpApi.Users;
 using Microsoft.AspNetCore.Identity;
-using FlashcardXpApi.StudySets;
+using FlashcardXpApi.Features.Flashcards;
+using FlashcardXpApi.Features.StudySets;
+using FlashcardXpApi.Features.Users;
 
 namespace FlashcardXpApi.Data
 {

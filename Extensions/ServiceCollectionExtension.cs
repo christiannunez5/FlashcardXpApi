@@ -1,10 +1,9 @@
-﻿using FlashcardXpApi.Auth;
-using FlashcardXpApi.Auth.Interfaces;
-using FlashcardXpApi.Data;
+﻿using FlashcardXpApi.Data;
 using FlashcardXpApi.Exceptions;
-using FlashcardXpApi.Flashcards;
-using FlashcardXpApi.FlashcardSets;
-using FlashcardXpApi.Users;
+using FlashcardXpApi.Features.Auth;
+using FlashcardXpApi.Features.Flashcards;
+using FlashcardXpApi.Features.StudySets;
+using FlashcardXpApi.Features.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
