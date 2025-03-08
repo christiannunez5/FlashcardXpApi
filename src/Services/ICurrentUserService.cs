@@ -1,6 +1,6 @@
 ﻿using FlashcardXpApi.Features.Users;
 
-namespace FlashcardXpApi.Features.Auth
+namespace FlashcardXpApi.Services
 {
     public interface ICurrentUserService
     {

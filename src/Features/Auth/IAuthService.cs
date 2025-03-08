@@ -1,5 +1,4 @@
 ﻿using FlashcardXpApi.Common.Results;
-using FlashcardXpApi.Features.Auth.Requests;
 
 namespace FlashcardXpApi.Features.Auth
 {

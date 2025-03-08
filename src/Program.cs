@@ -39,6 +39,18 @@ var services = WebApplication.CreateBuilder(args);
     services.Services.AddAutoMapper(typeof(MappingProfile));
     services.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
 
+    services.Services.AddCors(options =>
+    {
+
+        options.AddPolicy("ApiCorsPolicy", policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .AllowAnyMethod();
+        });
+    });
+
 }
 
 var app = services.Build();
@@ -48,11 +60,15 @@ var app = services.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
+    app.UseCors("ApiCorsPolicy");
+
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
     app.UseExceptionHandler();
+
 
     app.Run();
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FlashcardXpApi.Features.Flashcards.Requests
+namespace FlashcardXpApi.Features.Flashcards
 {
     public record FlashcardRequest(string Term, string Definition);
 

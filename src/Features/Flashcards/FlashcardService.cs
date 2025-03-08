@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using FlashcardXpApi.Common.Results;
-using FlashcardXpApi.Features.Auth;
-using FlashcardXpApi.Features.Flashcards.Requests;
 using FlashcardXpApi.Features.StudySets;
 using FlashcardXpApi.Features.Users;
+using FlashcardXpApi.Services;
 
 namespace FlashcardXpApi.Features.Flashcards
 {

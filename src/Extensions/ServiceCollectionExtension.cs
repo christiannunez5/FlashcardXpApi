@@ -4,6 +4,7 @@ using FlashcardXpApi.Features.Auth;
 using FlashcardXpApi.Features.Flashcards;
 using FlashcardXpApi.Features.StudySets;
 using FlashcardXpApi.Features.Users;
+using FlashcardXpApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -91,7 +92,7 @@ namespace FlashcardXpApi.Extensions
         public static IServiceCollection AddStudySetExtensions(this IServiceCollection services)
         {
             services.AddScoped<IStudySetRepository, StudySetRepository>();
-            services.AddScoped<StudySetService>();
+            services.AddScoped<IStudySetService, StudySetService>();
 
             return services;
         }

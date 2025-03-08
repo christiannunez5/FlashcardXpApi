@@ -1,5 +1,4 @@
 ﻿using FlashcardXpApi.Extensions;
-using FlashcardXpApi.Features.Flashcards.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

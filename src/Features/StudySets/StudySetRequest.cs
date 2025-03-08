@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
-namespace FlashcardXpApi.Features.StudySets.Requests
+namespace FlashcardXpApi.Features.StudySets
 {
     public record StudySetRequest(
         string Title,

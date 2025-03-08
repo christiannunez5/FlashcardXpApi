@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using FlashcardXpApi.Common.Results;
-using FlashcardXpApi.Features.Auth.Requests;
+﻿using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Features.Users;
 using Microsoft.AspNetCore.Identity;
 

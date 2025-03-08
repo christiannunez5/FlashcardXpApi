@@ -1,11 +1,5 @@
 ﻿using FlashcardXpApi.Extensions;
-using FlashcardXpApi.Features.Auth.Requests;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.HttpSys;
-using System.Net;
 
 namespace FlashcardXpApi.Features.Auth
 {

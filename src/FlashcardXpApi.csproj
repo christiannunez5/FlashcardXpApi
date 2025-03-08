@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Auth\Interfaces\" />
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using FlashcardXpApi.Features.Users;
 using Microsoft.AspNetCore.Identity;
 
-namespace FlashcardXpApi.Features.Auth
+namespace FlashcardXpApi.Services
 {
     public class CurrentUserService : ICurrentUserService
     {
@@ -18,14 +18,17 @@ namespace FlashcardXpApi.Features.Auth
 
         public async Task<User?> GetCurrentUser()
         {
+            
+            var httpContext = _contextAccessor.HttpContext;
 
-            if (_contextAccessor.HttpContext != null)
+            if (httpContext?.User.Identity?.IsAuthenticated != true)
             {
-                var user = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
-                return user;
+                return null;
             }
 
-            return null;
+            var user = await _userManager.GetUserAsync(httpContext.User);
+            return user;
+
         }
     }
 }
