@@ -8,10 +8,10 @@ namespace FlashcardXpApi.Extensions
         {
             if (result.IsSuccess)
             {
-                return Results.Ok(result);
+                return Results.Ok();
             }
 
-            return MapErrorResponse(result.Error, result);
+            return MapErrorResponse(result.Error, result.Error);
 
         }
 
@@ -19,10 +19,10 @@ namespace FlashcardXpApi.Extensions
         {
             if (result.IsSuccess)
             {
-                return Results.Ok(result);
+                return Results.Ok(result.Data);
             }
 
-            return MapErrorResponse(result.Error, result);
+            return MapErrorResponse(result.Error, result.Error);
 
         }
         private static IResult MapErrorResponse(Error error, object result)

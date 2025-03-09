@@ -1,4 +1,8 @@
-﻿using FlashcardXpApi.Extensions;
+﻿using AutoMapper;
+using FlashcardXpApi.Extensions;
+using FlashcardXpApi.Features.Users;
+using FlashcardXpApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardXpApi.Features.Auth
@@ -9,23 +13,26 @@ namespace FlashcardXpApi.Features.Auth
     {
 
         private readonly IAuthService _authService;
-        private readonly ITokenService _tokenService;
+        private readonly ICurrentUserService _currentUserService;
+        private readonly IMapper _mapper;
 
-        public AuthController(IAuthService authService, ITokenService tokenService)
+        public AuthController(IAuthService authService,
+            ICurrentUserService currentUserService,
+            IMapper mapper)
         {
             _authService = authService;
-            _tokenService = tokenService;
+            _currentUserService = currentUserService;
+            _mapper = mapper;
         }
 
-        /*
-        [HttpGet("me")]
+
         [Authorize]
+        [HttpGet("me")]
         public async Task<IResult> GetCurrentLoggedInUser()
         {
-            var response = await _authService.GetLoggedInUserHttp();
-            return response.ToHttpResponse();
+            var user = await _currentUserService.GetCurrentUser();
+            return Results.Ok(_mapper.Map<UserDto>(user));
         }
-        */
 
 
         [HttpPost("register")]

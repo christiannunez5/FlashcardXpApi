@@ -8,7 +8,7 @@ namespace FlashcardXpApi.Services
 
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
-
+            
         public CurrentUserService(UserManager<User> userManager,
             IHttpContextAccessor contextAccessor)
         {

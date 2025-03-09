@@ -2,7 +2,7 @@
 
 namespace FlashcardXpApi.Features.Flashcards
 {
-    public record FlashcardsByStudySetDto(
+    public record StudySetDetailDto(
         string Id,
         string Title,
         string? Description,

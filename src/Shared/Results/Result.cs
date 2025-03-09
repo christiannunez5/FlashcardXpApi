@@ -1,4 +1,6 @@
-﻿namespace FlashcardXpApi.Common.Results
+﻿using System.Text.Json.Serialization;
+
+namespace FlashcardXpApi.Common.Results
 {
     public class Result
     {
@@ -7,19 +9,21 @@
 
         public Error Error { get; }
 
-        private Result(bool isSuccess, Error error)
+        private Result()
         {
-            if (isSuccess && error != Error.None)
-                throw new ArgumentException("Invalid error", nameof(error));
-
-            if (!isSuccess && error == Error.None)
-                throw new ArgumentException("Invalid error", nameof(error));
-
-            IsSuccess = isSuccess;
-            Error = error;
+            IsSuccess = true;
+            Error = Error.None;
         }
 
-        public static Result Success => new(true, Error.None);
-        public static Result Failure(Error error) => new(false, error);
+        private Result(Error error)
+        {
+            IsSuccess = false;
+            Error = error;
+
+
+        }
+        
+        public static Result Success => new();
+        public static Result Failure(Error error) => new(error);
     }
 }

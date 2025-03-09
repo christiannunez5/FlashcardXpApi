@@ -33,7 +33,7 @@ namespace FlashcardXpApi.Features.Flashcards
         }
 
 
-        public async Task<ResultGeneric<FlashcardsByStudySetDto>> GetAllByStudySet(
+        public async Task<ResultGeneric<StudySetDetailDto>> GetAllByStudySet(
             string studySetId
         )
         {
@@ -43,12 +43,12 @@ namespace FlashcardXpApi.Features.Flashcards
 
             if (studySet is null)
             {
-                return ResultGeneric<FlashcardsByStudySetDto>.Failure(FlashcardErrors.StudySetNotFoundError);
+                return ResultGeneric<StudySetDetailDto>.Failure(FlashcardErrors.StudySetNotFoundError);
             }
 
             var flashcards = await _flashcardRepo.GetAllByStudySet(studySet);
 
-            var response = new FlashcardsByStudySetDto
+            var response = new StudySetDetailDto
             (
                 studySet.Id,
                 studySet.Title,
@@ -57,7 +57,7 @@ namespace FlashcardXpApi.Features.Flashcards
                 _mapper.Map<List<FlashcardDto>>(flashcards)
             );
 
-            return ResultGeneric<FlashcardsByStudySetDto>.Success(
+            return ResultGeneric<StudySetDetailDto>.Success(
                 response
             );
         }
@@ -79,6 +79,7 @@ namespace FlashcardXpApi.Features.Flashcards
                     return ResultGeneric<List<FlashcardDto>>.Failure(FlashcardErrors.FlashcardValidationError(errorMessage));
                 }
             }
+
 
             var studySet = await _studySetRepo.GetByIdAsync(studySetId);
 
