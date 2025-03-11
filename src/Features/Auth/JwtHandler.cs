@@ -1,7 +1,9 @@
-﻿using FlashcardXpApi.Features.Users;
+﻿using FlashcardXpApi.Data;
+using FlashcardXpApi.Features.Users;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace FlashcardXpApi.Features.Auth
@@ -22,6 +24,11 @@ namespace FlashcardXpApi.Features.Auth
             var tokenOptions = GenerateTokenOptions(credentials, claims);
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        }
+
+        public string GenerateRefreshToken()
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
         }
 
         private SigningCredentials GetSigningCredentials()

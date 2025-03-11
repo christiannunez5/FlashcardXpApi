@@ -7,5 +7,8 @@ namespace FlashcardXpApi.Features.Auth
         Task<Result> Login(UserLoginRequest request);
         Task<Result> Register(CreateUserRequest request);
 
+        Task<Result> LoginWithRefreshToken();
+
+        Task<Result> Logout();
     }
 }

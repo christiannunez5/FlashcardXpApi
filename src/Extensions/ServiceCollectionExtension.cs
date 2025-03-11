@@ -83,7 +83,8 @@ namespace FlashcardXpApi.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddSingleton<JwtHandler>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
-            services.AddScoped<ITokenService, CookieTokenService>();
+            services.AddScoped<ICookieService, CookieService>();
+            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddHttpContextAccessor();
 
             return services;

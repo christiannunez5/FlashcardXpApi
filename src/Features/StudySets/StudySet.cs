@@ -20,6 +20,7 @@ namespace FlashcardXpApi.Features.StudySets
         public string? CreatedById { get; set; }
         public User? CreatedBy { get; set; }
 
+
         public ICollection<Flashcard> Flashcards { get; set; } = new List<Flashcard>();
 
         public ICollection<StudySetParticipant> StudySetParticipants { get; set; } =

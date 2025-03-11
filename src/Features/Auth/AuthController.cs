@@ -52,6 +52,22 @@ namespace FlashcardXpApi.Features.Auth
             return response.ToHttpResponse();
         }
 
+        [HttpPost("logout")]
+
+        [Authorize]
+        public async Task<IResult> Logout()
+        {
+            var response = await _authService.Logout();
+            return response.ToHttpResponse();
+        }
+
+        [HttpPost("login/refresh-token")]
+        public async Task<IResult> LoginWithRefreshToken()
+        {
+            var response = await _authService.LoginWithRefreshToken();
+            return response.ToHttpResponse();
+        }
+
 
 
     }

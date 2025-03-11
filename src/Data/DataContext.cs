@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using FlashcardXpApi.Features.Flashcards;
 using FlashcardXpApi.Features.StudySets;
 using FlashcardXpApi.Features.Users;
+using FlashcardXpApi.Features.Auth;
 
 namespace FlashcardXpApi.Data
 {
@@ -17,6 +18,8 @@ namespace FlashcardXpApi.Data
         public DbSet<StudySet> StudySets { get; set; }
 
         public DbSet<Flashcard> Flashcards  { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,7 +40,6 @@ namespace FlashcardXpApi.Data
                 .HasForeignKey(s => s.CreatedById)
                 .OnDelete(DeleteBehavior.SetNull);
 
- 
             modelBuilder.Entity<StudySet>()
                 .Property(s => s.Id)
                 .ValueGeneratedOnAdd();
