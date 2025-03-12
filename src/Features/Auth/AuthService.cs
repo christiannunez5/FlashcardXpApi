@@ -71,14 +71,14 @@ namespace FlashcardXpApi.Features.Auth
 
             if (tokenEntry is null)
             {
-                return Result.Failure(AuthErrors.AuthenticationRequiredError);
+                return Result.Failure(AuthErrors.AuthorizationFailedError);
             }
 
             var refreshToken = await _refreshTokenRepository.GetByToken(tokenEntry);
 
             if (refreshToken is null || refreshToken.ExpiresOnUtc < DateTime.Now)
             {
-                return Result.Failure(AuthErrors.AuthenticationRequiredError);
+                return Result.Failure(AuthErrors.AuthorizationFailedError);
             }
 
             var accessToken = _jwtHandler.CreateToken(refreshToken.User);

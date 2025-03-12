@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Features.Auth;
+using FlashcardXpApi.Features.Flashcards;
 using FlashcardXpApi.Features.Users;
 using FlashcardXpApi.Services;
 using Microsoft.AspNetCore.Identity;
@@ -15,18 +16,20 @@ namespace FlashcardXpApi.Features.StudySets
         private readonly IMapper _mapper;
         private readonly StudySetRequestValidator
             _validator;
-
+        private readonly IFlashcardRepository _flashcardRepository;
         public StudySetService(IStudySetRepository studySetRepo,
                                ILogger<AuthService> logger,
                                IMapper mapper,
                                StudySetRequestValidator validator,
-                               ICurrentUserService currentUserService)
+                               ICurrentUserService currentUserService,
+                               IFlashcardRepository flashcardRepository)
         {
             _studySetRepo = studySetRepo;
             _logger = logger;
             _mapper = mapper;
             _validator = validator;
             _currentUserService = currentUserService;
+            _flashcardRepository = flashcardRepository;
         }
 
 
@@ -47,7 +50,7 @@ namespace FlashcardXpApi.Features.StudySets
 
         }
 
-        public async Task<ResultGeneric<StudySetDto>> AddNewStudySet(StudySetRequest request)
+        public async Task<ResultGeneric<string>>AddNewStudySetWithFlashcards(StudySetWithFlashcardsRequest request)
         {
 
             var user = await _currentUserService.GetCurrentUser();
@@ -60,12 +63,11 @@ namespace FlashcardXpApi.Features.StudySets
                     .Select(x => x.ErrorMessage)
                     .First();
 
-                return ResultGeneric<StudySetDto>.Failure(
+                return ResultGeneric<string>.Failure(
                     StudySetErrors.ValidationError(errorMessage)
                 );
             }
-
-            
+                
             var newStudySet = new StudySet()
             {
                 Title = request.Title,
@@ -74,12 +76,17 @@ namespace FlashcardXpApi.Features.StudySets
             };
 
             await _studySetRepo.InsertAsync(newStudySet);
+            
+            var flashcards = _mapper.Map<List<Flashcard>>(request.Flashcards);
+            flashcards.ForEach(f => f.StudySet = newStudySet);
 
-            return ResultGeneric<StudySetDto>.Success(_mapper.Map<StudySetDto>(newStudySet));
+            await _flashcardRepository.InsertAllAsync(flashcards);
+
+            return ResultGeneric<string>.Success(newStudySet.Id);
         }
 
 
-        public async Task<ResultGeneric<StudySetDto>> UpdateStudySet(string studySetId, StudySetRequest request)
+        public async Task<ResultGeneric<StudySetDto>> UpdateStudySet(string studySetId, StudySetWithFlashcardsRequest request)
         {
             var user = await _currentUserService.GetCurrentUser();
 

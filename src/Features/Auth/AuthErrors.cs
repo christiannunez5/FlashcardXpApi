@@ -17,6 +17,9 @@ namespace FlashcardXpApi.Features.Auth
         public static Error AuthenticationRequiredError =>
            new Error(ErrorTypeConstant.UNAUTHORIZED, "Authenticated required.");
 
+        public static Error AuthorizationFailedError =>
+           new Error(ErrorTypeConstant.FORBIDDEN, "Not authorized to perform this action.");
+
         public static Error CreateUserValidationError(string message) =>
             new Error(ErrorTypeConstant.BAD_REQUEST, message);
     }
