@@ -19,8 +19,7 @@ namespace FlashcardXpApi.Shared.Mapper
             CreateMap<UserLoginRequest, UserDto>();
 
             CreateMap<StudySet, StudySetDto>();
-
-
+                    
             CreateMap<Flashcard, FlashcardDto>();
             CreateMap<FlashcardRequest, Flashcard>();
         }

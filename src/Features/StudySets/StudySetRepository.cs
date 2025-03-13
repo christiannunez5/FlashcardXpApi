@@ -45,7 +45,7 @@ namespace FlashcardXpApi.Features.StudySets
             await _context.SaveChangesAsync();
 
         }
-
+    
         public async Task DeleteAsync(StudySet studySet)
         {
             _context.StudySets

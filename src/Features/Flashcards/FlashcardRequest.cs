@@ -2,9 +2,8 @@
 
 namespace FlashcardXpApi.Features.Flashcards
 {
-    public record FlashcardRequest(string Term, string Definition);
-
-
+    public record FlashcardRequest(string? Id, string Term, string Definition);
+    
     public class FlashcardRequestValidator : AbstractValidator<FlashcardRequest>
     {
         public FlashcardRequestValidator()

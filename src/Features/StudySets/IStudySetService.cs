@@ -7,10 +7,10 @@ namespace FlashcardXpApi.Features.StudySets
     {
         Task<ResultGeneric<List<StudySetDto>>> GetStudySetsByUser();
 
-        Task<ResultGeneric<string>> AddNewStudySetWithFlashcards(StudySetWithFlashcardsRequest request);
+        Task<ResultGeneric<string>> AddEmptyStudySet();
 
         Task<ResultGeneric<StudySetDto>> DeleteStudySet(string studySetId);
-        Task<ResultGeneric<StudySetDto>> UpdateStudySet(string studySetId, StudySetWithFlashcardsRequest request);
+        Task<ResultGeneric<string>> UpdateStudySet(string studySetId, StudySetWithFlashcardsRequest request);
 
     }
 }

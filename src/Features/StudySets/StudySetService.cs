@@ -2,9 +2,7 @@
 using FlashcardXpApi.Common.Results;
 using FlashcardXpApi.Features.Auth;
 using FlashcardXpApi.Features.Flashcards;
-using FlashcardXpApi.Features.Users;
 using FlashcardXpApi.Services;
-using Microsoft.AspNetCore.Identity;
 
 namespace FlashcardXpApi.Features.StudySets
 {
@@ -50,11 +48,14 @@ namespace FlashcardXpApi.Features.StudySets
 
         }
 
-        public async Task<ResultGeneric<string>>AddNewStudySetWithFlashcards(StudySetWithFlashcardsRequest request)
+       
+        public async Task<ResultGeneric<string>> UpdateStudySet(
+            string studySetId, 
+            StudySetWithFlashcardsRequest request
+        )
         {
-
             var user = await _currentUserService.GetCurrentUser();
-        
+
             var validationResult = _validator.Validate(request);
 
             if (!validationResult.IsValid)
@@ -67,71 +68,45 @@ namespace FlashcardXpApi.Features.StudySets
                     StudySetErrors.ValidationError(errorMessage)
                 );
             }
-                
-            var newStudySet = new StudySet()
-            {
-                Title = request.Title,
-                Description = request.Description,
-                CreatedBy = user
-            };
 
-            await _studySetRepo.InsertAsync(newStudySet);
-            
-            var flashcards = _mapper.Map<List<Flashcard>>(request.Flashcards);
-            flashcards.ForEach(f => f.StudySet = newStudySet);
-
-            await _flashcardRepository.InsertAllAsync(flashcards);
-
-            return ResultGeneric<string>.Success(newStudySet.Id);
-        }
-
-
-        public async Task<ResultGeneric<StudySetDto>> UpdateStudySet(string studySetId, StudySetWithFlashcardsRequest request)
-        {
-            var user = await _currentUserService.GetCurrentUser();
-
-            if (user is null)
-            {
-                return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.AuthenticationRequiredError
-                );
-            };
-
-            var validationResult = _validator.Validate(request);
-
-            if (!validationResult.IsValid)
-            {
-                var errorMessage = validationResult.Errors
-                    .Select(x => x.ErrorMessage)
-                    .First();
-
-                return ResultGeneric<StudySetDto>.Failure(
-                    StudySetErrors.ValidationError(errorMessage)
-                );
-            }
-          
             var studySet = await _studySetRepo.GetByIdAsync(studySetId);
 
             if (studySet is null)
             {
-                return ResultGeneric<StudySetDto>.Failure(StudySetErrors.StudySetNotFoundError);
-            }
-
-            if (studySet.CreatedById != user.Id)
-            {
-                return ResultGeneric<StudySetDto>.Failure(StudySetErrors.AuthorizationFailedError);
+                return ResultGeneric<string>.Failure(StudySetErrors.StudySetNotFoundError);
             }
 
             studySet.Title = request.Title;
-            studySet.IsPublic = request.IsPublic;
-            studySet.Description =
-                request.Description is not null ? request.Description : studySet.Description;
-            
-            _logger.LogInformation("Updating study set....");
+            studySet.Description = request.Description;
+
             await _studySetRepo.UpdateAsync(studySet);
-            _logger.LogInformation("Study set updated.");
+
+            foreach ( var flashcard in request.Flashcards )
+            {
+
+                var currentFlashcard = await _flashcardRepository.GetByIdAsync(flashcard.Id);
+
+                if (currentFlashcard is not null)
+                {
+                    currentFlashcard.Definition = flashcard.Definition;
+                    currentFlashcard.Term = flashcard.Term;
+                    await _flashcardRepository.UpdateAsync(currentFlashcard);
+                }
+
+                else
+                {
+                    var newFlashcard = new Flashcard
+                    {
+                        Term = flashcard.Term,
+                        Definition = flashcard.Definition,
+                        StudySet = studySet
+                    };
+                    await _flashcardRepository.InsertAsync(newFlashcard);
+                }
+                
+            }
             
-            return ResultGeneric<StudySetDto>.Success(_mapper.Map<StudySetDto>(studySet));
+            return ResultGeneric<string>.Success(studySet.Id);
 
         }
 
@@ -166,6 +141,33 @@ namespace FlashcardXpApi.Features.StudySets
             );
         }
 
-      
+        public async Task<ResultGeneric<string>> AddEmptyStudySet()
+        {
+            var user = await _currentUserService.GetCurrentUser();
+
+            if (user is null)
+            {
+                return ResultGeneric<string>.Failure(AuthErrors.AuthenticationRequiredError);
+            }
+
+            var newStudySet = new StudySet() { CreatedById = user.Id,
+                Title = "",
+                Description = ""
+            };
+            
+            await _studySetRepo.InsertAsync(newStudySet);
+
+            var newFlashcards = new List<Flashcard>
+            {
+                new Flashcard { Definition = "", Term = "", StudySet = newStudySet },
+                new Flashcard { Definition = "", Term = "", StudySet = newStudySet },
+                new Flashcard { Definition = "", Term = "", StudySet = newStudySet },
+                new Flashcard { Definition = "", Term = "", StudySet = newStudySet },
+            };
+
+            await _flashcardRepository.InsertAllAsync(newFlashcards);
+
+            return ResultGeneric<string>.Success(newStudySet.Id);
+        }
     }
 }

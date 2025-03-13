@@ -26,14 +26,14 @@ namespace FlashcardXpApi.Features.StudySets
         }
 
         [HttpPost]
-        public async Task<IResult> Add(StudySetWithFlashcardsRequest request)
+        public async Task<IResult> Add()
         {
-            var response = await _studySetService.AddNewStudySetWithFlashcards(request);
+            var response = await _studySetService.AddEmptyStudySet();
             return response.ToHttpResponse();
         }
 
        
-        [HttpPatch("{studySetId}")]
+        [HttpPut("{studySetId}")]
         public async Task<IResult> UpdateStudySet(string studySetId, StudySetWithFlashcardsRequest request)
         {
             var response = await _studySetService.UpdateStudySet(studySetId, request);
