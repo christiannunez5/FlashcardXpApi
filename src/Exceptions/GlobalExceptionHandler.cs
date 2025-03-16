@@ -1,35 +1,27 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace FlashcardXpApi.Exceptions
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {
-        public async ValueTask<bool> TryHandleAsync(
-            HttpContext httpContext, Exception exception, 
-            CancellationToken cancellationToken)
+        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            var (statusCode, title) = MapException(exception);
-                
-            await Results.Problem(
-                title: title,
-                statusCode: statusCode
-            ).ExecuteAsync(httpContext);
 
+            var problemDetails = new ProblemDetails
+            {
+                Status = (int) HttpStatusCode.InternalServerError,
+                Title = "Internal server error",
+                Type = exception.GetType().Name,
+                Detail = exception.Message
+            };
+
+            await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
             return true;
         }
 
-        public static (int statusCode, string title) MapException(Exception exception)
-        {
-            return exception switch
-            {
-                NotFoundException => (StatusCodes.Status404NotFound, exception.Message),
-                ValidationException => (StatusCodes.Status400BadRequest, exception.Message),
-                NotAuthorizedException => (StatusCodes.Status401Unauthorized, exception.Message),
-                ConflictException => (StatusCodes.Status409Conflict, exception.Message),
-                _ => (StatusCodes.Status500InternalServerError, "Internal Server Error.")
-            };
-        }
+       
     }
 }

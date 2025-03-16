@@ -1,55 +1,26 @@
-using FlashcardXpApi.Common;
-using FlashcardXpApi.Data;
-using FlashcardXpApi.Extensions;
 
-using FlashcardXpApi.Shared.Mapper;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
+using FlashcardXpApi.Application;
+using FlashcardXpApi.Exceptions;
+using FlashcardXpApi.Infrastructure;
+using FlashcardXpApi.Infrastructure.Persistence;
 
 var services = WebApplication.CreateBuilder(args);
 {
-
+    
     var config = services.Configuration;
         
     services.Services.AddControllers();
     services.Services.AddEndpointsApiExplorer();
-    services.Services.AddSwaggerGenWithAuth();
          
-    services.Services.AddExceptionHandling();
+    services.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-    // database
-    services.Services.AddDbContext<DataContext>(options =>
-    {
-        const string FLASHCARDXP_CONTEXT_CONNSTRING = "DefaultConnection";
-        options.UseSqlServer(config.GetConnectionString(FLASHCARDXP_CONTEXT_CONNSTRING));
-    });
-    
-    // routing
+    services.Services.AddHttpContextAccessor();
+
     services.Services.AddRouting(options => options.LowercaseUrls = true);
 
-    // identity
-    services.Services.AddIdentityExtensions();
-    
-    // features
-    services.Services.AddAuthenticationExtensions(config);
-    services.Services.AddStudySetExtensions();
-    services.Services.AddFlashcardExtensions();
+    services.Services.AddInfrastructure(config);
 
-    // mapping and validation
-    services.Services.AddAutoMapper(typeof(MappingProfile));
-    services.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
-
-    services.Services.AddCors(options =>
-    {
-
-        options.AddPolicy("ApiCorsPolicy", policy =>
-        {
-            policy.WithOrigins("http://localhost:5173")
-                .AllowAnyHeader()
-                .AllowCredentials()
-                .AllowAnyMethod();
-        });
-    });
+    services.Services.AddApplication();
 
 }
 
@@ -59,16 +30,22 @@ var app = services.Build();
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+            await Seeder.Initialize(context);
+        }
+
     }
 
-    app.UseCors("ApiCorsPolicy");
-
     app.UseHttpsRedirection();
+
+    app.UseCors("ApiCorsPolicy");
     app.UseAuthentication();
     app.UseAuthorization();
-    app.MapControllers();
-    app.UseExceptionHandler();
-
+    app.MapControllers();   
+    app.UseExceptionHandler(o => { });
 
     app.Run();
 
