@@ -1,5 +1,5 @@
 ﻿namespace FlashcardXpApi.Application.Contracts
 {
-    public record UpdateFlashcardRequest(string Term, string? Definition);
+    public record UpdateFlashcardRequest(string? Id, string Term, string Definition);
     
 }

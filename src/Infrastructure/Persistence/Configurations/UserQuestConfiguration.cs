@@ -20,6 +20,10 @@ namespace FlashcardXpApi.Infrastructure.Persistence.Configurations
                 .HasForeignKey(uq => uq.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder
+                .Property(uq => uq.CurrentQuestDate)
+                .HasDefaultValueSql("CAST(GETDATE() AS DATE)");
+
         }
     }
 }

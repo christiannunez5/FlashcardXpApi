@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace FlashcardXpApi.Domain
 {
@@ -14,6 +15,11 @@ namespace FlashcardXpApi.Domain
 
         public string StudySetId { get; set; } = string.Empty;
         public StudySet? StudySet { get; set; }
+
+
+        [JsonIgnore]
+        public ICollection<FlashcardsCompleted> FlashcardsCompleted { get; set; } =
+            new List<FlashcardsCompleted>();
 
     }
 }

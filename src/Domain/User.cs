@@ -16,5 +16,10 @@ namespace FlashcardXpApi.Domain
         public ICollection<StudySetParticipant> StudySetParticipants { get; set; } =
             new List<StudySetParticipant>();
 
+        [JsonIgnore]
+        public ICollection<FlashcardsCompleted> FlashcardsCompleted { get; set; } =
+            new List<FlashcardsCompleted>();
+
+
     }
 }

@@ -24,7 +24,6 @@ namespace FlashcardXpApi.Application.Features.Auth
         public async Task<IResult> LoginRefreshToken()
         {
             var command = new LoginWithRefreshToken.Command();
-
             var response = await Mediator.Send(command);
             return response.ToHttpResponse();
         }

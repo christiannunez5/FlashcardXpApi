@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlashcardXpApi.Application.Features.Quests
 {
-    public static class GetUserQuests
+    public static class GetCurrentUserQuests
     {
         public class Query : IRequest<Result<List<UserQuestResponse>>>
         {

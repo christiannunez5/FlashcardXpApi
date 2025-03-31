@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using FlashcardXpApi.Application.Common;
+﻿using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace FlashcardXpApi.Application.Features.Flashcards
+namespace FlashcardXpApi.Application.Features.Quests
 {
-    public static class DeleteFlashcard
+    public static class CompleteQuest
     {
         public class Command : IRequest<Result<string>>
         {
@@ -25,19 +24,23 @@ namespace FlashcardXpApi.Application.Features.Flashcards
 
             public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var flashcard = await _context
-                    .Flashcards
-                    .FirstOrDefaultAsync(f => f.Id == request.Id);
 
-                if (flashcard is null)
+                var quest = await _context
+                    .UserQuests
+                    .FirstOrDefaultAsync(uq => uq.QuestId == request.Id);
+
+                if (quest is null)
                 {
-                    return Result.Failure<string>(FlashcardErrors.FlashcardNotFoundError);
+                    return Result.Failure<string>(QuestErrors.QuestNotFound);
                 }
 
-                _context.Flashcards.Remove(flashcard);
-                await _context.SaveChangesAsync();
+                quest.isCompleted = true;
 
-                return Result.Success(flashcard.Id);
+                _context.UserQuests.Update(quest);
+
+                await _context.SaveChangesAsync(cancellationToken);
+                
+                return Result.Success(quest.QuestId);
             }
         }
     }

@@ -3,7 +3,7 @@
     public record UpdateStudySetRequest
     (
         string Title,
-        string Description
-
+        string Description,
+        List<UpdateFlashcardRequest> Flashcards
     );
 }

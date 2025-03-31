@@ -20,6 +20,8 @@ namespace FlashcardXpApi.Infrastructure.Persistence
 
         public DbSet<UserQuest> UserQuests { get; set; }
         public DbSet<Quest> Quests { get; set; }
+
+        public DbSet<FlashcardsCompleted> FlashcardsCompleted { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -28,6 +30,8 @@ namespace FlashcardXpApi.Infrastructure.Persistence
             modelBuilder.ApplyConfiguration(new StudySetParticipantConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new UserQuestConfiguration());
+            modelBuilder.ApplyConfiguration(new FlashcardsCompletedConfiguration());
         }
     }
 }

@@ -47,7 +47,7 @@ namespace FlashcardXpApi.Application.Features.StudySets
                 Id = id,
                 Title = request.Title,
                 Description = request.Description,
-
+                Flashcards = request.Flashcards
             };
             
             var response = await Mediator.Send(command);

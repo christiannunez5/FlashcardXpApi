@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Application\Features\Badges\**" />
+    <Compile Remove="Application\Features\Users\**" />
+    <Content Remove="Application\Features\Badges\**" />
+    <Content Remove="Application\Features\Users\**" />
+    <EmbeddedResource Remove="Application\Features\Badges\**" />
+    <EmbeddedResource Remove="Application\Features\Users\**" />
+    <None Remove="Application\Features\Badges\**" />
+    <None Remove="Application\Features\Users\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Properties\launchSettings.json" />
   </ItemGroup>
 
@@ -28,8 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Features\Badges\" />
-    <Folder Include="Application\Features\Users\" />
     <Folder Include="Infrastructure\Persistence\Migrations\" />
   </ItemGroup>
 

@@ -17,9 +17,11 @@ namespace FlashcardXpApi.Application.Features.StudySets
             public required string Id { get; set; }
             public required string Title { get; set; }
             public required string Description { get; set; }
+
+            public List<UpdateFlashcardRequest> Flashcards { get; set; } = new();
     
         };
-
+        
         public class Handler : IRequestHandler<Command, Result>
         {
             private readonly DataContext _context;
@@ -43,12 +45,40 @@ namespace FlashcardXpApi.Application.Features.StudySets
                 {
                     return Result.Failure(StudySetErrors.StudySetNotFoundError);
                 }
-
+                
                 studySet.Title = request.Title;
                 studySet.Description = request.Description;
                 studySet.Status = StudySetStatus.Published;
                 studySet.UpdatedAt = DateOnly.FromDateTime(DateTime.Now);
                 
+                foreach(var flashcard in request.Flashcards)
+                {
+                    var existingFlashcard = await _context
+                        .Flashcards
+                        .FirstOrDefaultAsync(f => f.Id == flashcard.Id);
+
+                    if (existingFlashcard is not null)
+                    {
+                        existingFlashcard.Term = flashcard.Term;
+                        existingFlashcard.Definition = flashcard.Definition;
+
+                        _context.Flashcards.Update(existingFlashcard);
+                    }
+
+                    else
+                    {
+                        var newFlashcard = new Flashcard
+                        {
+                            Term = flashcard.Term,
+                            Definition = flashcard.Definition,
+                            StudySetId = studySet.Id
+                        };
+
+                        _context.Flashcards.Add(newFlashcard);
+                    }
+                        
+                }
+
                 await _context.SaveChangesAsync(cancellationToken);
                 return Result.Success();
 

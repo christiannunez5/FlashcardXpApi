@@ -10,6 +10,8 @@
         public User? User { get; set; }
 
         public bool isCompleted { get; set; }
-       
+        
+        public DateOnly CurrentQuestDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
+
     }
 }

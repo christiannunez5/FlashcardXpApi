@@ -5,7 +5,6 @@ using FlashcardXpApi.Infrastructure.Persistence;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlashcardXpApi.Application.Features.Auth

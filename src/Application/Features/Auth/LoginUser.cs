@@ -1,10 +1,12 @@
 ﻿using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Common.Interfaces;
+using FlashcardXpApi.Application.Contracts;
 using FlashcardXpApi.Domain;
 using FlashcardXpApi.Infrastructure.Persistence;
 using FlashcardXpApi.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlashcardXpApi.Application.Features.Auth
 {
