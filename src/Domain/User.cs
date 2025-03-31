@@ -9,17 +9,20 @@ namespace FlashcardXpApi.Domain
     {
         public string? ProfilePicUrl { get; set; }
 
-        public ICollection<StudySet> StudySets { get; set; } = new List<StudySet>();
 
         // navigations
         [JsonIgnore]
         public ICollection<StudySetParticipant> StudySetParticipants { get; set; } =
             new List<StudySetParticipant>();
 
+        public ICollection<StudySet> StudySets { get; set; } = new List<StudySet>();
+
         [JsonIgnore]
         public ICollection<FlashcardsCompleted> FlashcardsCompleted { get; set; } =
             new List<FlashcardsCompleted>();
 
+        public ICollection<RecentStudySet> RecentStudySets { get; set; } =
+           new List<RecentStudySet>();
 
     }
 }

@@ -28,8 +28,10 @@ namespace FlashcardXpApi.Domain
         public ICollection<Flashcard> Flashcards { get; set; } = new List<Flashcard>();
 
         public ICollection<StudySetParticipant> StudySetParticipants { get; set; } =
-           new List<StudySetParticipant>();
+            new List<StudySetParticipant>();
 
+        public ICollection<RecentStudySet> RecentStudySets { get; set; } =
+            new List<RecentStudySet>();
 
         // functions
         public void AddParticipant(User user)
@@ -42,7 +44,6 @@ namespace FlashcardXpApi.Domain
             return StudySetParticipants
                 .Any(sp => sp.UserId == userId);
         }
-
     }
 
     public enum StudySetStatus

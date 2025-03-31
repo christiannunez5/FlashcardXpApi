@@ -4,6 +4,7 @@ using FlashcardXpApi.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlashcardXpApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250331112838_AddFlashcardsCompletedEntity")]
+    partial class AddFlashcardsCompletedEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,26 +88,6 @@ namespace FlashcardXpApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Quests");
-                });
-
-            modelBuilder.Entity("FlashcardXpApi.Domain.RecentStudySet", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StudySetId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("AccessedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.HasKey("UserId", "StudySetId");
-
-                    b.HasIndex("StudySetId");
-
-                    b.ToTable("RecentStudySets");
                 });
 
             modelBuilder.Entity("FlashcardXpApi.Domain.RefreshToken", b =>
@@ -455,25 +438,6 @@ namespace FlashcardXpApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FlashcardXpApi.Domain.RecentStudySet", b =>
-                {
-                    b.HasOne("FlashcardXpApi.Domain.StudySet", "StudySet")
-                        .WithMany("RecentStudySets")
-                        .HasForeignKey("StudySetId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("FlashcardXpApi.Domain.User", "User")
-                        .WithMany("RecentStudySets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("StudySet");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("FlashcardXpApi.Domain.RefreshToken", b =>
                 {
                     b.HasOne("FlashcardXpApi.Domain.User", "User")
@@ -593,16 +557,12 @@ namespace FlashcardXpApi.Migrations
                 {
                     b.Navigation("Flashcards");
 
-                    b.Navigation("RecentStudySets");
-
                     b.Navigation("StudySetParticipants");
                 });
 
             modelBuilder.Entity("FlashcardXpApi.Domain.User", b =>
                 {
                     b.Navigation("FlashcardsCompleted");
-
-                    b.Navigation("RecentStudySets");
 
                     b.Navigation("StudySetParticipants");
 

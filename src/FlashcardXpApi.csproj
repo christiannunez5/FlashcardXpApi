@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Features\Leaderboard\" />
     <Folder Include="Infrastructure\Persistence\Migrations\" />
   </ItemGroup>
 
