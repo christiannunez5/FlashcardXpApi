@@ -25,7 +25,7 @@ namespace FlashcardXpApi.Infrastructure.Persistence.Configurations
                 .HasOne(rs => rs.StudySet)
                 .WithMany(s => s.RecentStudySets)
                 .HasForeignKey(rs => rs.StudySetId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

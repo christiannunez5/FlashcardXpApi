@@ -12,7 +12,6 @@ namespace FlashcardXpApi.Application.Common.Mapper
 
             CreateMap<Flashcard, FlashcardResponse>();
             
-        
             CreateMap<StudySet, StudySetSummaryResponse>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
 
@@ -20,6 +19,7 @@ namespace FlashcardXpApi.Application.Common.Mapper
                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
                .ForMember(dest => dest.Flashcards, opt => opt.MapFrom(src => src.Flashcards));
+
 
         }
     }

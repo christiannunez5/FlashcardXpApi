@@ -73,7 +73,7 @@ namespace FlashcardXpApi.Application.Features.Auth
 
                 _cookieService.Store("accessToken", accessToken, DateTime.Now.AddMinutes(15));
                 _cookieService.Store("refreshToken", refreshToken, DateTime.Now.AddDays(14));
-
+    
                 return Result.Success();
             }
 

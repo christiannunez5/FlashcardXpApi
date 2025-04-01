@@ -52,7 +52,7 @@ namespace FlashcardXpApi.Application.Features.Auth
 
                 _context.RefreshTokens.Update(refreshToken);
                 await _context.SaveChangesAsync();
-
+                    
                 _cookieService.Store("accessToken", accessToken, DateTime.Now.AddMinutes(15));
                 _cookieService.Store("refreshToken", refreshToken.Token, DateTime.Now.AddDays(14));
                     

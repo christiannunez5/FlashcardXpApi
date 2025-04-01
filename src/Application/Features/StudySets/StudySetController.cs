@@ -1,5 +1,6 @@
 ﻿using FlashcardXpApi.Application.Common.Extensions;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Features.RecentStudySets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +14,7 @@ namespace FlashcardXpApi.Application.Features.StudySets
         public async Task<IResult> GetAll()
         {
             var query = new GetCurrentUserStudySets.Query { };
-
             var result = await Mediator.Send(query);
-
             return result.ToHttpResponse();
         }
 
@@ -31,9 +30,7 @@ namespace FlashcardXpApi.Application.Features.StudySets
         public async Task<IResult> CreateEmpty()
         {
             var command = new CreateDraftStudySet.Command();
-
             var response = await Mediator.Send(command);
-
             return response.ToHttpResponse();
         }
 
