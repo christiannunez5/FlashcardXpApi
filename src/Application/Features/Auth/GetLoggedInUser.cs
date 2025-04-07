@@ -1,6 +1,7 @@
 ﻿using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Common.Interfaces;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.Auth;
 using MediatR;
 
 namespace FlashcardXpApi.Application.Features.Auth
@@ -23,14 +24,13 @@ namespace FlashcardXpApi.Application.Features.Auth
 
             public async Task<Result<UserResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-
                 var user = await _currentUserService.GetCurrentUser();
-
+                
                 if (user is null)
                 {
                     return Result.Failure<UserResponse>(AuthErrors.AuthenticationRequiredError);
                 }
-
+                
                 UserResponse userDto = new UserResponse
                 (
                     user.Id,

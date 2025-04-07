@@ -1,5 +1,6 @@
 ﻿using FlashcardXpApi.Application.Common.Extensions;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.StudySets;
 using FlashcardXpApi.Application.Features.RecentStudySets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

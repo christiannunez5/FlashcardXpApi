@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FlashcardXpApi.Application.Common;
+﻿using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Domain;
 using FlashcardXpApi.Infrastructure.Persistence;
 using FluentValidation;
@@ -75,9 +74,10 @@ namespace FlashcardXpApi.Application.Features.Auth
                     return Result.Failure(
                         AuthErrors.ValidationError(errorMessage));
                 }
-
+                
                 var quests = await _context.Quests.ToListAsync();
-
+                
+                // add the created quests to the new user
                 var userQuests = quests.Select(q =>
                 {
                     return new UserQuest
@@ -86,8 +86,15 @@ namespace FlashcardXpApi.Application.Features.Auth
                         QuestId = q.Id
                     };
                 }).ToList();
-
-                await _context.UserQuests.AddRangeAsync(userQuests);
+                
+                // add a new user experience to newly created user
+                var newUserExperience = new UserExperience
+                {
+                    UserId = newUser.Id,
+                };
+                
+                await _context.UserQuests.AddRangeAsync(userQuests, cancellationToken);
+                _context.UserExperiences.Add(newUserExperience);
                 await _context.SaveChangesAsync(cancellationToken);
                 return Result.Success();
 

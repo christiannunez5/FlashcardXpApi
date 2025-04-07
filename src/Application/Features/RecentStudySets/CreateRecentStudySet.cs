@@ -2,6 +2,7 @@
 using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Common.Interfaces;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.StudySets;
 using FlashcardXpApi.Application.Features.Auth;
 using FlashcardXpApi.Application.Features.StudySets;
 using FlashcardXpApi.Domain;
@@ -50,7 +51,6 @@ namespace FlashcardXpApi.Application.Features.RecentStudySets
                         Result.Failure<RecentStudySetResponse>(StudySetErrors
                         .StudySetNotFoundError);
                 }
-
 
                 var recentStudySet = await _context
                     .RecentStudySets

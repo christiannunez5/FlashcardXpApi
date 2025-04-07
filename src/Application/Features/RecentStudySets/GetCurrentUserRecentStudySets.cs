@@ -2,6 +2,7 @@
 using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Common.Interfaces;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.StudySets;
 using FlashcardXpApi.Application.Features.Auth;
 using FlashcardXpApi.Infrastructure.Persistence;
 using MediatR;
@@ -38,7 +39,7 @@ namespace FlashcardXpApi.Application.Features.RecentStudySets
                 {
                     return Result.Failure<List<RecentStudySetResponse>>(AuthErrors.AuthenticationRequiredError);
                 }
-
+            
                 var studySets = await _context.RecentStudySets
                     .Where(rs => rs.UserId == user.Id)
                     .Include(rs => rs.StudySet)

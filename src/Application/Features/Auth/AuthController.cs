@@ -1,5 +1,6 @@
 ﻿using FlashcardXpApi.Application.Common.Extensions;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardXpApi.Application.Features.Auth

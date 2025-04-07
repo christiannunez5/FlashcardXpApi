@@ -14,7 +14,7 @@ namespace FlashcardXpApi.Application.Features.Quests
         {
 
         };
-
+        
         public class Handler : IRequestHandler<Command, Result>
         {
 

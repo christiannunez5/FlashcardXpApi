@@ -6,5 +6,8 @@ namespace FlashcardXpApi.Application.Features.StudySets
     {
         public static Error StudySetNotFoundError =
             new Error(ErrorTypeConstant.NOT_FOUND, "Study set not found.");
+        
+        public static Error NotStudySetOwner =
+            new Error(ErrorTypeConstant.FORBIDDEN, "Not authorized to perform this action.");
     }
 }

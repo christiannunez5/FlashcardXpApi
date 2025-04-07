@@ -2,6 +2,7 @@
 using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Common.Interfaces;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.StudySets;
 using FlashcardXpApi.Application.Features.Auth;
 using FlashcardXpApi.Domain;
 using FlashcardXpApi.Infrastructure.Persistence;

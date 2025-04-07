@@ -1,12 +1,13 @@
 ﻿using FlashcardXpApi.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlashcardXpApi.Infrastructure.Persistence
 {
     public static class Seeder
     {
-        public async static Task Initialize(DataContext context)
+        public static async Task Initialize(DataContext context)
         {
-            context.Database.EnsureCreated();
+            await context.Database.EnsureCreatedAsync();
 
             if (!context.Quests.Any())
             {
@@ -77,6 +78,26 @@ namespace FlashcardXpApi.Infrastructure.Persistence
                 await context.Quests.AddRangeAsync(quests);
                 await context.SaveChangesAsync();
             }
+
+            var users = await context.Users.ToListAsync();
+            var userExperiences = new List<UserExperience>();
+            
+            foreach (var user in users)
+            {
+                var isUserExperienceAlreadyAdded = await context
+                    .UserExperiences
+                    .AnyAsync(ux => ux.UserId == user.Id);
+
+                if (!isUserExperienceAlreadyAdded)
+                {
+                    userExperiences.Add(new UserExperience
+                    {
+                        UserId = user.Id
+                    });
+                }
+            }
+            await context.UserExperiences.AddRangeAsync(userExperiences);
+            await context.SaveChangesAsync();
 
         }
     }

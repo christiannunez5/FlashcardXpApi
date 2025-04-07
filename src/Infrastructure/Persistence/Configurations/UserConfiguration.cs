@@ -12,11 +12,17 @@ namespace FlashcardXpApi.Infrastructure.Persistence.Configurations
             builder
                 .HasIndex(u => u.Email)
                 .IsUnique();
-
+            
             builder
                 .HasMany(u => u.StudySets)
                 .WithOne(s => s.CreatedBy)
                 .HasForeignKey(u => u.CreatedById);
+            
+            builder
+                .HasOne(u => u.Experience)
+                .WithOne(ux => ux.User)
+                .HasForeignKey<UserExperience>(ux => ux.UserId);
+            
         }
     }
 }

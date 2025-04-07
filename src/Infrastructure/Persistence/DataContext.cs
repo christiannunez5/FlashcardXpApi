@@ -25,6 +25,9 @@ namespace FlashcardXpApi.Infrastructure.Persistence
 
         public DbSet<RecentStudySet> RecentStudySets { get; set; }
 
+        public DbSet<UserExperience> UserExperiences { get; set; }
+        
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -36,6 +39,7 @@ namespace FlashcardXpApi.Infrastructure.Persistence
             modelBuilder.ApplyConfiguration(new UserQuestConfiguration());
             modelBuilder.ApplyConfiguration(new FlashcardsCompletedConfiguration());
             modelBuilder.ApplyConfiguration(new RecentStudySetConfiguration());
+            modelBuilder.ApplyConfiguration(new UserExperienceConfiguration());
         }
     }
 }

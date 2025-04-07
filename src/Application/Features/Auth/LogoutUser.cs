@@ -38,8 +38,8 @@ namespace FlashcardXpApi.Application.Features.Auth
                     await _context.SaveChangesAsync(cancellationToken);
                 }
 
-                _cookieService.Remove("accessToken");
-                _cookieService.Remove("refreshToken");
+                _cookieService.Store("accessToken", "", DateTime.Now.AddMinutes(-5));
+                _cookieService.Store("refreshToken", "", DateTime.Now.AddMinutes(-5));
 
                 return Result.Success();
             }

@@ -4,6 +4,7 @@ using FlashcardXpApi.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlashcardXpApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250407081115_RemoveXpColumnFromUser")]
+    partial class RemoveXpColumnFromUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,26 +263,6 @@ namespace FlashcardXpApi.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("FlashcardXpApi.Domain.UserExperience", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Xp")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserExperiences");
                 });
 
             modelBuilder.Entity("FlashcardXpApi.Domain.UserQuest", b =>
@@ -534,17 +517,6 @@ namespace FlashcardXpApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FlashcardXpApi.Domain.UserExperience", b =>
-                {
-                    b.HasOne("FlashcardXpApi.Domain.User", "User")
-                        .WithOne("Experience")
-                        .HasForeignKey("FlashcardXpApi.Domain.UserExperience", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("FlashcardXpApi.Domain.UserQuest", b =>
                 {
                     b.HasOne("FlashcardXpApi.Domain.Quest", "Quest")
@@ -631,8 +603,6 @@ namespace FlashcardXpApi.Migrations
 
             modelBuilder.Entity("FlashcardXpApi.Domain.User", b =>
                 {
-                    b.Navigation("Experience");
-
                     b.Navigation("FlashcardsCompleted");
 
                     b.Navigation("RecentStudySets");

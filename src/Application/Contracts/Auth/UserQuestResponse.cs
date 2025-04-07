@@ -1,4 +1,4 @@
-﻿namespace FlashcardXpApi.Application.Contracts
+﻿namespace FlashcardXpApi.Application.Contracts.Auth
 {
     public record UserQuestResponse
     (

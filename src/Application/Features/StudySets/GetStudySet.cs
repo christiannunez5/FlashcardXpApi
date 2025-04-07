@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.StudySets;
 using FlashcardXpApi.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

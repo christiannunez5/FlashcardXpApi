@@ -1,6 +1,8 @@
 ﻿using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Common.Interfaces;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.Flashcards;
+using FlashcardXpApi.Application.Features.Auth;
 using FlashcardXpApi.Domain;
 using FlashcardXpApi.Infrastructure.Persistence;
 using MediatR;
@@ -26,7 +28,7 @@ namespace FlashcardXpApi.Application.Features.StudySets
         {
             private readonly DataContext _context;
             private readonly ICurrentUserService _currentUserService;
-
+    
             public Handler(DataContext context, ICurrentUserService currentUserService)
             {
                 _context = context;
@@ -37,13 +39,24 @@ namespace FlashcardXpApi.Application.Features.StudySets
             {
                 var user = await _currentUserService.GetCurrentUser();
 
+                if (user is null)
+                {
+                    return Result.Failure(AuthErrors.AuthenticationRequiredError);
+                }
+                
                 var studySet = await _context
                     .StudySets
                     .FirstOrDefaultAsync(s => s.Id == request.Id);
-
+                
                 if (studySet == null)
                 {
                     return Result.Failure(StudySetErrors.StudySetNotFoundError);
+                }
+                    
+                if (studySet.CreatedById != user.Id)
+                {
+                    return Result.Failure(StudySetErrors.NotStudySetOwner);
+
                 }
                 
                 studySet.Title = request.Title;
@@ -56,7 +69,7 @@ namespace FlashcardXpApi.Application.Features.StudySets
                     var existingFlashcard = await _context
                         .Flashcards
                         .FirstOrDefaultAsync(f => f.Id == flashcard.Id);
-
+                    
                     if (existingFlashcard is not null)
                     {
                         existingFlashcard.Term = flashcard.Term;
@@ -78,7 +91,7 @@ namespace FlashcardXpApi.Application.Features.StudySets
                     }
                         
                 }
-
+                
                 await _context.SaveChangesAsync(cancellationToken);
                 return Result.Success();
 

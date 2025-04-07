@@ -12,7 +12,7 @@ namespace FlashcardXpApi.Application.Features.Quests
             var response = await Mediator.Send(query);
             return response.ToHttpResponse();
         }
-
+        
         [HttpPatch("reset")]
         public async Task<IResult> ResetUserQuest()
         {

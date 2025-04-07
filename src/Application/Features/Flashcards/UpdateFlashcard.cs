@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.Flashcards;
+using FlashcardXpApi.Domain;
 using FlashcardXpApi.Infrastructure.Persistence;
 using FluentValidation;
 using MediatR;
@@ -13,6 +15,7 @@ namespace FlashcardXpApi.Application.Features.Flashcards
         public class Command : IRequest<Result<FlashcardResponse>>
         {
             public required string Id { get; set; }
+            public required string StudySetId { get; set; }
             public required string Term { get; set; }
             public string Definition { get; set; } = string.Empty;
         };
@@ -21,10 +24,10 @@ namespace FlashcardXpApi.Application.Features.Flashcards
         {
             public Validator() {
                 RuleFor(x => x.Term)
-                    .NotEmpty().WithMessage("Title can't be empty.");
-
-                RuleFor(x => x.Term)
-                    .MinimumLength(6).WithMessage("Title should be atleast 6 characters");
+                    .NotEmpty().WithMessage("Term can't be empty.");
+                
+                RuleFor(x => x.Definition)
+                    .MinimumLength(6).WithMessage("Description can't be empty.");
 
             }
         }
@@ -46,7 +49,7 @@ namespace FlashcardXpApi.Application.Features.Flashcards
             {
 
                 var validationResult = _validator.Validate(request);
-
+                
                 if (!validationResult.IsValid)
                 {
                     var error = validationResult
@@ -60,18 +63,27 @@ namespace FlashcardXpApi.Application.Features.Flashcards
                 var flashcard = await _context
                     .Flashcards
                     .FirstOrDefaultAsync(f => f.Id == request.Id);
-
+                    
                 if (flashcard is null)
                 {
-                    return Result.Failure<FlashcardResponse>(FlashcardErrors.FlashcardNotFoundError);
+                    var newFlashcard = new Flashcard()
+                    {
+                         Term = request.Term,
+                         Definition = request.Definition,
+                         StudySetId = request.StudySetId
+                    };
+                    _context.Flashcards.Add(newFlashcard);
                 }
 
-                flashcard.Term = request.Term;
-                flashcard.Definition =
-                    request.Definition == "" ? request.Definition : flashcard.Definition;
-
-                _context.Flashcards.Update(flashcard);
-                await _context.SaveChangesAsync();
+                else
+                {
+                    flashcard.Term = request.Term;
+                    flashcard.Definition =
+                        request.Definition == "" ? request.Definition : flashcard.Definition;
+                    _context.Flashcards.Update(flashcard);
+                }
+                
+                await _context.SaveChangesAsync(cancellationToken);
 
                 return Result.Success(_mapper.Map<FlashcardResponse>(flashcard));
                 

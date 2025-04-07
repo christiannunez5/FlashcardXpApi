@@ -1,6 +1,7 @@
 ﻿using FlashcardXpApi.Application.Common;
 using FlashcardXpApi.Application.Common.Interfaces;
 using FlashcardXpApi.Application.Contracts;
+using FlashcardXpApi.Application.Contracts.Auth;
 using FlashcardXpApi.Application.Features.Auth;
 using FlashcardXpApi.Infrastructure.Persistence;
 using MediatR;

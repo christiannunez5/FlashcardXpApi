@@ -1,4 +1,4 @@
-﻿namespace FlashcardXpApi.Application.Contracts
+﻿namespace FlashcardXpApi.Application.Contracts.StudySets
 {
     public record StudySetSummaryResponse(
         string Id,
