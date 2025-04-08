@@ -1,8 +1,10 @@
 ﻿using FlashcardXpApi.Application.Common.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardXpApi.Application.Features.Quests
 {
+    [Authorize]
     public class QuestsController : ApiControllerBase
     {
         [HttpGet]

@@ -35,17 +35,15 @@ namespace FlashcardXpApi.Application.Features.StudySets
             return response.ToHttpResponse();
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<IResult> Update([FromBody] UpdateStudySetRequest request,
             [FromRoute] string id)
         {
-
             var command = new UpdateStudySet.Command
             {
                 Id = id,
                 Title = request.Title,
                 Description = request.Description,
-                Flashcards = request.Flashcards
             };
             
             var response = await Mediator.Send(command);

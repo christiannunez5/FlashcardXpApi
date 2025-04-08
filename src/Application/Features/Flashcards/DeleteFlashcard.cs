@@ -17,17 +17,17 @@ namespace FlashcardXpApi.Application.Features.Flashcards
         {
 
             private readonly DataContext _context;
-
+            
             public Handler(DataContext context)
             {
                 _context = context;
             }
-
+            
             public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var flashcard = await _context
                     .Flashcards
-                    .FirstOrDefaultAsync(f => f.Id == request.Id);
+                    .FirstOrDefaultAsync(f => f.Id == request.Id, cancellationToken);
 
                 if (flashcard is null)
                 {
@@ -35,7 +35,7 @@ namespace FlashcardXpApi.Application.Features.Flashcards
                 }
 
                 _context.Flashcards.Remove(flashcard);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
 
                 return Result.Success(flashcard.Id);
             }

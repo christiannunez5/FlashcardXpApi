@@ -20,7 +20,7 @@ namespace FlashcardXpApi.Application.Features.Auth
             return response.ToHttpResponse();
            
         }
-
+        
         [HttpPost("login/refresh-token")]
         public async Task<IResult> LoginRefreshToken()
         {

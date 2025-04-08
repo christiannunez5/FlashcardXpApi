@@ -35,7 +35,7 @@ namespace FlashcardXpApi.Application.Features.Auth
                 (
                     user.Id,
                     user.UserName,
-                    user.UserName,
+                    user.Email,
                     user.ProfilePicUrl
                 );
                 

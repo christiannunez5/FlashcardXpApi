@@ -35,12 +35,12 @@ namespace FlashcardXpApi.Application.Features.FlashcardsCompletion
                 {
                     return Result.Failure<int>(AuthErrors.AuthenticationRequiredError);
                 }
-
+                
                 var flashcardsCountCompletedToday = await _context
                     .FlashcardsCompleted
-                    .Where(fc => fc.UserId == user.Id)
-                    .CountAsync();
-
+                    .Where(fc => fc.UserId == user.Id && fc.Date == DateOnly.MinValue)
+                    .CountAsync(cancellationToken);
+                
                 return Result.Success(flashcardsCountCompletedToday);
             }
         }

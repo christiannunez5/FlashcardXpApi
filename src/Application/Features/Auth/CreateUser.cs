@@ -57,7 +57,7 @@ namespace FlashcardXpApi.Application.Features.Auth
 
                     return Result.Failure(AuthErrors.ValidationError(errorMessage));
                 }
-
+                
                 var newUser = new User
                 {
                     Email = request.Email,

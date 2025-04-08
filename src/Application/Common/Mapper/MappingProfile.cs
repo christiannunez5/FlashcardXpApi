@@ -23,10 +23,6 @@ namespace FlashcardXpApi.Application.Common.Mapper
                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
                .ForMember(dest => dest.Flashcards, opt => opt.MapFrom(src => src.Flashcards));
-            
-            CreateMap<UserExperience, UserExperienceResponse>()
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
-
         }
     }
 }

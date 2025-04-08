@@ -17,6 +17,7 @@ public static class GetCurrentUserExperience
     {
         
     }
+    
     public class Handler : IRequestHandler<Query, Result<UserExperienceResponse>>
     {
         
@@ -50,7 +51,14 @@ public static class GetCurrentUserExperience
                 return Result.Failure<UserExperienceResponse>(UserExperienceErrors.UserExperienceNotFound);
             }
 
-            return Result.Success(_mapper.Map<UserExperienceResponse>(userXp));
+            var response = new UserExperienceResponse(
+                _mapper.Map<UserResponse>(currentUser),
+                userXp.Xp,
+                new LevelDto((int)userXp.GetLevel, userXp.GetLevel.ToString()),
+                userXp.GetMaxXp
+            );
+            
+            return Result.Success(response);
         }
     }
 }

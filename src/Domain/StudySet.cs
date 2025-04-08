@@ -45,7 +45,7 @@ namespace FlashcardXpApi.Domain
                 .Any(sp => sp.UserId == userId);
         }
     }
-
+    
     public enum StudySetStatus
     {
         Draft,

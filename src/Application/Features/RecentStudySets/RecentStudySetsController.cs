@@ -1,8 +1,10 @@
 ﻿using FlashcardXpApi.Application.Common.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardXpApi.Application.Features.RecentStudySets
 {
+    [Authorize]
     [Route("api/recent-studysets")]
     public class RecentStudySetsController : ApiControllerBase
     {

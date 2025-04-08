@@ -19,14 +19,14 @@ namespace FlashcardXpApi.Infrastructure.Services
 
         public async Task<User?> GetCurrentUser()
         {
-
+            
             var httpContext = _contextAccessor.HttpContext;
 
             if (httpContext?.User.Identity?.IsAuthenticated != true)
             {
                 return null;
             }
-
+                
             var user = await _userManager.GetUserAsync(httpContext.User);
 
             return user;

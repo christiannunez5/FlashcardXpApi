@@ -14,7 +14,7 @@ namespace FlashcardXpApi.Application.Features.Flashcards
     {
         public class Command : IRequest<Result<FlashcardResponse>>
         {
-            public required string Id { get; set; }
+            public string Id { get; set; } = string.Empty;
             public required string StudySetId { get; set; }
             public required string Term { get; set; }
             public string Definition { get; set; } = string.Empty;
@@ -27,7 +27,7 @@ namespace FlashcardXpApi.Application.Features.Flashcards
                     .NotEmpty().WithMessage("Term can't be empty.");
                 
                 RuleFor(x => x.Definition)
-                    .MinimumLength(6).WithMessage("Description can't be empty.");
+                    .NotEmpty().WithMessage("Definition can't be empty.");
 
             }
         }
@@ -74,17 +74,15 @@ namespace FlashcardXpApi.Application.Features.Flashcards
                     };
                     _context.Flashcards.Add(newFlashcard);
                 }
-
+                
                 else
                 {
                     flashcard.Term = request.Term;
-                    flashcard.Definition =
-                        request.Definition == "" ? request.Definition : flashcard.Definition;
+                    flashcard.Definition = request.Definition;
                     _context.Flashcards.Update(flashcard);
                 }
                 
                 await _context.SaveChangesAsync(cancellationToken);
-
                 return Result.Success(_mapper.Map<FlashcardResponse>(flashcard));
                 
             }

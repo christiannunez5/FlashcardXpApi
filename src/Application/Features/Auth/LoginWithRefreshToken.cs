@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlashcardXpApi.Application.Features.Auth
 {
-    public class LoginWithRefreshToken
+    public static class LoginWithRefreshToken
     {
         public class Command : IRequest<Result>
         {
