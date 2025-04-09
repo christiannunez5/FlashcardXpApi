@@ -1,28 +1,26 @@
-﻿using FlashcardXpApi.Domain;
+using Domain.Entities.Auth;
+using Domain.Entities.UserExperiences;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
-namespace FlashcardXpApi.Infrastructure.Persistence.Configurations
+namespace Infrastructure.Persistence.Configurations;
+
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder
-                .HasIndex(u => u.Email)
-                .IsUnique();
+        builder
+            .HasIndex(u => u.Email)
+            .IsUnique();
             
-            builder
-                .HasMany(u => u.StudySets)
-                .WithOne(s => s.CreatedBy)
-                .HasForeignKey(u => u.CreatedById);
+        builder
+            .HasMany(u => u.StudySets)
+            .WithOne(s => s.CreatedBy)
+            .HasForeignKey(u => u.CreatedById);
             
-            builder
-                .HasOne(u => u.Experience)
-                .WithOne(ux => ux.User)
-                .HasForeignKey<UserExperience>(ux => ux.UserId);
-            
-        }
+        builder
+            .HasOne(u => u.Experience)
+            .WithOne(ux => ux.User)
+            .HasForeignKey<UserExperience>(ux => ux.UserId);
     }
 }

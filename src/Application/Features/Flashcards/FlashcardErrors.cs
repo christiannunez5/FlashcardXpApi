@@ -1,13 +1,9 @@
-﻿using FlashcardXpApi.Application.Common;
+using Application.Common.Models;
 
-namespace FlashcardXpApi.Application.Features.Flashcards
+namespace Application.Features.Flashcards;
+
+public class FlashcardErrors
 {
-    public static class FlashcardErrors
-    {
-        public static Error FlashcardNotFoundError =
-            new Error(ErrorTypeConstant.NOT_FOUND, "Flashcard not found.");
-
-        public static Error ValidationError (string message) =>
-            new Error(ErrorTypeConstant.VALIDATION_ERROR, message);
-    }
+    public static Error FlashcardNotFound = 
+        new Error(ErrorTypeConstant.NOT_FOUND, "Flashcard not found.");
 }
