@@ -8,21 +8,15 @@ namespace Domain.Entities.Auth;
 
 public class User : IdentityUser
 {
-    public string? ProfilePicUrl { get; set; }
-    
-    /*
-    public ICollection<StudySetParticipant> StudySetParticipants { get; set; } =
-        new List<StudySetParticipant>();
-    */
+    public string ProfilePicUrl { get; set; } = default!;
     
     public ICollection<StudySet> StudySets { get; set; } = new List<StudySet>();
-        
-    [JsonIgnore]
-    public ICollection<CompletedFlashcard> FlashcardsCompleted { get; set; } =
+    
+    public ICollection<CompletedFlashcard> CompletedFlashcards { get; set; } =
         new List<CompletedFlashcard>();
-
+    
     public ICollection<RecentStudySet> RecentStudySets { get; set; } =
         new List<RecentStudySet>();
-            
-    public UserExperience? Experience { get; set; }
+
+    public UserExperience Experience { get; set; } = null!;
 }

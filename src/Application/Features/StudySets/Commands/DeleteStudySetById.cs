@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.StudySets.Commands;
 
-public static class DeleteStudySet
+public static class DeleteStudySetById
 {
     public class Command : IRequest<Result<string>>
     {

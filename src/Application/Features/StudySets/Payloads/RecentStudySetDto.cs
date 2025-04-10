@@ -9,7 +9,7 @@ public record RecentStudySetDto(string Id, string Title, DateTime AccessedAt)
     {
         public Mapping()
         {
-            CreateMap<StudySet, RecentStudySetDto>();
+            CreateMap<RecentStudySet, RecentStudySetDto>();
         }
     }
 }

@@ -15,12 +15,21 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-    
+
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
     public DbSet<StudySet> StudySets => Set<StudySet>();
     public DbSet<RecentStudySet> RecentStudySets => Set<RecentStudySet>();
+
     public DbSet<Flashcard> Flashcards => Set<Flashcard>();
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-    
+    public DbSet<CompletedFlashcard> CompletedFlashcards => Set<CompletedFlashcard>();
+
+    public DbSet<Quest> Quests => Set<Quest>();
+    public DbSet<UserQuest> UserQuests => Set<UserQuest>();
+
+    public DbSet<UserExperience> UserExperiences => Set<UserExperience>();
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -31,6 +40,7 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         modelBuilder.ApplyConfiguration(new UserQuestConfiguration());
         modelBuilder.ApplyConfiguration(new RecentStudySetConfiguration());
         modelBuilder.ApplyConfiguration(new UserExperienceConfiguration());
+        modelBuilder.ApplyConfiguration(new CompletedFlashcardConfiguration());
     }
 
 

@@ -1,6 +1,7 @@
 using Application.Common.Abstraction;
 using Application.Common.Models;
 using Domain.Entities.Auth;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,6 +15,15 @@ public static class LoginUser
         public required string Password { get; init; }
     }
     
+    public class Validator : AbstractValidator<Command>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.Email).EmailAddress().WithMessage("Invalid email address.");
+            RuleFor(x => x.Password).NotEmpty().WithMessage("Password can't be empty.");
+        }
+    }
+    
     public class Handler : IRequestHandler<Command, Result>
     {
         private readonly SignInManager<User> _signInManager;
@@ -21,20 +31,20 @@ public static class LoginUser
         private readonly ITokenProvider _tokenProvider;
         private readonly UserManager<User> _userManager;
         private readonly IApplicationDbContext _context;
-
+        private readonly IValidator<Command> _validator;
         public Handler(SignInManager<User> signInManager, 
-            ICookieService cookieService, ITokenProvider tokenProvider, UserManager<User> userManager, IApplicationDbContext context)
+            ICookieService cookieService, ITokenProvider tokenProvider, UserManager<User> userManager, IApplicationDbContext context, IValidator<Command> validator)
         {
             _signInManager = signInManager;
             _cookieService = cookieService;
             _tokenProvider = tokenProvider;
             _userManager = userManager;
             _context = context;
+            _validator = validator;
         }
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
-            
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)

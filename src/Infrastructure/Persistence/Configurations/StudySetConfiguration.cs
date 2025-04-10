@@ -12,7 +12,7 @@ public class StudySetConfiguration : IEntityTypeConfiguration<StudySet>
             .HasOne(s => s.CreatedBy)
             .WithMany(u => u.StudySets)
             .HasForeignKey(s => s.CreatedById)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder
             .Property(fs => fs.CreatedAt)

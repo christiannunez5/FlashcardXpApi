@@ -6,7 +6,7 @@ namespace Infrastructure.Services;
 public class CookieService : ICookieService
 {
     private readonly IHttpContextAccessor _contextAccessor;
-    
+
     public CookieService(IHttpContextAccessor contextAccessor)
     {
         _contextAccessor = contextAccessor;

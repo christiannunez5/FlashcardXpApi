@@ -6,15 +6,13 @@ using Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 {
     var config = builder.Configuration;
-    
     var services = builder.Services;
     
+    services.AddControllers();
+    services.AddEndpointsApiExplorer();
     services.AddRouting(options => options.LowercaseUrls = true);
     services.AddSwaggerGen();
-    
     services.AddHttpContextAccessor();
-    
-    services.AddEndpointsApiExplorer();
     
     services
         .AddInfrastructure(config)
@@ -37,7 +35,7 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();   
-    app.UseExceptionHandler(o => { });
+    // app.UseExceptionHandler(o => { });
 
     app.Run();
 

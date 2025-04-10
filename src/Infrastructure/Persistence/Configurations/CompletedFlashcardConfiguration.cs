@@ -9,14 +9,14 @@ public class CompletedFlashcardConfiguration : IEntityTypeConfiguration<Complete
     public void Configure(EntityTypeBuilder<CompletedFlashcard> builder)
     {
         builder.HasKey(fc => new { fc.FlashcardId, fc.UserId });
-
+        
         builder
             .Property(fc => fc.Date)
             .HasDefaultValueSql("CAST(GETDATE() AS DATE)");
         
         builder
             .HasOne(fc => fc.User)
-            .WithMany(u => u.FlashcardsCompleted)
+            .WithMany(u => u.CompletedFlashcards)
             .HasForeignKey(fc => fc.UserId)
             .OnDelete(DeleteBehavior.NoAction);
         

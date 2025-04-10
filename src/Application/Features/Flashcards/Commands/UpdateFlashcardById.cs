@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Flashcards.Commands;
 
-public static class UpdateFlashcard
+public static class UpdateFlashcardById
 {
     public class Command : IRequest<Result<FlashcardDto>>
     {
@@ -22,7 +22,13 @@ public static class UpdateFlashcard
         
         private readonly IMapper _mapper;
         private readonly IApplicationDbContext _context;
-        
+
+        public Handler(IMapper mapper, IApplicationDbContext context)
+        {
+            _mapper = mapper;
+            _context = context;
+        }
+
         public async Task<Result<FlashcardDto>> Handle(Command request, CancellationToken cancellationToken)
         {
             var flashcard = await _context

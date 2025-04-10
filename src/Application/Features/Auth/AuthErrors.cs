@@ -12,4 +12,7 @@ public class AuthErrors
     
     public static Error NotAuthorize = 
         new Error(ErrorTypeConstant.FORBIDDEN, "Not authorized to perform this action");
+    
+    public static Error ValidationError (string message) =>
+        new Error(ErrorTypeConstant.VALIDATION_ERROR, message);
 }

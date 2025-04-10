@@ -16,94 +16,98 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-        services.AddAuthenticationExtensions(config);
+        services.AddAuthenticationInternal(config);
         services.AddIdentityExtensions();
-        services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<ICookieService, CookieService>();
+        services.AddDatabase(config);
+       
+        return services;
+    }
+
+    private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration config)
+    {
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             const string FLASHCARDXP_CONTEXT_CONNSTRING = "DefaultConnection";
             options.UseSqlServer(config.GetConnectionString(FLASHCARDXP_CONTEXT_CONNSTRING));
         });
-
+        
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
         return services;
     }
     
-     private static IServiceCollection AddAuthenticationExtensions(
-            this IServiceCollection services,IConfiguration config)
+    private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services,IConfiguration config)
+    {
+    
+        services.AddAuthentication(options =>
         {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-            services.AddAuthentication(options =>
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = config["JwtSettings:Issuer"]!,
+                ValidAudience = config["JwtSettings:Audience"]!,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
+            };
 
-            })
-            .AddJwtBearer(options =>
+            options.Events = new JwtBearerEvents
             {
-                options.TokenValidationParameters = new TokenValidationParameters
+                OnMessageReceived = context =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = config["JwtSettings:Issuer"]!,
-                    ValidAudience = config["JwtSettings:Audience"]!,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
-                    
+                    context.Request.Cookies.TryGetValue("accessToken", out var accessToken);
 
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
+                    if (!string.IsNullOrEmpty(accessToken))
                     {
-                        context.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                        context.Token = accessToken;
+                    }
 
-                        if (!string.IsNullOrEmpty(accessToken))
-                        {
-                            context.Token = accessToken;
-                        }
+                    return Task.CompletedTask;
 
-                        return Task.CompletedTask;
+                },
 
-                    },
-
-                };
-            });
-
-            services.AddCors(options =>
-            {
-
-                options.AddPolicy("ApiCorsPolicy", policy =>
-                {
-                    policy.WithOrigins("http://localhost:5173")
-                        .AllowAnyHeader()
-                        .AllowCredentials()
-                        .AllowAnyMethod();
-                });
-            });
-
-            services.AddSingleton<TokenProvider>();
-
-            return services;
-        }
-
-        private static IServiceCollection AddIdentityExtensions(this IServiceCollection services)
+            };
+        });
+        
+        services.AddCors(options =>
         {
-            services.AddIdentityApiEndpoints<User>(options =>
+            options.AddPolicy("ApiCorsPolicy", policy =>
             {
-                options.User.RequireUniqueEmail = true;
+                policy.WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .AllowAnyMethod();
+            });
+        });
+        
+        services.AddScoped<IUserContext, UserContext>();
+        services.AddScoped<ITokenProvider, TokenProvider>();
 
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 0;
-            })
-            .AddEntityFrameworkStores<ApplicationDbContext>();
-            return services;
-        }
+        return services;
+    }
+
+    private static IServiceCollection AddIdentityExtensions(this IServiceCollection services)
+    {
+        services.AddIdentityApiEndpoints<User>(options =>
+        {
+            options.User.RequireUniqueEmail = true;
+
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 6;
+            options.Password.RequiredUniqueChars = 0;
+        })
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+        return services;
+    }
 }
