@@ -1,13 +1,12 @@
-﻿using FlashcardXpApi.Application.Common;
+using Application.Common.Models;
 
-namespace FlashcardXpApi.Application.Features.StudySets
+namespace Application.Features.StudySets;
+
+public class StudySetErrors
 {
-    public class StudySetErrors
-    {
-        public static Error StudySetNotFoundError =
-            new Error(ErrorTypeConstant.NOT_FOUND, "Study set not found.");
-        
-        public static Error NotStudySetOwner =
-            new Error(ErrorTypeConstant.FORBIDDEN, "Not authorized to perform this action.");
-    }
+    public static Error StudySetNotFound = 
+        new Error(ErrorTypeConstant.NOT_FOUND, "Study set not found");
+
+    public static Error NotOwner =
+        new Error(ErrorTypeConstant.FORBIDDEN, "Not authorized to perform this action");
 }
