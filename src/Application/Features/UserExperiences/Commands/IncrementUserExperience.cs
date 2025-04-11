@@ -2,7 +2,9 @@
 using Application.Common.Abstraction;
 using Application.Common.Models;
 using Application.Features.UserExperiences.Payloads;
+using Application.Features.UserQuests;
 using AutoMapper;
+using Domain.Entities.Quests;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +14,7 @@ public static class IncrementUserExperience
 {
     public class Command : IRequest<Result<UserExperienceDto>>
     {
-        public required int Xp { get; set; }
+        public required string UserQuestId { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<UserExperienceDto>>
@@ -40,7 +42,23 @@ public static class IncrementUserExperience
                 throw new ApplicationException("User does not have user experience implemented");
             }
 
-            userExperience.Xp += request.Xp;
+            var userQuest = await _context
+                            .UserQuests
+                            .Include(uq => uq.Quest)
+                            .FirstOrDefaultAsync(uq => uq.Id == request.UserQuestId, cancellationToken);
+
+            if (userQuest == null)
+            {
+                return Result.Failure<UserExperienceDto>(UserQuestErrors.UserQuestNotFound);
+            }
+
+            if (!userQuest.IsCompleted)
+            {
+                return Result.Failure<UserExperienceDto>(UserQuestErrors.UserQuestNotCompleted);
+            }
+
+            userExperience.Xp += userQuest.Quest.XpReward;
+
             _context.UserExperiences.Update(userExperience);
             await _context.SaveChangesAsync(cancellationToken);
 

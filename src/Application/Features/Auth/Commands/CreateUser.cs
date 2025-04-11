@@ -29,7 +29,6 @@ public static class CreateUser
         }
     }
     
-    
     public class Handler : IRequestHandler<Command, Result>
     {
         private readonly UserManager<User> _userManager;

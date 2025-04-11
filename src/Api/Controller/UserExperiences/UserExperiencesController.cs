@@ -26,7 +26,7 @@ public class UserExperiencesController : ApiControllerBase
     {
         var command = new IncrementUserExperience.Command
         {
-            Xp = request.Xp
+            UserQuestId = request.UserQuestId
         };
 
         var response = await Mediator.Send(command);
