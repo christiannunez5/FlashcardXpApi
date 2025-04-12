@@ -10,8 +10,8 @@ public class Flashcard
     public required string Definition { get; set; }
     
     // navigations
-    public required string StudySetId { get; set; }
-    public StudySet StudySet { get; set; } = null!;
+    public string? StudySetId { get; set; }
+    public StudySet? StudySet { get; set; }
     
     public ICollection<CompletedFlashcard> FlashcardsCompleted { get; set; } = new List<CompletedFlashcard>();
     

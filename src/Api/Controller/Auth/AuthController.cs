@@ -31,7 +31,9 @@ public class AuthController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
-    
+
+
+    [AllowAnonymous]
     [HttpPost("login/refresh-token")]
     public async Task<IResult> LoginRefreshToken()
     {

@@ -19,7 +19,7 @@ public static class ResultExtension
     {
         return error.Code switch
         {
-            ErrorTypeConstant.AUTHENTICATION_ERROR => Results.Json(error, statusCode: 401),
+            ErrorTypeConstant.AUTHORIZATION_ERROR => Results.Json(error, statusCode: 401),
             ErrorTypeConstant.VALIDATION_ERROR => Results.BadRequest(error),
             ErrorTypeConstant.NOT_FOUND => Results.NotFound(error),
             ErrorTypeConstant.BAD_REQUEST => Results.BadRequest(error),

@@ -17,13 +17,11 @@ public static class GetCurrentUserRecentStudySets
     public class Handler :  IRequestHandler<Query, Result<List<RecentStudySetDto>>>
     {
         
-        private readonly IMapper _mapper;
         private readonly IApplicationDbContext _context;
         private readonly IUserContext _userContext;
 
-        public Handler(IMapper mapper, IApplicationDbContext context, IUserContext userContext)
+        public Handler(IApplicationDbContext context, IUserContext userContext)
         {
-            _mapper = mapper;
             _context = context;
             _userContext = userContext;
         }
@@ -32,10 +30,18 @@ public static class GetCurrentUserRecentStudySets
         {
             var recentStudySets = await _context
                 .RecentStudySets
+                .Include(rs => rs.StudySet)
                 .Where(rs => rs.UserId == _userContext.UserId())
+                .Select(rs => new RecentStudySetDto
+                (
+                    rs.Id,
+                    rs.StudySet.Title,
+                    rs.AccessedAt
+                ))
                 .ToListAsync(cancellationToken);
             
-            return Result.Success(_mapper.Map<List<RecentStudySetDto>>(recentStudySets));
+            return Result.Success(recentStudySets);
+
         }
     }
 }

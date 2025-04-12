@@ -19,7 +19,7 @@ public class UserExperiencesController : ApiControllerBase
         var response = await Mediator.Send(query);
         return response.ToHttpResponse();
     }
-
+    
     [HttpPatch]
     public async Task<IResult> IncrementExperience(
                 [FromBody] IncrementUserExperienceRequest request)

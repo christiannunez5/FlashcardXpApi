@@ -36,7 +36,6 @@ public static class DependencyInjection
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
         return services;
     }
-    
     private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services,IConfiguration config)
     {
     

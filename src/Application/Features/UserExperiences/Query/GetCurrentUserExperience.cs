@@ -1,5 +1,6 @@
 ﻿using Application.Common.Abstraction;
 using Application.Common.Models;
+using Application.Features.Auth.Payloads;
 using Application.Features.UserExperiences.Payloads;
 using AutoMapper;
 using MediatR;
@@ -32,7 +33,8 @@ public static class GetCurrentUserExperience
 
             var userExperience = await _context
                 .UserExperiences
-                .FirstOrDefaultAsync(r => r.UserId == _userContext.UserId(), cancellationToken);
+                .Include(uxp => uxp.User)
+                .FirstOrDefaultAsync(uxp => uxp.UserId == _userContext.UserId(), cancellationToken);
 
             if (userExperience == null)
             {

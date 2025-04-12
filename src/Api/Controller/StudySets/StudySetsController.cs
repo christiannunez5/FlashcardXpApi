@@ -40,7 +40,6 @@ public class StudySetsController : ApiControllerBase
         return response.ToHttpResponse();
     }
 
-
     [HttpPatch("{id}")]
     public async Task<IResult> UpdateStudySet([FromBody] StudySetRequest request, string id)
     {
@@ -53,6 +52,18 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
+    
+    [HttpPatch("{id}/status")]
+    public async Task<IResult> UpdateStatus(string id)
+    {
+        var command = new UpdateStudySetStatus.Command
+        {
+            Id = id,
+        };
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+
 
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteStudySet(string id)

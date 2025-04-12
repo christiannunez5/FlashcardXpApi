@@ -10,7 +10,7 @@ namespace Api.Controller.Flashcards;
 public class FlashcardsController : ApiControllerBase
 {
 
-    [HttpPost("{id}")]
+    [HttpPatch("{id}")]
     public async Task<IResult> UpdateFlashcard([FromBody] UpdateFlashcardRequest request, string id)
     {
         var command = new UpdateFlashcardById.Command

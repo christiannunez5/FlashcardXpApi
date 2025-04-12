@@ -1,5 +1,6 @@
 ﻿using Application.Common.Abstraction;
 using Application.Common.Models;
+using Domain.Entities.Studysets;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +44,7 @@ namespace Application.Features.StudySets.Commands
 
                 studySet.Title = request.Title;
                 studySet.Description = request.Description;
+
                 _context.StudySets.Update(studySet);
 
                 await _context.SaveChangesAsync(cancellationToken);

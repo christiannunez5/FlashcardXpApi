@@ -22,7 +22,7 @@ public record StudySetDto(
         public Mapping()
         {
             CreateMap<StudySet, StudySetDto>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CreatedBy))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
                 .ForMember(dest => dest.Flashcards, opt => opt.MapFrom(src => src.Flashcards))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
         }

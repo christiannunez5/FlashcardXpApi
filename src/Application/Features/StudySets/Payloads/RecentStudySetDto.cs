@@ -9,7 +9,9 @@ public record RecentStudySetDto(string Id, string Title, DateTime AccessedAt)
     {
         public Mapping()
         {
-            CreateMap<RecentStudySet, RecentStudySetDto>();
+            CreateMap<RecentStudySet, RecentStudySetDto>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.StudySet.Title))
+                .ForMember(dest => dest.AccessedAt, opt => opt.MapFrom(src => src.AccessedAt));
         }
     }
 }

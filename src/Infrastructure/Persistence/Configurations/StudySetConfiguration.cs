@@ -13,7 +13,13 @@ public class StudySetConfiguration : IEntityTypeConfiguration<StudySet>
             .WithMany(u => u.StudySets)
             .HasForeignKey(s => s.CreatedById)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
+        builder
+            .HasMany(s => s.Flashcards)
+            .WithOne(f => f.StudySet)
+            .HasForeignKey(f => f.StudySetId)  
+            .OnDelete(DeleteBehavior.SetNull);
+
         builder
             .Property(fs => fs.CreatedAt)
             .HasDefaultValueSql("getDate()");

@@ -17,5 +17,6 @@ public interface IApplicationDbContext
     DbSet<Quest> Quests { get; }
     DbSet<UserQuest> UserQuests { get; }
     DbSet<UserExperience> UserExperiences { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

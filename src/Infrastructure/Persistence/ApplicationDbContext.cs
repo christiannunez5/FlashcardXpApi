@@ -41,6 +41,7 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         modelBuilder.ApplyConfiguration(new RecentStudySetConfiguration());
         modelBuilder.ApplyConfiguration(new UserExperienceConfiguration());
         modelBuilder.ApplyConfiguration(new CompletedFlashcardConfiguration());
+        // modelBuilder.ApplyConfiguration(new StudySetProgressConfiguration());
     }
 
 

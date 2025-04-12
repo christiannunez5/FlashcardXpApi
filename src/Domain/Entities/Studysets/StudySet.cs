@@ -26,11 +26,6 @@ public class StudySet
     
     public ICollection<Flashcard> Flashcards { get; set; } = new List<Flashcard>();
     
-    /*
-    public ICollection<StudySetParticipant> StudySetParticipants { get; set; } =
-        new List<StudySetParticipant>();
-    */
-    
     public ICollection<RecentStudySet> RecentStudySets { get; set; } =
         new List<RecentStudySet>();
 }
