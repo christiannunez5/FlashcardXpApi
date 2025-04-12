@@ -20,7 +20,7 @@ public class UserExperiencesController : ApiControllerBase
         return response.ToHttpResponse();
     }
 
-    [HttpPost]
+    [HttpPatch]
     public async Task<IResult> IncrementExperience(
                 [FromBody] IncrementUserExperienceRequest request)
     {
