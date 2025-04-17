@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Domain.Entities.Studysets;
 
 namespace Domain.Entities.Flashcards;
@@ -8,6 +7,8 @@ public class Flashcard
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public required string Term { get; set; }
     public required string Definition { get; set; }
+
+    public DateTime CreatedAt = default;
     
     // navigations
     public string? StudySetId { get; set; }

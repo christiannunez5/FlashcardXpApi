@@ -4,6 +4,7 @@ using Application;
 using Application.Common.Abstraction;
 using Infrastructure;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -29,7 +30,7 @@ var app = builder.Build();
     {
         app.UseSwagger();
         app.UseSwaggerUI();
-
+        app.ApplyMigrations();
         using (var scope = app.Services.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();

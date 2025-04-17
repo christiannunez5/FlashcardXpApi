@@ -33,6 +33,7 @@ public static class GetCurrentUserQuests
         {
             var userQuests = await _context
                 .UserQuests
+                .Include(uq => uq.Quest)
                 .Where(uq => uq.UserId == _userContext.UserId())
                 .ToListAsync(cancellationToken);
 

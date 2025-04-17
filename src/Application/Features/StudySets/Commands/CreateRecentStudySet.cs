@@ -40,16 +40,30 @@ public static class CreateRecentStudySet
                 return Result.Failure<RecentStudySetDto>(StudySetErrors.StudySetNotFound);
             }
 
-            var newRecentStudySet = new RecentStudySet
-            {
-                StudySetId = request.StudySetId,
-                UserId = _userContext.UserId()
-            };
+            var recentStudySet = await _context
+                .RecentStudySets
+                .FirstOrDefaultAsync(rs => rs.StudySetId == request.StudySetId &&
+                    rs.UserId == _userContext.UserId());
 
-            _context.RecentStudySets.Add(newRecentStudySet);
+            if (recentStudySet == null)
+            {
+                var newRecentStudySet = new RecentStudySet
+                {
+                    StudySetId = request.StudySetId,
+                    UserId = _userContext.UserId()
+                };
+                _context.RecentStudySets.Add(newRecentStudySet);
+            }
+            else
+            {
+                recentStudySet.AccessedAt = DateTime.UtcNow;
+                _context.RecentStudySets.Update(recentStudySet);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(_mapper.Map<RecentStudySetDto>(newRecentStudySet));
+            return Result.Success(_mapper.Map<RecentStudySetDto>(recentStudySet));
         }
     }
 }

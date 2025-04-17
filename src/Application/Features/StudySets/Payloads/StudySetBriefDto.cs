@@ -3,16 +3,15 @@ using Domain.Entities.Studysets;
 
 namespace Application.Features.StudySets.Payloads;
 
-public record StudySetBriefDto
-(
-    string Id,
-    string Title,
-    string Description,
-    DateOnly UpdatedAt,
-    string Status,
-    int FlashcardsCount)
+public class StudySetBriefDto
 {
-    
+    public required string Id { get; set; }
+    public required string Title { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public DateOnly UpdatedAt { get; set; }
+    public required string Status { get; set; }
+    public int FlashcardsCount { get; set; }
+
     private class Mapping : Profile
     {
         public Mapping()

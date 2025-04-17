@@ -19,7 +19,6 @@ public class UserExperienceDto
         public Mapping()
         {
             CreateMap<UserExperience, UserExperienceDto>()
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src =>
                     new LevelDto(1, src.GetLevel.ToString())
                 ))

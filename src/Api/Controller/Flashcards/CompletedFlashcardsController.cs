@@ -1,5 +1,6 @@
 ﻿using Application.Extensions;
 using Application.Features.CompletedFlashcards.Commands;
+using Application.Features.CompletedFlashcards.Payloads;
 using Application.Features.CompletedFlashcards.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,12 @@ public class CompletedFlashcardsController : ApiControllerBase
         return response.ToHttpResponse();
     }
 
-    [HttpPost("{id}")]
-    public async Task<IResult> AddNewCompletedFlashcard(string id)
+    [HttpPost]
+    public async Task<IResult> AddNewCompletedFlashcard([FromBody] CreateCompletedFlashcardRequest request)
     {
         var command = new CreateCompletedFlashcard.Command
         {
-            Id = id
+            FlashcardId = request.FlashcardId
         };
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();

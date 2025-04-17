@@ -1,0 +1,35 @@
+services:
+  flashcardxp.api:
+    container_name: flashcardxp.api
+    build:
+      context: .
+      dockerfile: src/Api/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    restart: "on-failure"
+    networks:
+      flashcard-network:
+    depends_on:
+      - sqlserver
+        
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyPassword12345!
+    volumes:
+      - flashcard-sql-volume:/var/opt/mssql
+    ports:
+      - "1433:1433"
+    networks:
+      flashcard-network:
+      
+networks:
+  flashcard-network:
+volumes:
+  flashcard-sql-volume:
+  

@@ -30,7 +30,7 @@ public static class GetStudySetById
         {
             var studySet = await _context
                 .StudySets
-                .Include(s => s.Flashcards)
+                .Include(s => s.Flashcards.OrderBy(f => f.CreatedAt))
                 .Include(s => s.CreatedBy)
                 .FirstOrDefaultAsync(rs => rs.Id == request.Id, cancellationToken);
 

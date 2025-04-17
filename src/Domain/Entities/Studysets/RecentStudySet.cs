@@ -4,7 +4,6 @@ namespace Domain.Entities.Studysets;
 
 public class RecentStudySet
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public required string StudySetId { get; set; }
     public StudySet StudySet { get; set; } = null!;

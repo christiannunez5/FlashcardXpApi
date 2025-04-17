@@ -40,30 +40,32 @@ public class StudySetsController : ApiControllerBase
         return response.ToHttpResponse();
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IResult> UpdateStudySet([FromBody] StudySetRequest request, string id)
+    [HttpPut("{id}/full")]
+    public async Task<IResult> UpdateFullStudySet([FromBody] UpdateFullStudySetRequest request, string id)
     {
-        var command = new UpdateStudySetById.Command
+        var command = new UpdateFullStudySetById.Command
         {
             Id = id,
             Title = request.Title,
-            Description = request.Description
-        };
-        var response = await Mediator.Send(command);
-        return response.ToHttpResponse();
-    }
-    
-    [HttpPatch("{id}/status")]
-    public async Task<IResult> UpdateStatus(string id)
-    {
-        var command = new UpdateStudySetStatus.Command
-        {
-            Id = id,
+            Description = request.Description,
+            Flashcards = request.Flashcards
         };
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
 
+    [HttpPatch("{id}")]
+    public async Task<IResult> UpdateStudySetBasicInfo([FromBody] UpdateStudySetBasicInfoRequest request, string id)
+    {
+        var command = new UpdateStudySetBasicInfoById.Command
+        {
+            Id = id,
+            Title = request.Title,
+            Description = request.Description,
+        };
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
 
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteStudySet(string id)

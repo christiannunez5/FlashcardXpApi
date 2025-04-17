@@ -1,7 +1,5 @@
 ﻿using Application.Extensions;
-using Application.Features.UserExperiences.Commands;
-using Application.Features.UserExperiences.Payloads;
-using Application.Features.UserExperiences.Query;
+using Application.Features.UserExperiences.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +18,7 @@ public class UserExperiencesController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
+    /*
     [HttpPatch]
     public async Task<IResult> IncrementExperience(
                 [FromBody] IncrementUserExperienceRequest request)
@@ -32,8 +31,6 @@ public class UserExperiencesController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
-
-
-
+    */
 
 }

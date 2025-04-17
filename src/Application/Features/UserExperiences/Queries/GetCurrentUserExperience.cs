@@ -1,12 +1,11 @@
 ﻿using Application.Common.Abstraction;
 using Application.Common.Models;
-using Application.Features.Auth.Payloads;
 using Application.Features.UserExperiences.Payloads;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Features.UserExperiences.Query;
+namespace Application.Features.UserExperiences.Queries;
 
 public static class GetCurrentUserExperience
 {

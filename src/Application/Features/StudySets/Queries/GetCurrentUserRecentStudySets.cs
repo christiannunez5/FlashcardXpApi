@@ -19,11 +19,13 @@ public static class GetCurrentUserRecentStudySets
         
         private readonly IApplicationDbContext _context;
         private readonly IUserContext _userContext;
+        private readonly IMapper _mapper;
 
-        public Handler(IApplicationDbContext context, IUserContext userContext)
+        public Handler(IApplicationDbContext context, IUserContext userContext, IMapper mapper)
         {
             _context = context;
             _userContext = userContext;
+            _mapper = mapper;
         }
 
         public async Task<Result<List<RecentStudySetDto>>> Handle(Query request, CancellationToken cancellationToken)
@@ -31,16 +33,11 @@ public static class GetCurrentUserRecentStudySets
             var recentStudySets = await _context
                 .RecentStudySets
                 .Include(rs => rs.StudySet)
+                .OrderBy(rs => rs.AccessedAt)
                 .Where(rs => rs.UserId == _userContext.UserId())
-                .Select(rs => new RecentStudySetDto
-                (
-                    rs.Id,
-                    rs.StudySet.Title,
-                    rs.AccessedAt
-                ))
                 .ToListAsync(cancellationToken);
             
-            return Result.Success(recentStudySets);
+            return Result.Success(_mapper.Map<List<RecentStudySetDto>>(recentStudySets));
 
         }
     }

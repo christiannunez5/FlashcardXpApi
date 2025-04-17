@@ -11,7 +11,7 @@ public static class CreateCompletedFlashcard
 {
     public class Command : IRequest<Result>
     {
-        public required string Id { get; set; }
+        public required string FlashcardId { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result>
@@ -24,12 +24,11 @@ public static class CreateCompletedFlashcard
             _context = context;
             _userContext = userContext;
         }
-
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
             var doesFlashcardExist = await _context
                 .Flashcards
-                .AnyAsync(f => f.Id == request.Id);
+                .AnyAsync(f => f.Id == request.FlashcardId);
 
             if (!doesFlashcardExist)
             {
@@ -39,7 +38,7 @@ public static class CreateCompletedFlashcard
             var isFlashcardMarkedAsCompletedToday = await _context
                 .CompletedFlashcards
                 .AnyAsync(cf => cf.UserId == _userContext.UserId()
-                            && cf.FlashcardId == request.Id, cancellationToken);
+                            && cf.FlashcardId == request.FlashcardId, cancellationToken);
 
             if (isFlashcardMarkedAsCompletedToday)
             {
@@ -48,7 +47,7 @@ public static class CreateCompletedFlashcard
 
             var newCompletedFlashcard = new CompletedFlashcard
             {
-                FlashcardId = request.Id,
+                FlashcardId = request.FlashcardId,
                 UserId = _userContext.UserId(),
             };
             

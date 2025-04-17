@@ -2,6 +2,7 @@ using Application.Common.Abstraction;
 using Application.Common.Models;
 using Application.Features.Flashcards.Payloads;
 using AutoMapper;
+using Domain.Entities.Flashcards;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +12,10 @@ public static class UpdateFlashcardById
 {
     public class Command : IRequest<Result<FlashcardDto>>
     {
-        public required string Id { get; init; }
+        public string? Id { get; init; }
         public required string Term { get; init; }
         public required string Definition { get; init; }
+        public required string StudySetId { get; init; }
         
     };
     
@@ -28,7 +30,6 @@ public static class UpdateFlashcardById
             _mapper = mapper;
             _context = context;
         }
-
         public async Task<Result<FlashcardDto>> Handle(Command request, CancellationToken cancellationToken)
         {
             var flashcard = await _context
@@ -37,13 +38,21 @@ public static class UpdateFlashcardById
 
             if (flashcard == null)
             {
-                return Result.Failure<FlashcardDto>(FlashcardErrors.FlashcardNotFound);
+                var newFlashcard = new Flashcard
+                {
+                    Definition = request.Definition,
+                    Term = request.Term,
+                    StudySetId = request.StudySetId,
+                };
+                _context.Flashcards.Add(newFlashcard);
             }
-
-            flashcard.Term = request.Term;
-            flashcard.Definition = request.Definition;
+            else
+            {
+                flashcard.Term = request.Term;
+                flashcard.Definition = request.Definition;
+                _context.Flashcards.Update(flashcard);
+            }
             
-            _context.Flashcards.Update(flashcard);
             await _context.SaveChangesAsync(cancellationToken);
             
             return Result.Success(_mapper.Map<FlashcardDto>(flashcard));

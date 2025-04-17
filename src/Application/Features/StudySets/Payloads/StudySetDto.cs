@@ -1,7 +1,6 @@
 using Application.Features.Auth.Payloads;
 using Application.Features.Flashcards.Payloads;
 using AutoMapper;
-using Domain.Entities.Auth;
 using Domain.Entities.Studysets;
 
 namespace Application.Features.StudySets.Payloads;
