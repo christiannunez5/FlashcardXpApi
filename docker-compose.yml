@@ -14,6 +14,7 @@ services:
       flashcard-network:
     depends_on:
       - sqlserver
+    
         
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -27,7 +28,7 @@ services:
       - "1433:1433"
     networks:
       flashcard-network:
-      
+
 networks:
   flashcard-network:
 volumes:

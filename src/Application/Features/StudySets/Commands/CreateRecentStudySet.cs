@@ -21,7 +21,7 @@ public static class CreateRecentStudySet
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUserContext _userContext;
-
+            
         public Handler(IApplicationDbContext context, IMapper mapper, IUserContext userContext)
         {
             _context = context;
@@ -43,24 +43,27 @@ public static class CreateRecentStudySet
             var recentStudySet = await _context
                 .RecentStudySets
                 .FirstOrDefaultAsync(rs => rs.StudySetId == request.StudySetId &&
-                    rs.UserId == _userContext.UserId());
-
+                    rs.UserId == _userContext.UserId(), cancellationToken);
+            
             if (recentStudySet == null)
             {
                 var newRecentStudySet = new RecentStudySet
                 {
                     StudySetId = request.StudySetId,
-                    UserId = _userContext.UserId()
+                    UserId = _userContext.UserId(),
                 };
                 _context.RecentStudySets.Add(newRecentStudySet);
             }
             else
             {
-                recentStudySet.AccessedAt = DateTime.UtcNow;
-                _context.RecentStudySets.Update(recentStudySet);
-                await _context.SaveChangesAsync(cancellationToken);
-            }
+                var utcNow = DateTime.UtcNow;
 
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"); // or whatever you want
+                
+                recentStudySet.AccessedAt = TimeZoneInfo.ConvertTimeFromUtc(utcNow, timeZone);;
+                _context.RecentStudySets.Update(recentStudySet);
+            }
+            
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success(_mapper.Map<RecentStudySetDto>(recentStudySet));

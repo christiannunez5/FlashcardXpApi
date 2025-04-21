@@ -12,8 +12,9 @@ public class UserExperienceDto
     public UserDto User { get; set; } = default!;
     public int CurrentExperience { get; set; }
     public LevelDto Level { get; set; } = default!;
+    
     public int MaxXp { get; set; }
-
+    
     private class Mapping : Profile
     {
         public Mapping()

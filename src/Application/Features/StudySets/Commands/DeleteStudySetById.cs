@@ -23,7 +23,7 @@ public static class DeleteStudySetById
             _context = context;
             _userContext = userContext;
         }
-
+        
         public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
         {
             

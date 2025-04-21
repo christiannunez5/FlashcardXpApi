@@ -39,7 +39,7 @@ public static class GetCurrentUserExperience
             {
                 throw new ApplicationException("User does not have user experience implemented");
             }
-
+        
             return Result.Success(_mapper.Map<UserExperienceDto>(userExperience));
         }
     }

@@ -28,8 +28,8 @@ public static class CreateCompletedFlashcard
         {
             var doesFlashcardExist = await _context
                 .Flashcards
-                .AnyAsync(f => f.Id == request.FlashcardId);
-
+                .AnyAsync(f => f.Id == request.FlashcardId, cancellationToken);
+            
             if (!doesFlashcardExist)
             {
                 return Result.Failure(FlashcardErrors.FlashcardNotFound);

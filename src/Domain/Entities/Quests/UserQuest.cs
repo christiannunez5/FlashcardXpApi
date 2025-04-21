@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Entities.Auth;
 
 namespace Domain.Entities.Quests;
@@ -13,4 +14,8 @@ public class UserQuest
     public Quest Quest { get; set; } = null!;
     public required string UserId { get; set; }
     public User User { get; set; } = null!;
+    
+    // not mapped
+    [NotMapped]
+    public int CompletedFlashcards { get; set; }
 }

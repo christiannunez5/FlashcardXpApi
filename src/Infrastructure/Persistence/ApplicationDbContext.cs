@@ -29,7 +29,6 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
 
     public DbSet<UserExperience> UserExperiences => Set<UserExperience>();
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -42,6 +41,7 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         modelBuilder.ApplyConfiguration(new UserExperienceConfiguration());
         modelBuilder.ApplyConfiguration(new CompletedFlashcardConfiguration());
         modelBuilder.ApplyConfiguration(new FlashcardConfiguration());
+        modelBuilder.ApplyConfiguration(new QuestConfiguration());
         // modelBuilder.ApplyConfiguration(new StudySetProgressConfiguration());
     }
 

@@ -10,5 +10,5 @@ public class RecentStudySet
     public required string UserId { get; set; }
     public User User { get; set; } = null!;
     
-    public DateTime AccessedAt { get; set; }
+    public DateTime AccessedAt { get; set; } = DateTime.Now;
 }

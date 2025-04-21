@@ -18,7 +18,6 @@ public static class UpdateStudySetBasicInfoById
 
     public class Handler : IRequestHandler<Command, Result>
     {
-
         private readonly IUserContext _userContext;
         private readonly IApplicationDbContext _context;
         public Handler(IUserContext userContext, IApplicationDbContext context)
@@ -31,7 +30,7 @@ public static class UpdateStudySetBasicInfoById
         {
             var studySet = await _context
                 .StudySets
-                .FirstOrDefaultAsync(s => s.Id == request.Id);
+                .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
 
             if (studySet == null)
             {

@@ -6,4 +6,9 @@ public class Quest
     public required string Title { get; set; }
     public required string Description { get; set; }
     public int XpReward { get; set; }
+    
+    public string IconUrl { get; set; } = string.Empty;
+    
+    public int Goal { get; set; }
+
 }

@@ -2,7 +2,7 @@
 
 using Application.Common.Abstraction;
 using Application.Common.Models;
-using Application.Features.Quests.Payloads;
+using Application.Features.UserQuests.Payloads;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +35,21 @@ public static class GetCurrentUserQuests
                 .UserQuests
                 .Include(uq => uq.Quest)
                 .Where(uq => uq.UserId == _userContext.UserId())
+                .OrderBy(uq => uq.Quest.Goal)
                 .ToListAsync(cancellationToken);
 
+            foreach (var userQuest in userQuests)
+            {
+                var today = DateOnly.FromDateTime(DateTime.UtcNow);
+                
+                var flashcardsCompleted = await _context
+                    .CompletedFlashcards
+                    .Where(fc => fc.UserId == _userContext.UserId() && 
+                                                    fc.Date == today)
+                    .CountAsync(cancellationToken);
+                userQuest.CompletedFlashcards = flashcardsCompleted;
+            }
+            
             return Result.Success(_mapper.Map<List<UserQuestDto>>(userQuests));
         }
     }

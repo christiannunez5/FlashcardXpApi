@@ -14,4 +14,7 @@ public class UserQuestErrors
 
     public static Error QuestAlreadyCompleted =
         new Error(ErrorTypeConstant.BAD_REQUEST, "You already completed this quest");
+    
+    public static Error RequirementsNotMet =
+        new Error(ErrorTypeConstant.BAD_REQUEST, "You have not yet completed the quest requirements.");
 }

@@ -33,10 +33,10 @@ public static class GetCurrentUserCompletedFlashcards
                 .CompletedFlashcards
                 .Where(cf => cf.UserId == _userContext.UserId() &&
                        cf.Date == DateOnly.FromDateTime(DateTime.UtcNow))
-                .CountAsync();
-
+                .CountAsync(cancellationToken);
+            
             var completedFlashcardDto = new CompletedFlashcardDto(completedFlashcardsTodayCount);
-
+            
             return Result.Success(completedFlashcardDto);
         }
     }

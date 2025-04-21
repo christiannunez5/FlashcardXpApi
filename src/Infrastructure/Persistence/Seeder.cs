@@ -13,52 +13,45 @@ public static class Seeder
             {
                 new Quest
                 {
-                    Title = "Flashcard Initiate",
-                    Description = "Complete 1 flashcard today.",
-                    XpReward = 25
+                    Title = "Lightning Learner",
+                    Description = "Answer 5 flashcards",
+                    XpReward = 150,
+                    IconUrl = "https://cdn-icons-png.flaticon.com/512/169/169367.png",
+                    Goal = 5
                 },
                 new Quest
                 {
-                    Title = "Daily Grinder",
-                    Description = "Complete 4 flashcards today.",
-                    XpReward = 50
+                    Title = "Marathon mind",
+                    Description = "Answer 10 flashcards",
+                    XpReward = 200,
+                    IconUrl = "https://cdn-icons-png.flaticon.com/512/169/169362.png",
+                    Goal = 10
                 },
                 new Quest
                 {
-                    Title = "Focused Learner",
-                    Description = "Complete 10 flashcards in a single session.",
-                    XpReward = 75
+                    Title = "Brainiac Burst",
+                    Description = "Answer 15 flashcards",
+                    XpReward = 250,
+                    IconUrl = "https://cdn-icons-png.flaticon.com/512/1055/1055646.png",
+                    Goal = 15
                 },
                 new Quest
                 {
-                    Title = "No Card Left Behind",
-                    Description = "Complete all flashcards in a study set.",
-                    XpReward = 100
+                    Title = "Daily Dynamo",
+                    Description = "Answer 20 flashcards",
+                    XpReward = 400,
+                    IconUrl = "https://cdn-icons-png.flaticon.com/512/3176/3176297.png",
+                    Goal = 20
                 },
                 new Quest
                 {
-                    Title = "Flashcard Finisher",
-                    Description = "Complete 50 flashcards total.",
-                    XpReward = 150
+                    Title = "Shockwave Sprinter",
+                    Description = "Answer 50 flashcards",
+                    XpReward = 700,
+                    IconUrl = "https://cdn-icons-png.flaticon.com/512/169/169374.png",
+                    Goal = 50
                 },
-                new Quest
-                {
-                    Title = "Century Scholar",
-                    Description = "Complete 100 flashcards total.",
-                    XpReward = 200
-                },
-                new Quest
-                {
-                    Title = "All In One Go",
-                    Description = "Complete 20 flashcards without exiting the session.",
-                    XpReward = 175
-                },
-                new Quest
-                {
-                    Title = "Ultimate Recall",
-                    Description = "Complete 300 flashcards in total.",
-                    XpReward = 500
-                }
+               
             };
 
             await context.Quests.AddRangeAsync(quests);
