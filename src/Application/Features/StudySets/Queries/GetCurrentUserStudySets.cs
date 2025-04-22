@@ -33,6 +33,7 @@ public static class GetCurrentUserStudySets
                 .StudySets
                 .Include(s => s.Flashcards)
                 .Where(s => s.CreatedById == _userContext.UserId())
+                .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync(cancellationToken);
 
             return Result.Success(_mapper.Map<List<StudySetBriefDto>>(studySets));

@@ -39,7 +39,7 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
-
+    
     [HttpPut("{id}/full")]
     public async Task<IResult> UpdateFullStudySet([FromBody] UpdateFullStudySetRequest request, string id)
     {

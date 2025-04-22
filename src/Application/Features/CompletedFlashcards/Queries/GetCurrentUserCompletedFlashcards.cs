@@ -20,11 +20,12 @@ public static class GetCurrentUserCompletedFlashcards
 
         private readonly IApplicationDbContext _context;
         private readonly IUserContext _userContext;
-
-        public Handler(IApplicationDbContext context, IUserContext userContext)
+        private readonly IDateTimeProvider _dateTimeProvider;
+        public Handler(IApplicationDbContext context, IUserContext userContext, IDateTimeProvider dateTimeProvider)
         {
             _context = context;
             _userContext = userContext;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Result<CompletedFlashcardDto>> Handle(Query request, CancellationToken cancellationToken)
@@ -32,7 +33,7 @@ public static class GetCurrentUserCompletedFlashcards
             var completedFlashcardsTodayCount = await _context
                 .CompletedFlashcards
                 .Where(cf => cf.UserId == _userContext.UserId() &&
-                       cf.Date == DateOnly.FromDateTime(DateTime.UtcNow))
+                       cf.Date == DateOnly.FromDateTime(_dateTimeProvider.Today()))
                 .CountAsync(cancellationToken);
             
             var completedFlashcardDto = new CompletedFlashcardDto(completedFlashcardsTodayCount);

@@ -20,7 +20,7 @@ public static class DependencyInjection
         services.AddIdentityExtensions();
         services.AddScoped<ICookieService, CookieService>();
         services.AddDatabase(config);
-       
+        services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         return services;
     }
 

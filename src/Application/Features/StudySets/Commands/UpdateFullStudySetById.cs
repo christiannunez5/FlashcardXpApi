@@ -21,13 +21,16 @@ namespace Application.Features.StudySets.Commands
 
         public class Handler : IRequestHandler<Command, Result>
         {
-
             private readonly IApplicationDbContext _context;
             private readonly IUserContext _userContext;
-            public Handler(IApplicationDbContext context, IUserContext userContext)
+            private readonly IDateTimeProvider _dateTimeProvider;
+
+            public Handler(IApplicationDbContext context, IUserContext userContext, 
+                IDateTimeProvider dateTimeProvider)
             {
                 _context = context;
                 _userContext = userContext;
+                _dateTimeProvider = dateTimeProvider;
             }
 
             public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
@@ -45,10 +48,11 @@ namespace Application.Features.StudySets.Commands
                 {
                     return Result.Failure(StudySetErrors.NotOwner);
                 }
-
+                
                 studySet.Title = request.Title;
                 studySet.Description = request.Description;
                 studySet.Status = StudySetStatus.Published;
+                studySet.UpdatedAt = DateOnly.FromDateTime(_dateTimeProvider.Today());
                 _context.StudySets.Update(studySet);
 
                 foreach (var flashcard in request.Flashcards)

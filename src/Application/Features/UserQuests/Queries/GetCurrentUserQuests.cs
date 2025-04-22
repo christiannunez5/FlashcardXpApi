@@ -21,12 +21,13 @@ public static class GetCurrentUserQuests
         private readonly IApplicationDbContext _context;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
-
-        public Handler(IApplicationDbContext context, IUserContext userContext, IMapper mapper)
+        private readonly IDateTimeProvider _dateTimeProvider;
+        public Handler(IApplicationDbContext context, IUserContext userContext, IMapper mapper, IDateTimeProvider dateTimeProvider)
         {
             _context = context;
             _userContext = userContext;
             _mapper = mapper;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Result<List<UserQuestDto>>> Handle(Query request, CancellationToken cancellationToken)
@@ -34,19 +35,23 @@ public static class GetCurrentUserQuests
             var userQuests = await _context
                 .UserQuests
                 .Include(uq => uq.Quest)
-                .Where(uq => uq.UserId == _userContext.UserId())
+                .Where(uq => uq.UserId == _userContext.UserId() && uq.IsCompleted == false)
                 .OrderBy(uq => uq.Quest.Goal)
                 .ToListAsync(cancellationToken);
 
             foreach (var userQuest in userQuests)
             {
-                var today = DateOnly.FromDateTime(DateTime.UtcNow);
-                
                 var flashcardsCompleted = await _context
                     .CompletedFlashcards
                     .Where(fc => fc.UserId == _userContext.UserId() && 
-                                                    fc.Date == today)
+                                                    fc.Date == DateOnly.FromDateTime(_dateTimeProvider.Today()))
                     .CountAsync(cancellationToken);
+                    
+                if (flashcardsCompleted > userQuest.Quest.Goal)
+                {
+                    flashcardsCompleted = userQuest.Quest.Goal;
+                }
+                
                 userQuest.CompletedFlashcards = flashcardsCompleted;
             }
             

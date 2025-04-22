@@ -27,13 +27,13 @@ public static class GetCurrentUserRecentStudySets
             _userContext = userContext;
             _mapper = mapper;
         }
-
+        
         public async Task<Result<List<RecentStudySetDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
             var recentStudySets = await _context
                 .RecentStudySets
                 .Include(rs => rs.StudySet)
-                .OrderBy(rs => rs.AccessedAt)
+                .OrderByDescending(rs => rs.AccessedAt)
                 .Where(rs => rs.UserId == _userContext.UserId())
                 .ToListAsync(cancellationToken);
             

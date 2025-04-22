@@ -20,11 +20,12 @@ namespace Application.Features.StudySets.Commands
 
             private readonly IApplicationDbContext _context;
             private readonly IUserContext _userContext;
-
-            public Handler(IApplicationDbContext context, IUserContext userContext)
+            private readonly IDateTimeProvider _dateTimeProvider;
+            public Handler(IApplicationDbContext context, IUserContext userContext, IDateTimeProvider dateTimeProvider)
             {
                 _context = context;
                 _userContext = userContext;
+                _dateTimeProvider = dateTimeProvider;
             }
 
             public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
@@ -36,7 +37,8 @@ namespace Application.Features.StudySets.Commands
                     Title = "",
                     Description = "",
                     Status = StudySetStatus.Draft,
-                    CreatedById = _userContext.UserId()
+                    CreatedById = _userContext.UserId(),
+                    CreatedAt = DateOnly.FromDateTime(_dateTimeProvider.Today())
                 };
 
                 _context.StudySets.Add(newStudySet);

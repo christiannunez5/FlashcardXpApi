@@ -39,15 +39,19 @@ public static class CreateUser
             _userManager = userManager;
             _context = context;
         }
-
+        
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
+            
+            string defaultProfilePicUrl = $"https://api.dicebear.com/7.x/micah/svg?seed={request.Username}";
+            
+            // TODO: add multer to store profile picture
             var newUser = new User()
             {
                 Email = request.Email,
                 UserName = request.Username,
                 PasswordHash = request.Password,
-                ProfilePicUrl = request.ProfilePic
+                ProfilePicUrl = request.ProfilePic == "" ? defaultProfilePicUrl : request.ProfilePic
             };
             
             var createdUser = await _userManager.CreateAsync(newUser, request.Password);

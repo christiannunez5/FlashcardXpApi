@@ -21,12 +21,15 @@ public static class CreateRecentStudySet
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUserContext _userContext;
-            
-        public Handler(IApplicationDbContext context, IMapper mapper, IUserContext userContext)
+        private readonly IDateTimeProvider _dateTimeProvider;
+        
+        public Handler(IApplicationDbContext context, IMapper mapper, 
+            IUserContext userContext, IDateTimeProvider dateTimeProvider)
         {
             _context = context;
             _mapper = mapper;
             _userContext = userContext;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Result<RecentStudySetDto>> Handle(Command request, CancellationToken cancellationToken)
@@ -39,7 +42,7 @@ public static class CreateRecentStudySet
             {
                 return Result.Failure<RecentStudySetDto>(StudySetErrors.StudySetNotFound);
             }
-
+            
             var recentStudySet = await _context
                 .RecentStudySets
                 .FirstOrDefaultAsync(rs => rs.StudySetId == request.StudySetId &&
@@ -51,16 +54,13 @@ public static class CreateRecentStudySet
                 {
                     StudySetId = request.StudySetId,
                     UserId = _userContext.UserId(),
+                    AccessedAt = _dateTimeProvider.Today()
                 };
                 _context.RecentStudySets.Add(newRecentStudySet);
             }
             else
             {
-                var utcNow = DateTime.UtcNow;
-
-                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"); // or whatever you want
-                
-                recentStudySet.AccessedAt = TimeZoneInfo.ConvertTimeFromUtc(utcNow, timeZone);;
+                recentStudySet.AccessedAt = _dateTimeProvider.Today();
                 _context.RecentStudySets.Update(recentStudySet);
             }
             

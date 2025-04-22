@@ -8,7 +8,7 @@ public class Flashcard
     public required string Term { get; set; }
     public required string Definition { get; set; }
 
-    public DateTime CreatedAt = default;
+    public DateTime CreatedAt { get; set; }
     
     // navigations
     public string? StudySetId { get; set; }

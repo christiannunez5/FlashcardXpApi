@@ -28,6 +28,14 @@ public class UserQuestsController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
+    
+    [HttpPatch("/reset")]
+    public async Task<IResult> Reset()
+    {
+        var command = new ResetDailyQuests.Command();
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
 
 
 

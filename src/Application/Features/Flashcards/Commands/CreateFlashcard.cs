@@ -25,11 +25,12 @@ public static class CreateFlashcard
 
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
-
-        public Handler(IApplicationDbContext context, IMapper mapper)
+        private readonly IDateTimeProvider _dateTimeProvider;
+        public Handler(IApplicationDbContext context, IMapper mapper, IDateTimeProvider dateTimeProvider)
         {
             _context = context;
             _mapper = mapper;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Result<FlashcardDto>> Handle(Command request, CancellationToken cancellationToken)
@@ -47,10 +48,11 @@ public static class CreateFlashcard
             {
                 Term = request.Term,
                 Definition = request.Definition,
-                StudySetId = request.StudySetId
+                StudySetId = request.StudySetId,
+                CreatedAt = _dateTimeProvider.Today()
             };
+            
             _context.Flashcards.Add(newFlashcard);
-
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success(_mapper.Map<FlashcardDto>(newFlashcard));

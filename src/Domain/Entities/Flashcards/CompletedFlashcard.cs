@@ -9,7 +9,6 @@ public class CompletedFlashcard
     
     public required string FlashcardId { get; set; }
     public Flashcard Flashcard { get; set; } = null!;
-
-    public DateOnly Date { get; set; } = default;
+    public DateOnly Date { get; set; }
 
 }

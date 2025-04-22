@@ -18,13 +18,13 @@ public class CompletedFlashcardConfiguration : IEntityTypeConfiguration<Complete
             .HasOne(fc => fc.User)
             .WithMany(u => u.CompletedFlashcards)
             .HasForeignKey(fc => fc.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder
             .HasOne(fc => fc.Flashcard)
             .WithMany(f => f.FlashcardsCompleted)
             .HasForeignKey(fc => fc.FlashcardId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
     }
 }
