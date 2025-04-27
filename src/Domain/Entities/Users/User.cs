@@ -1,10 +1,11 @@
-using System.Text.Json.Serialization;
+using System.Collections;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Groups;
 using Domain.Entities.Studysets;
 using Domain.Entities.UserExperiences;
 using Microsoft.AspNetCore.Identity;
 
-namespace Domain.Entities.Auth;
+namespace Domain.Entities.Users;
 
 public class User : IdentityUser
 {
@@ -17,6 +18,12 @@ public class User : IdentityUser
     
     public ICollection<RecentStudySet> RecentStudySets { get; set; } =
         new List<RecentStudySet>();
-
+    
+    public ICollection<GroupMembers> GroupMembers { get; set; } =
+        new List<GroupMembers>();
+        
+    /*
+    public ICollection<StudySetRecord> StudySetRecords { get; set; } = new List<StudySetRecord>();
+    */
     public UserExperience Experience { get; set; } = null!;
 }

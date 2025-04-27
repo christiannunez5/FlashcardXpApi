@@ -1,6 +1,7 @@
 ﻿
 using Domain.Entities.Auth;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Users;
 
 namespace Domain.Entities.Studysets;
 

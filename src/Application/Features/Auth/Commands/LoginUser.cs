@@ -1,6 +1,7 @@
 using Application.Common.Abstraction;
 using Application.Common.Models;
 using Domain.Entities.Auth;
+using Domain.Entities.Users;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

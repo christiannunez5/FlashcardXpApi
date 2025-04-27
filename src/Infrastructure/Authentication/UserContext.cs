@@ -1,5 +1,6 @@
 using Application.Common.Abstraction;
 using Domain.Entities.Auth;
+using Domain.Entities.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 

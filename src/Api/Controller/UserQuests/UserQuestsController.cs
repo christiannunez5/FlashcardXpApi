@@ -1,14 +1,16 @@
 ﻿using Application.Extensions;
 using Application.Features.Quests.Queries;
 using Application.Features.UserQuests.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controller.UserQuests;
 
 [Route("api/user-quests")]
+[Authorize]
 public class UserQuestsController : ApiControllerBase
 {
-
+    
     [HttpGet]
     public async Task<IResult> GetQuests()
     {

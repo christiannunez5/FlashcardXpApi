@@ -1,12 +1,15 @@
+using System.Text.RegularExpressions;
 using Application.Common.Abstraction;
 using Domain.Entities.Auth;
 using Domain.Entities.Flashcards;
 using Domain.Entities.Quests;
 using Domain.Entities.Studysets;
 using Domain.Entities.UserExperiences;
+using Domain.Entities.Users;
 using Infrastructure.Persistence.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Group = Domain.Entities.Groups.Group;
 
 namespace Infrastructure.Persistence;
 
@@ -28,6 +31,8 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     public DbSet<UserQuest> UserQuests => Set<UserQuest>();
 
     public DbSet<UserExperience> UserExperiences => Set<UserExperience>();
+    
+    public DbSet<Group> Groups => Set<Group>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,6 +47,8 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         modelBuilder.ApplyConfiguration(new CompletedFlashcardConfiguration());
         modelBuilder.ApplyConfiguration(new FlashcardConfiguration());
         modelBuilder.ApplyConfiguration(new QuestConfiguration());
+        modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
+        // modelBuilder.ApplyConfiguration(new StudySetRecordConfiguration());
         // modelBuilder.ApplyConfiguration(new StudySetProgressConfiguration());
     }
 

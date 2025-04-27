@@ -1,6 +1,7 @@
 using System.Text;
 using Application.Common.Abstraction;
 using Domain.Entities.Auth;
+using Domain.Entities.Users;
 using Infrastructure.Authentication;
 using Infrastructure.Persistence;
 using Infrastructure.Services;

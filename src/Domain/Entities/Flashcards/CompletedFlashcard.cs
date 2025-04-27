@@ -1,4 +1,5 @@
 using Domain.Entities.Auth;
+using Domain.Entities.Users;
 
 namespace Domain.Entities.Flashcards;
 

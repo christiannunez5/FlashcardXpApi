@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Entities.Auth;
+using Domain.Entities.Users;
 
 namespace Domain.Entities.Quests;
 

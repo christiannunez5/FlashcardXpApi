@@ -3,6 +3,7 @@ using Application.Common.Models;
 using Domain.Entities.Auth;
 using Domain.Entities.Quests;
 using Domain.Entities.UserExperiences;
+using Domain.Entities.Users;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

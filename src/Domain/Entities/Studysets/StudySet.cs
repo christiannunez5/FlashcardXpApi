@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Entities.Auth;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Users;
 
 namespace Domain.Entities.Studysets;
 
@@ -14,7 +15,7 @@ public class StudySet
 
     public DateOnly UpdatedAt { get; set; }
     public bool IsPublic { get; set; }
-
+    
     public StudySetStatus Status { get; set; } = StudySetStatus.Draft;
 
     [NotMapped]
@@ -28,4 +29,9 @@ public class StudySet
     
     public ICollection<RecentStudySet> RecentStudySets { get; set; } =
         new List<RecentStudySet>();
+    
+    /*
+    public ICollection<StudySetRecord> StudySetRecords { get; set; } =
+        new List<StudySetRecord>();
+    */
 }

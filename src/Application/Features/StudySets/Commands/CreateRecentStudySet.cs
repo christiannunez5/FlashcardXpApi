@@ -45,6 +45,8 @@ public static class CreateRecentStudySet
             
             var recentStudySet = await _context
                 .RecentStudySets
+                .Include(rs => rs.StudySet)
+                .ThenInclude(rs => rs.CreatedBy)
                 .FirstOrDefaultAsync(rs => rs.StudySetId == request.StudySetId &&
                     rs.UserId == _userContext.UserId(), cancellationToken);
             

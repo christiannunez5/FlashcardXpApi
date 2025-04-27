@@ -1,5 +1,6 @@
 using AutoMapper;
 using Domain.Entities.Auth;
+using Domain.Entities.Users;
 
 namespace Application.Features.Auth.Payloads;
 

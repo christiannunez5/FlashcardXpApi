@@ -1,5 +1,6 @@
 using Domain.Entities.Auth;
 using Domain.Entities.UserExperiences;
+using Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

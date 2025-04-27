@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Application.Common.Abstraction;
 using Domain.Entities.Auth;
+using Domain.Entities.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 

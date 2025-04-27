@@ -4,6 +4,7 @@ using Application.Features.StudySets.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Application.Extensions;
 using Application.Features.StudySets.Commands;
+using Application.Features.StudySets.Payloads;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controller.StudySets;
@@ -20,13 +21,13 @@ public class RecentStudySetsController : ApiControllerBase
         var response = await Mediator.Send(query);
         return response.ToHttpResponse();
     }
-
-    [HttpPost("{id}")]
-    public async Task<IResult> InsertNewRecentStudySets(string id)
+    
+    [HttpPut]
+    public async Task<IResult> InsertNewRecentStudySets([FromBody] CreateRecentStudySetRequest request)
     {
         var command = new CreateRecentStudySet.Command
         {
-            StudySetId = id
+            StudySetId = request.StudySetId
         };
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();

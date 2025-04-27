@@ -1,5 +1,6 @@
 using Domain.Entities.Auth;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Groups;
 using Domain.Entities.Quests;
 using Domain.Entities.Studysets;
 using Domain.Entities.UserExperiences;
@@ -17,6 +18,8 @@ public interface IApplicationDbContext
     DbSet<Quest> Quests { get; }
     DbSet<UserQuest> UserQuests { get; }
     DbSet<UserExperience> UserExperiences { get; }
-
+    
+    DbSet<Group> Groups { get; }
+    
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

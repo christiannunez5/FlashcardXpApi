@@ -33,6 +33,7 @@ public static class GetCurrentUserRecentStudySets
             var recentStudySets = await _context
                 .RecentStudySets
                 .Include(rs => rs.StudySet)
+                .ThenInclude(s => s.CreatedBy)
                 .OrderByDescending(rs => rs.AccessedAt)
                 .Where(rs => rs.UserId == _userContext.UserId())
                 .ToListAsync(cancellationToken);

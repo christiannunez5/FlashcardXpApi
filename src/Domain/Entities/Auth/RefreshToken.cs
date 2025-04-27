@@ -1,3 +1,5 @@
+using Domain.Entities.Users;
+
 namespace Domain.Entities.Auth;
 
 public class RefreshToken

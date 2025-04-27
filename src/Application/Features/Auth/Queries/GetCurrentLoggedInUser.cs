@@ -3,6 +3,7 @@ using Application.Common.Models;
 using Application.Features.Auth.Payloads;
 using AutoMapper;
 using Domain.Entities.Auth;
+using Domain.Entities.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
