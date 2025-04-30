@@ -10,6 +10,7 @@ using Infrastructure.Persistence.Configurations;
 using Infrastructure.Persistence.Configurations.Flashcards;
 using Infrastructure.Persistence.Configurations.Quests;
 using Infrastructure.Persistence.Configurations.Studysets;
+using Infrastructure.Persistence.Configurations.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Group = Domain.Entities.Groups.Group;
@@ -21,22 +22,31 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-
+    
+    // study sets
     public DbSet<StudySet> StudySets => Set<StudySet>();
     public DbSet<RecentStudySet> RecentStudySets => Set<RecentStudySet>();
-
+    public DbSet<GroupStudySet> GroupStudySets => Set<GroupStudySet>();
+    public DbSet<StudySetParticipant> StudySetParticipants => Set<StudySetParticipant>();
+    public DbSet<StudySetRating> StudySetRatings => Set<StudySetRating>();
+    
+    // auth
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+ 
+    // flashcards
     public DbSet<Flashcard> Flashcards => Set<Flashcard>();
     public DbSet<CompletedFlashcard> CompletedFlashcards => Set<CompletedFlashcard>();
-
+    
+    // quests
     public DbSet<Quest> Quests => Set<Quest>();
     public DbSet<UserQuest> UserQuests => Set<UserQuest>();
-
+    
+    
+    // user experiences
     public DbSet<UserExperience> UserExperiences => Set<UserExperience>();
     
+    // groups
     public DbSet<Group> Groups => Set<Group>();
-    public DbSet<GroupStudySet> GroupStudySets => Set<GroupStudySet>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -44,6 +54,8 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         modelBuilder.ApplyConfiguration(new StudySetConfiguration());
         modelBuilder.ApplyConfiguration(new GroupStudySetConfiguration());
         modelBuilder.ApplyConfiguration(new RecentStudySetConfiguration());
+        modelBuilder.ApplyConfiguration(new StudySetParticipantConfiguration());
+        modelBuilder.ApplyConfiguration(new StudySetRatingConfiguration());
         
         modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
 

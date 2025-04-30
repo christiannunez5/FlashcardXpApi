@@ -4,6 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250430084014_FixCascadeDeletionOnStudySet")]
+    partial class FixCascadeDeletionOnStudySet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,28 +289,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("StudySetParticipants");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Studysets.StudySetRating", b =>
-                {
-                    b.Property<string>("StudySetId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RatedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReviewText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StudySetId", "RatedById");
-
-                    b.HasIndex("RatedById");
-
-                    b.ToTable("StudySetRatings");
-                });
-
             modelBuilder.Entity("Domain.Entities.UserExperiences.UserExperience", b =>
                 {
                     b.Property<string>("Id")
@@ -571,7 +552,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.Studysets.StudySet", "StudySet")
                         .WithMany("Flashcards")
                         .HasForeignKey("StudySetId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.Navigation("StudySet");
                 });
@@ -692,25 +673,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Studysets.StudySetRating", b =>
-                {
-                    b.HasOne("Domain.Entities.Users.User", "RatedBy")
-                        .WithMany("StudySetRatings")
-                        .HasForeignKey("RatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Studysets.StudySet", "StudySet")
-                        .WithMany("StudySetRatings")
-                        .HasForeignKey("StudySetId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("RatedBy");
-
-                    b.Navigation("StudySet");
-                });
-
             modelBuilder.Entity("Domain.Entities.UserExperiences.UserExperience", b =>
                 {
                     b.HasOne("Domain.Entities.Users.User", "User")
@@ -794,8 +756,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("RecentStudySets");
 
                     b.Navigation("StudySetParticipants");
-
-                    b.Navigation("StudySetRatings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Users.User", b =>
@@ -810,8 +770,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("RecentStudySets");
 
                     b.Navigation("StudySetParticipants");
-
-                    b.Navigation("StudySetRatings");
 
                     b.Navigation("StudySets");
                 });

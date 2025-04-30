@@ -19,9 +19,15 @@ public static class DependencyInjection
     {
         services.AddAuthenticationInternal(config);
         services.AddIdentityExtensions();
-        services.AddScoped<ICookieService, CookieService>();
+        services
+            .AddScoped<ICookieService, CookieService>()
+            .AddScoped<IEventService, EventService>()
+            .AddScoped<IDateTimeProvider, DateTimeProvider>();
+        
         services.AddDatabase(config);
-        services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+        services
+            .AddSignalR();
+        
         return services;
     }
 
@@ -110,4 +116,5 @@ public static class DependencyInjection
         .AddEntityFrameworkStores<ApplicationDbContext>();
         return services;
     }
+    
 }

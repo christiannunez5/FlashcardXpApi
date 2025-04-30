@@ -10,17 +10,32 @@ namespace Application.Common.Abstraction;
 
 public interface IApplicationDbContext
 {
+    // study sets
     DbSet<StudySet> StudySets { get; }
     DbSet<RecentStudySet> RecentStudySets { get; }
+    DbSet<GroupStudySet> GroupStudySets { get; }
+    DbSet<StudySetParticipant> StudySetParticipants { get; }   
+    DbSet<StudySetRating> StudySetRatings { get; }
+    
+    // flashcards
     DbSet<Flashcard> Flashcards { get; }
-    DbSet<RefreshToken> RefreshTokens { get; }
     DbSet<CompletedFlashcard> CompletedFlashcards { get; }
+    
+    // quests
     DbSet<Quest> Quests { get; }
     DbSet<UserQuest> UserQuests { get; }
+    
+    // user experience
     DbSet<UserExperience> UserExperiences { get; }
     
+    // groups
     DbSet<Group> Groups { get; }
     
-    DbSet<GroupStudySet> GroupStudySets { get; }
+    // auth
+    DbSet<RefreshToken> RefreshTokens { get; }
+
+    
+    
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

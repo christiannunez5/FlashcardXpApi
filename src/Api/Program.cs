@@ -1,10 +1,10 @@
-
-
+using Api;
 using Application;
 using Application.Common.Abstraction;
 using Infrastructure;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Extensions;
+using Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -16,13 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddRouting(options => options.LowercaseUrls = true);
     services.AddSwaggerGen();
     services.AddHttpContextAccessor();
-    
+    services.AddExceptionHandler<GlobalExceptionHandler>();
     services
         .AddInfrastructure(config)
         .AddApplication();
 }
-
-
 
 var app = builder.Build();
 {
@@ -41,9 +39,11 @@ var app = builder.Build();
     app.UseCors("ApiCorsPolicy");
     app.UseAuthentication();
     app.UseAuthorization();
-    app.MapControllers();   
+    app.MapControllers();
+
+    app.MapHub<EventHub>("/hub/events");
     
-    // app.UseExceptionHandler(o => { });
+    app.UseExceptionHandler(o => { });
     
     app.Run();
 

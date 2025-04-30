@@ -23,6 +23,11 @@ public class StudySet
     [NotMapped]
     public int FlashcardsCount => Flashcards.Count;
     
+    [NotMapped]
+    public double AverageRating 
+        => StudySetRatings.Average(r => r.Rating) / StudySetRatings.Count;
+  
+    
     // navigations
     public required string CreatedById { get; set; }
     public User CreatedBy { get; set; } = null!;
@@ -31,9 +36,11 @@ public class StudySet
     
     public ICollection<RecentStudySet> RecentStudySets { get; set; } =
         new List<RecentStudySet>();
-    
     public ICollection<GroupStudySet> GroupStudySets { get; set; } = new List<GroupStudySet>();
     
+    public ICollection<StudySetParticipant> StudySetParticipants { get; set; } = new List<StudySetParticipant>();
+    
+    public ICollection<StudySetRating> StudySetRatings { get; set; } = new List<StudySetRating>();
     /*
     public ICollection<StudySetRecord> StudySetRecords { get; set; } =
         new List<StudySetRecord>();

@@ -5,7 +5,6 @@ namespace Domain.Entities.Studysets;
 
 public class RecentStudySet
 {
-
     public required string StudySetId { get; set; }
     public StudySet StudySet { get; set; } = null!;
     public required string UserId { get; set; }

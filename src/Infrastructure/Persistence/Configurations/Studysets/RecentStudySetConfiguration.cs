@@ -9,7 +9,7 @@ public class RecentStudySetConfiguration : IEntityTypeConfiguration<RecentStudyS
     public void Configure(EntityTypeBuilder<RecentStudySet> builder)
     {
         builder.HasKey(rs => new { rs.UserId, rs.StudySetId });
-
+            
         builder
             .Property(rs => rs.AccessedAt)
             .HasDefaultValueSql("GETDATE()");
@@ -18,12 +18,12 @@ public class RecentStudySetConfiguration : IEntityTypeConfiguration<RecentStudyS
             .HasOne(rs => rs.User)
             .WithMany(u => u.RecentStudySets)
             .HasForeignKey(rs => rs.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder
             .HasOne(rs => rs.StudySet)
             .WithMany(s => s.RecentStudySets)
             .HasForeignKey(rs => rs.StudySetId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

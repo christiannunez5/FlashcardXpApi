@@ -19,8 +19,7 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(query);
         return response.ToHttpResponse();
     }
-
-    [AllowAnonymous]
+    
     [HttpGet("{id}")]
     public async Task<IResult> GetStudySet(string id)
     {
@@ -73,6 +72,30 @@ public class StudySetsController : ApiControllerBase
         var command = new DeleteStudySetById.Command
         {
             Id = id
+        };
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpGet("{id}/ratings")]
+    public async Task<IResult> GetStudySetRating(string id)
+    {
+        var command = new GetStudySetRatingById.Query()
+        {
+            StudySetId = id
+        };
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpPost("{id}/ratings")]
+    public async Task<IResult> AddRating(string id, [FromBody] CreateStudySetRatingRequest request)
+    {
+        var command = new CreateStudySetRating.Command
+        {
+            StudySetId = id,
+            Rating = request.Rating,
+            ReviewText = request.ReviewText
         };
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();

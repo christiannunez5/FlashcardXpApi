@@ -22,8 +22,15 @@ public class User : IdentityUser
     public ICollection<GroupMembers> GroupMembers { get; set; } =
         new List<GroupMembers>();
         
+    public ICollection<StudySetRating> StudySetRatings { get; init; } = new List<StudySetRating>();
+
     /*
     public ICollection<StudySetRecord> StudySetRecords { get; set; } = new List<StudySetRecord>();
     */
+    
     public UserExperience Experience { get; set; } = null!;
+    public ICollection<StudySetParticipant> StudySetParticipants { get; set; } = new List<StudySetParticipant>();
+
+
+
 }

@@ -10,12 +10,10 @@ public class Group
     
     public string Name { get; init; } = String.Empty;
     
+    // navigations
     public required string CreatedById { get; init; }
     public User CreatedBy { get; init; } = null!;
-    
-    // navigations
     public List<GroupMembers> GroupMembers { get; init; } = new();
-    
     public ICollection<GroupStudySet> GroupStudySets { get; set; } = new List<GroupStudySet>();
     
     public void AddMember(string userId)

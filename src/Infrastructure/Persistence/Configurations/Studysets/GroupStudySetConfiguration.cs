@@ -16,12 +16,12 @@ public class GroupStudySetConfiguration : IEntityTypeConfiguration<GroupStudySet
             .WithMany(g => g.GroupStudySets)
             .HasForeignKey(gs => gs.GroupId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+                
         builder
             .HasOne(gs => gs.StudySet)
             .WithMany(s => s.GroupStudySets)
             .HasForeignKey(gs => gs.StudySetId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Restrict);
         
     }
 }
