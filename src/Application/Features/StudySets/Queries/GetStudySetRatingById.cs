@@ -17,7 +17,6 @@ public static class GetStudySetRatingById
     
     public class Handler : IRequestHandler<Query, Result<StudySetRatingDto>>
     {
-        
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         
@@ -39,7 +38,7 @@ public static class GetStudySetRatingById
             {
                 return Result.Failure<StudySetRatingDto>(StudySetErrors.StudySetNotFound);
             }
-
+        
             return Result.Success(_mapper.Map<StudySetRatingDto>(studySet));
 
         }

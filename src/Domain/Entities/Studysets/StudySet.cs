@@ -22,10 +22,13 @@ public class StudySet
 
     [NotMapped]
     public int FlashcardsCount => Flashcards.Count;
-    
-    [NotMapped]
-    public double AverageRating 
-        => StudySetRatings.Average(r => r.Rating) / StudySetRatings.Count;
+
+    public double AverageRating()
+    {
+        if (StudySetRatings.Count == 0) return 0;
+        return StudySetRatings.Average(r => r.Rating);
+    }
+        
   
     
     // navigations

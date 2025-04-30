@@ -12,8 +12,8 @@ public static class CreateStudySetRating
 {
     public class Command : IRequest<Result<StudySetRatingDto>>
     {
-        public required string StudySetId {get; init;}
-        public int Rating { get; init; }
+        public required string StudySetId { get; init; }
+        public double Rating { get; init; }
         public string ReviewText { get; init; } = string.Empty;
     }
     
@@ -29,7 +29,6 @@ public static class CreateStudySetRating
             _context = context;
             _userContext = userContext;
         }
-
 
         public async Task<Result<StudySetRatingDto>> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -49,7 +48,7 @@ public static class CreateStudySetRating
            {
                RatedById = _userContext.UserId(),
                StudySetId = studySet.Id,
-               Rating = request.Rating,
+               Rating = (int) request.Rating,
                ReviewText = request.ReviewText
            };
            

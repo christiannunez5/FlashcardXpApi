@@ -89,7 +89,7 @@ public class StudySetsController : ApiControllerBase
     }
     
     [HttpPost("{id}/ratings")]
-    public async Task<IResult> AddRating(string id, [FromBody] CreateStudySetRatingRequest request)
+    public async Task<IResult> AddRating([FromBody] CreateStudySetRatingRequest request, string id)
     {
         var command = new CreateStudySetRating.Command
         {

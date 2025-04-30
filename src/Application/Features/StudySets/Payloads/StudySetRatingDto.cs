@@ -13,7 +13,7 @@ public class StudySetRatingDto
         public Mapping()
         {
             CreateMap<StudySet, StudySetRatingDto>()
-                .ForMember(dest => dest.AverageRating, opts => opts.MapFrom(src => src.AverageRating))
+                .ForMember(dest => dest.AverageRating, opts => opts.MapFrom(src => src.AverageRating()))
                 .ForMember(dest => dest.RatedByCount, opts => opts.MapFrom(src => src.StudySetRatings.Count()));
 
         }
