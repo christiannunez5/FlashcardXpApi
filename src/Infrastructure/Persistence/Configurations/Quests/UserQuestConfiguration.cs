@@ -2,7 +2,7 @@ using Domain.Entities.Quests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configurations;
+namespace Infrastructure.Persistence.Configurations.Quests;
 
 public class UserQuestConfiguration : IEntityTypeConfiguration<UserQuest>
 {

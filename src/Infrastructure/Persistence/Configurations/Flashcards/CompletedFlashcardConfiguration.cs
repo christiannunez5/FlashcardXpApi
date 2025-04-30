@@ -2,7 +2,7 @@ using Domain.Entities.Flashcards;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configurations;
+namespace Infrastructure.Persistence.Configurations.Flashcards;
 
 public class CompletedFlashcardConfiguration : IEntityTypeConfiguration<CompletedFlashcard>
 {

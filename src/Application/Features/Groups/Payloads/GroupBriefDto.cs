@@ -9,13 +9,13 @@ public class GroupBriefDto
 {
     public required string Id { get; set; }
     public string Name { get; init; } = String.Empty;
-    public UserDto CreatedBy { get; set; } = null!;
-    
+    public int MembersCount { get; init; }
     public class Mapping : Profile
     {
         public Mapping()
         {
-            CreateMap<Group, GroupBriefDto>();
+            CreateMap<Group, GroupBriefDto>()
+                .ForMember(dest => dest.MembersCount, opt => opt.MapFrom(src => src.GroupMembers.Count + 1));
         }
     }
 }

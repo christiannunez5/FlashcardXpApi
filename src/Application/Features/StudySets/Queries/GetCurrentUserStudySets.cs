@@ -32,6 +32,7 @@ public static class GetCurrentUserStudySets
             var studySets = await _context
                 .StudySets
                 .Include(s => s.Flashcards)
+                .Include(s => s.CreatedBy)
                 .Where(s => s.CreatedById == _userContext.UserId())
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync(cancellationToken);

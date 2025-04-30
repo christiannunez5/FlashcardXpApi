@@ -1,6 +1,8 @@
+using System.Collections;
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Entities.Auth;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Groups;
 using Domain.Entities.Users;
 
 namespace Domain.Entities.Studysets;
@@ -29,6 +31,8 @@ public class StudySet
     
     public ICollection<RecentStudySet> RecentStudySets { get; set; } =
         new List<RecentStudySet>();
+    
+    public ICollection<GroupStudySet> GroupStudySets { get; set; } = new List<GroupStudySet>();
     
     /*
     public ICollection<StudySetRecord> StudySetRecords { get; set; } =

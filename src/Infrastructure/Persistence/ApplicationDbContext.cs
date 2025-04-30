@@ -7,6 +7,9 @@ using Domain.Entities.Studysets;
 using Domain.Entities.UserExperiences;
 using Domain.Entities.Users;
 using Infrastructure.Persistence.Configurations;
+using Infrastructure.Persistence.Configurations.Flashcards;
+using Infrastructure.Persistence.Configurations.Quests;
+using Infrastructure.Persistence.Configurations.Studysets;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Group = Domain.Entities.Groups.Group;
@@ -33,21 +36,29 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     public DbSet<UserExperience> UserExperiences => Set<UserExperience>();
     
     public DbSet<Group> Groups => Set<Group>();
-
+    public DbSet<GroupStudySet> GroupStudySets => Set<GroupStudySet>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         
         modelBuilder.ApplyConfiguration(new StudySetConfiguration());
+        modelBuilder.ApplyConfiguration(new GroupStudySetConfiguration());
+        modelBuilder.ApplyConfiguration(new RecentStudySetConfiguration());
+        
+        modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
+
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
+        
         modelBuilder.ApplyConfiguration(new UserQuestConfiguration());
-        modelBuilder.ApplyConfiguration(new RecentStudySetConfiguration());
+        modelBuilder.ApplyConfiguration(new QuestConfiguration());
+        
         modelBuilder.ApplyConfiguration(new UserExperienceConfiguration());
+        
         modelBuilder.ApplyConfiguration(new CompletedFlashcardConfiguration());
         modelBuilder.ApplyConfiguration(new FlashcardConfiguration());
-        modelBuilder.ApplyConfiguration(new QuestConfiguration());
-        modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
+     
+        
         // modelBuilder.ApplyConfiguration(new StudySetRecordConfiguration());
         // modelBuilder.ApplyConfiguration(new StudySetProgressConfiguration());
     }

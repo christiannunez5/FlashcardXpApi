@@ -1,4 +1,5 @@
 using Domain.Entities.Auth;
+using Domain.Entities.Studysets;
 using Domain.Entities.Users;
 
 namespace Domain.Entities.Groups;
@@ -10,9 +11,12 @@ public class Group
     public string Name { get; init; } = String.Empty;
     
     public required string CreatedById { get; init; }
-    public  User CreatedBy { get; init; } = null!;
+    public User CreatedBy { get; init; } = null!;
     
-    public List<GroupMembers> GroupMembers { get; init; } = new List<GroupMembers>();
+    // navigations
+    public List<GroupMembers> GroupMembers { get; init; } = new();
+    
+    public ICollection<GroupStudySet> GroupStudySets { get; set; } = new List<GroupStudySet>();
     
     public void AddMember(string userId)
     {
@@ -22,7 +26,7 @@ public class Group
             GroupId = Id
         };
         
-        this.GroupMembers.Add(newMember);
+        GroupMembers.Add(newMember);
     }
     
     

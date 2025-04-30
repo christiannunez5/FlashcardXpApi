@@ -21,5 +21,6 @@ public interface IApplicationDbContext
     
     DbSet<Group> Groups { get; }
     
+    DbSet<GroupStudySet> GroupStudySets { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

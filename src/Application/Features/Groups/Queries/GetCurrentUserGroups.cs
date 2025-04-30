@@ -29,7 +29,7 @@ public static class GetCurrentUserGroups
 
         public async Task<Result<List<GroupBriefDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-
+            
             var userGroups = await _context
                 .Groups
                 .Include(g => g.GroupMembers)

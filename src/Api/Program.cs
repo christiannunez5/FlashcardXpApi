@@ -31,13 +31,11 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
         app.ApplyMigrations();
-        using (var scope = app.Services.CreateScope())
-        {
-            var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
-            await Seeder.Initialize(dbContext, CancellationToken.None);
-        }
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
+        await Seeder.Initialize(dbContext, CancellationToken.None);
     }
-
+    
     app.UseHttpsRedirection();
     
     app.UseCors("ApiCorsPolicy");
@@ -46,7 +44,7 @@ var app = builder.Build();
     app.MapControllers();   
     
     // app.UseExceptionHandler(o => { });
-
+    
     app.Run();
 
 }

@@ -18,6 +18,29 @@ public class GroupsController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
+    
+    [HttpGet("{id}/study-sets")]
+    public async Task<IResult> GetStudySetsByGroup(string id)
+    {
+        var query = new GetStudySetsByGroupId.Query
+        {
+            GroupId = id
+        };
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpGet("{id}/members")]
+    public async Task<IResult> GetGroupMembers(string id)
+    {
+        var query = new GetGroupMembers.Query
+        {
+            GroupId = id
+        };
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
     [HttpPost]
     public async Task<IResult> CreateGroup([FromBody] CreateGroupRequest request)
     {

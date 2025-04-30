@@ -34,7 +34,7 @@ namespace Application.Features.StudySets.Commands
                 var newStudySet = new StudySet
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Title = "",
+                    Title = "Untitled",
                     Description = "",
                     Status = StudySetStatus.Draft,
                     CreatedById = _userContext.UserId(),

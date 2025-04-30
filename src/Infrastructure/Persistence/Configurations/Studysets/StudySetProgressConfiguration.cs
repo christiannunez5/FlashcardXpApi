@@ -1,10 +1,8 @@
-﻿
-
-using Domain.Entities.Studysets;
+﻿using Domain.Entities.Studysets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configurations;
+namespace Infrastructure.Persistence.Configurations.Studysets;
 
 public class StudySetProgressConfiguration : IEntityTypeConfiguration<StudySetProgress>
 {
