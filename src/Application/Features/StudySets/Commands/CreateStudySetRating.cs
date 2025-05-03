@@ -43,7 +43,7 @@ public static class CreateStudySetRating
            {
                return Result.Failure<StudySetRatingDto>(StudySetErrors.StudySetNotFound);
            }
-            
+           
            var newStudySetRating = new StudySetRating
            {
                RatedById = _userContext.UserId(),

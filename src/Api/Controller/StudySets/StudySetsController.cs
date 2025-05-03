@@ -89,7 +89,7 @@ public class StudySetsController : ApiControllerBase
     }
     
     [HttpPost("{id}/ratings")]
-    public async Task<IResult> AddRating([FromBody] CreateStudySetRatingRequest request, string id)
+    public async Task<IResult> AddRating([FromBody] StudySetRatingRequest request, string id)
     {
         var command = new CreateStudySetRating.Command
         {
@@ -100,6 +100,29 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
-
+    
+    [HttpPatch("{id}/ratings")]
+    public async Task<IResult> UpdateRating([FromBody] StudySetRatingRequest request, string id)
+    {
+        var command = new UpdateStudySetRating.Command
+        {
+            StudySetId = id,
+            Rating = request.Rating,
+            ReviewText = request.ReviewText
+        };
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpGet("{id}/ratings/me")]
+    public async Task<IResult> DidUserAlreadyReviewed(string id)
+    {
+        var command = new GetUserStudySetRating.Query
+        {
+            StudySetId = id,
+        };
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
 
 }

@@ -1,5 +1,6 @@
 using Domain.Entities.Auth;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Folders;
 using Domain.Entities.Groups;
 using Domain.Entities.Quests;
 using Domain.Entities.Studysets;
@@ -34,7 +35,8 @@ public interface IApplicationDbContext
     // auth
     DbSet<RefreshToken> RefreshTokens { get; }
 
-    
+    // folders
+    DbSet<Folder> Folders { get; }
     
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

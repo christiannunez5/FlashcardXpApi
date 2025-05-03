@@ -2,12 +2,14 @@ using System.Text.RegularExpressions;
 using Application.Common.Abstraction;
 using Domain.Entities.Auth;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Folders;
 using Domain.Entities.Quests;
 using Domain.Entities.Studysets;
 using Domain.Entities.UserExperiences;
 using Domain.Entities.Users;
 using Infrastructure.Persistence.Configurations;
 using Infrastructure.Persistence.Configurations.Flashcards;
+using Infrastructure.Persistence.Configurations.Folders;
 using Infrastructure.Persistence.Configurations.Quests;
 using Infrastructure.Persistence.Configurations.Studysets;
 using Infrastructure.Persistence.Configurations.Users;
@@ -47,6 +49,10 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     
     // groups
     public DbSet<Group> Groups => Set<Group>();
+    
+    // folders
+    public DbSet<Folder> Folders => Set<Folder>();
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -69,8 +75,8 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         
         modelBuilder.ApplyConfiguration(new CompletedFlashcardConfiguration());
         modelBuilder.ApplyConfiguration(new FlashcardConfiguration());
-     
-        
+
+        modelBuilder.ApplyConfiguration(new FolderConfiguration());
         // modelBuilder.ApplyConfiguration(new StudySetRecordConfiguration());
         // modelBuilder.ApplyConfiguration(new StudySetProgressConfiguration());
     }

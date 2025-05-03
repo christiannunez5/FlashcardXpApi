@@ -1,5 +1,6 @@
 using System.Collections;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Folders;
 using Domain.Entities.Groups;
 using Domain.Entities.Studysets;
 using Domain.Entities.UserExperiences;
@@ -31,6 +32,7 @@ public class User : IdentityUser
     public UserExperience Experience { get; set; } = null!;
     public ICollection<StudySetParticipant> StudySetParticipants { get; set; } = new List<StudySetParticipant>();
 
+    public ICollection<Folder> Folders = new List<Folder>();
 
 
 }
