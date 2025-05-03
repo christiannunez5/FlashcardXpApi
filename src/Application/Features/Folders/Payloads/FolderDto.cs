@@ -7,6 +7,7 @@ public class FolderDto
 {
     public required string Id { get; init; }
     public required string Name { get; init; }
+    public string? ParentFolderId  { get; init; }
     public List<FolderBriefDto> SubFolders { get; init; } = new();
 
     public class Mapping : Profile

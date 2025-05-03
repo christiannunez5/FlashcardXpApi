@@ -1,5 +1,6 @@
 using Application.Common.Abstraction;
 using Application.Common.Models;
+using Domain.Entities.Folders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,26 +28,40 @@ public static class DeleteFolderById
         {
             var folder = await _context
                 .Folders
-                .Include(f => f.CreatedBy)
                 .Include(f => f.SubFolders)
+                .Include(f => f.StudySets)
                 .FirstOrDefaultAsync(f => f.Id == request.FolderId, cancellationToken);
-
+            
             if (folder == null)
             {
                 return Result.Failure<string>(FolderErrors.FolderNotFound);
             }
-
+            
             if (folder.CreatedById != _userContext.UserId())
             {
                 return Result.Failure<string>(FolderErrors.NotOwner);
             }
-
-            _context.Folders.Remove(folder);
-            _context.Folders.RemoveRange(folder.SubFolders);
-            await _context.SaveChangesAsync(cancellationToken);
             
+            await DeleteFolderRecursively(folder.Id, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return Result.Success(request.FolderId);
 
+        }
+        
+        private async Task DeleteFolderRecursively(string folderId, CancellationToken cancellationToken)
+        {
+            var folder = await _context.Folders
+                .Include(f => f.SubFolders)
+                .Include(f => f.StudySets)
+                .FirstAsync(f => f.Id == folderId, cancellationToken);
+        
+            foreach (var subFolder in folder.SubFolders)
+            { 
+                await DeleteFolderRecursively(subFolder.Id, cancellationToken);
+            }
+            
+            _context.StudySets.RemoveRange(folder.StudySets);
+            _context.Folders.Remove(folder);
         }
     }
 }

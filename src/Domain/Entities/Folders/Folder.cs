@@ -10,13 +10,13 @@ public class Folder
     public string Name { get; set; } = string.Empty;
     
     // navigations
-    public required string CreatedById { get; set; }
+    public required string CreatedById { get; init; }
     public User CreatedBy { get; set; } = null!;
     
-    public string? ParentFolderId  { get; set; }
+    public string? ParentFolderId  { get; init; }
     public Folder? ParentFolder { get; set; }
     
-    public ICollection<Folder> SubFolders { get; set; } = new List<Folder>();
+    public ICollection<Folder> SubFolders { get; init; } = new List<Folder>();
     
-    public ICollection<StudySet> StudySets { get; set; } = new List<StudySet>();
+    public ICollection<StudySet> StudySets { get; init; } = new List<StudySet>();
 }

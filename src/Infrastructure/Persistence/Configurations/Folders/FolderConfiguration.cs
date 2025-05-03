@@ -9,11 +9,18 @@ public class FolderConfiguration : IEntityTypeConfiguration<Folder>
 {
     public void Configure(EntityTypeBuilder<Folder> builder)
     {
+        
+        builder
+            .HasMany(f => f.StudySets)
+            .WithOne(s => s.Folder)
+            .HasForeignKey(f => f.FolderId)
+            .OnDelete(DeleteBehavior.NoAction);
+                
         builder
             .HasOne(f => f.ParentFolder)
             .WithMany(f => f.SubFolders)
             .HasForeignKey(f => f.ParentFolderId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
         
         builder
             .HasOne(f => f.CreatedBy)

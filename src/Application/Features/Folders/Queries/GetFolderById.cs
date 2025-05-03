@@ -32,7 +32,7 @@ public static class GetFolderById
                 .Folders
                 .Include(f => f.SubFolders)
                 .FirstOrDefaultAsync(f => f.Id == request.FolderId, cancellationToken);
-
+            
             if (folder is null)
             {
                 return Result.Failure<FolderDto>(FolderErrors.FolderNotFound);

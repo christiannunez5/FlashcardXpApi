@@ -2,6 +2,7 @@ using System.Collections;
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Entities.Auth;
 using Domain.Entities.Flashcards;
+using Domain.Entities.Folders;
 using Domain.Entities.Groups;
 using Domain.Entities.Users;
 
@@ -22,14 +23,13 @@ public class StudySet
 
     [NotMapped]
     public int FlashcardsCount => Flashcards.Count;
-
+    
     public double AverageRating()
     {
         if (StudySetRatings.Count == 0) return 0;
         return StudySetRatings.Average(r => r.Rating);
     }
         
-  
     
     // navigations
     public required string CreatedById { get; set; }
@@ -44,6 +44,11 @@ public class StudySet
     public ICollection<StudySetParticipant> StudySetParticipants { get; set; } = new List<StudySetParticipant>();
     
     public ICollection<StudySetRating> StudySetRatings { get; set; } = new List<StudySetRating>();
+    
+    public string? FolderId { get; init; }
+    
+    public Folder? Folder { get; init; }
+    
     /*
     public ICollection<StudySetRecord> StudySetRecords { get; set; } =
         new List<StudySetRecord>();

@@ -17,5 +17,6 @@ public class StudySetConfiguration : IEntityTypeConfiguration<StudySet>
         builder
             .Property(s => s.IsPublic)
             .HasDefaultValue(true);
+      
     }
 }
