@@ -33,7 +33,8 @@ public static class GetCurrentUserStudySets
                 .StudySets
                 .Include(s => s.Flashcards)
                 .Include(s => s.CreatedBy)
-                .Where(s => s.CreatedById == _userContext.UserId())
+                .Where(s => s.CreatedById == _userContext.UserId() &&
+                        s.FolderId == null)
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync(cancellationToken);
 

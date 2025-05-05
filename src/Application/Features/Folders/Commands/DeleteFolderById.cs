@@ -17,7 +17,7 @@ public static class DeleteFolderById
     {
         private readonly IApplicationDbContext  _context;
         private readonly IUserContext _userContext;
-
+        
         public Handler(IApplicationDbContext context, IUserContext userContext)
         {
             _context = context;

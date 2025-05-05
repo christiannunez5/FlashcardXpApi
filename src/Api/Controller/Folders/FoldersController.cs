@@ -29,6 +29,18 @@ public class FoldersController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
+    [HttpGet("{id}/study-sets")]
+    public async Task<IResult> GetStudySetsFolder(string id)
+    {
+        var query = new GetStudySetsByFolder.Query
+        {
+            FolderId = id
+        };
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
+    
     [HttpPost]
     public async Task<IResult> AddNewFolder([FromBody] CreateFolderRequest request)
     {
@@ -40,6 +52,20 @@ public class FoldersController : ApiControllerBase
         var response = await Mediator.Send(query);
         return response.ToHttpResponse();
     }
+    
+    [HttpPatch("{id}")]
+    public async Task<IResult> UpdateFolder(string id, [FromBody] RenameFolderRequest request)
+    {
+        var query = new RenameFolderById.Command
+        {
+            FolderId = id,
+            Name = request.Name,
+        };
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+
+    
     
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteFolder(string id)

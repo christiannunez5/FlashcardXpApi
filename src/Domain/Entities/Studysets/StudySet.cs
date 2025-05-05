@@ -20,7 +20,7 @@ public class StudySet
     public bool IsPublic { get; set; }
     
     public StudySetStatus Status { get; set; } = StudySetStatus.Draft;
-
+    
     [NotMapped]
     public int FlashcardsCount => Flashcards.Count;
     

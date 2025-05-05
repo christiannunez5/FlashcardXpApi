@@ -32,9 +32,12 @@ public class StudySetsController : ApiControllerBase
     }
     
     [HttpPost("draft")]
-    public async Task<IResult> AddDraftStudySet()
+    public async Task<IResult> AddDraftStudySet([FromBody] CreateDraftStudySetRequest request)
     {
-        var command = new CreateDraftStudySet.Command();
+        var command = new CreateDraftStudySet.Command
+        {
+            FolderId = request.FolderId
+        };
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
@@ -115,7 +118,7 @@ public class StudySetsController : ApiControllerBase
     }
     
     [HttpGet("{id}/ratings/me")]
-    public async Task<IResult> DidUserAlreadyReviewed(string id)
+    public async Task<IResult> GetUserRating(string id)
     {
         var command = new GetUserStudySetRating.Query
         {
