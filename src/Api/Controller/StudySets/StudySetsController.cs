@@ -127,5 +127,19 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
+    
+    [HttpPatch("{id}/folders/move")]
+    public async Task<IResult> UpdateStudySetFolder(string id, [FromBody] UpdateStudySetFolderRequest request)
+    {
+        var command = new UpdateStudySetFolderById.Command
+        {
+            StudySetId = id,
+            FolderId = request.FolderId
+        };
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+    
+    
 
 }

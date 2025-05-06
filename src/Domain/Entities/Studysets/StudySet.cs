@@ -45,7 +45,7 @@ public class StudySet
     
     public ICollection<StudySetRating> StudySetRatings { get; set; } = new List<StudySetRating>();
     
-    public string? FolderId { get; init; }
+    public string? FolderId { get; set; }
     
     public Folder? Folder { get; init; }
     

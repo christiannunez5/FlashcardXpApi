@@ -64,8 +64,18 @@ public class FoldersController : ApiControllerBase
         var response = await Mediator.Send(query);
         return response.ToHttpResponse();
     }
-
     
+    [HttpPatch("{id}/folders/move")]
+    public async Task<IResult> UpdateFolderParent(string id, [FromBody] UpdateFolderParentRequest request)
+    {
+        var query = new UpdateFolderParentById.Command
+        {
+            ParentFolderId = request.ParentFolderId,
+            FolderId = id
+        };
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
     
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteFolder(string id)

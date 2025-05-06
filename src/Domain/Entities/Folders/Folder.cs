@@ -13,7 +13,7 @@ public class Folder
     public required string CreatedById { get; init; }
     public User CreatedBy { get; set; } = null!;
     
-    public string? ParentFolderId  { get; init; }
+    public string? ParentFolderId  { get; set; }
     public Folder? ParentFolder { get; set; }
     
     public ICollection<Folder> SubFolders { get; init; } = new List<Folder>();

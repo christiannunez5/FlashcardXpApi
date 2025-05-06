@@ -45,7 +45,7 @@ public static class RenameFolderById
             }
             
             folder.Name = request.Name;
-
+                
             _context.Folders.Update(folder);
             await _context.SaveChangesAsync(cancellationToken);
 
