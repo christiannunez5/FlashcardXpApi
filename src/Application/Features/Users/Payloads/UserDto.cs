@@ -1,8 +1,7 @@
 using AutoMapper;
-using Domain.Entities.Auth;
 using Domain.Entities.Users;
 
-namespace Application.Features.Auth.Payloads;
+namespace Application.Features.Users.Payloads;
 
 public record UserDto(string Id, string Email, string Username, string ProfilePicUrl)
 {

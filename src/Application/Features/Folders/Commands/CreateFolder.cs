@@ -21,12 +21,14 @@ public static class CreateFolder
         private readonly IApplicationDbContext _context;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
+        private readonly IDateTimeProvider _dateTimeProvider;
         
-        public Handler(IApplicationDbContext context, IUserContext userContext, IMapper mapper)
+        public Handler(IApplicationDbContext context, IUserContext userContext, IMapper mapper, IDateTimeProvider dateTimeProvider)
         {
             _context = context;
             _userContext = userContext;
             _mapper = mapper;
+            _dateTimeProvider = dateTimeProvider;
         }
         
         public async Task<Result<FolderBriefDto>> Handle(Command request, CancellationToken cancellationToken)
@@ -47,7 +49,9 @@ public static class CreateFolder
             {
                 CreatedById = _userContext.UserId(),
                 Name = request.Name,
-                ParentFolderId = request.FolderId
+                ParentFolderId = request.FolderId,
+                CreatedAt = _dateTimeProvider.Today()
+                
             };
             
             _context.Folders.Add(newFolder);

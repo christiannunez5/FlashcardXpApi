@@ -25,15 +25,15 @@ public static class GetStudySetsByFolder
             _context = context;
             _mapper = mapper;
         }
-
+        
         public async Task<Result<List<StudySetBriefDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
             var folder = await _context
                 .Folders
                 .Include(f => f.StudySets)
-                .ThenInclude(s => s.CreatedBy)
+                .ThenInclude(s => s.Flashcards)
                 .FirstOrDefaultAsync(f => f.Id == request.FolderId, cancellationToken);
-            
+                
             if (folder == null)
             {
                 return Result.Failure<List<StudySetBriefDto>>(FolderErrors.FolderNotFound);

@@ -5,6 +5,7 @@ using Domain.Entities.Groups;
 using Domain.Entities.Quests;
 using Domain.Entities.Studysets;
 using Domain.Entities.UserExperiences;
+using Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Common.Abstraction;
@@ -38,6 +39,8 @@ public interface IApplicationDbContext
     // folders
     DbSet<Folder> Folders { get; }
     
+    // users following
+    DbSet<UserFollowing> UserFollowings { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -2,6 +2,7 @@ using Application.Common.Abstraction;
 using Application.Common.Models;
 using Application.Features.Auth;
 using Application.Features.Auth.Payloads;
+using Application.Features.Users.Payloads;
 using AutoMapper;
 using Domain.Entities.Auth;
 using Domain.Entities.Users;

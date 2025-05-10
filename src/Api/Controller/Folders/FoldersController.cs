@@ -65,7 +65,7 @@ public class FoldersController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
-    [HttpPatch("{id}/folders/move")]
+    [HttpPatch("{id}/move")]
     public async Task<IResult> UpdateFolderParent(string id, [FromBody] UpdateFolderParentRequest request)
     {
         var query = new UpdateFolderParentById.Command

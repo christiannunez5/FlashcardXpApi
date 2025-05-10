@@ -5,6 +5,7 @@ using Infrastructure;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Extensions;
 using Infrastructure.Services;
+using Infrastructure.Services.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -40,8 +41,8 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
-
-    app.MapHub<EventHub>("/hub/events");
+    
+    app.MapHub<EventHubService>("/hub/events");
     
     app.UseExceptionHandler(o => { });
     

@@ -33,6 +33,7 @@ public static class GetCurrentUserFolders
                 .Folders
                 .Where(f => f.CreatedById == _userContext.UserId() &&
                             f.ParentFolderId == null)
+                .OrderByDescending(f => f.CreatedAt)
                 .ToListAsync(cancellationToken);
 
             return Result.Success(_mapper.Map<List<FolderBriefDto>>(folders));

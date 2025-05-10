@@ -48,8 +48,6 @@ public static class DeleteStudySetById
                 return Result.Failure<string>(StudySetErrors.NotOwner);
             }
             
-            await _eventService.SendToGroup("deleted-study-set","deleted study set", studySet.Id);
-            
             // remove all children to studysets
             _context.GroupStudySets.RemoveRange(studySet.GroupStudySets);
             _context.RecentStudySets.RemoveRange(studySet.RecentStudySets);

@@ -24,6 +24,6 @@ public class RecentStudySetConfiguration : IEntityTypeConfiguration<RecentStudyS
             .HasOne(rs => rs.StudySet)
             .WithMany(s => s.RecentStudySets)
             .HasForeignKey(rs => rs.StudySetId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -68,7 +68,7 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
-
+    
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteStudySet(string id)
     {

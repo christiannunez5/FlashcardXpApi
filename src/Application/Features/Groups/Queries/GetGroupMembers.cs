@@ -2,6 +2,7 @@ using Application.Common.Abstraction;
 using Application.Common.Models;
 using Application.Features.Auth.Payloads;
 using Application.Features.StudySets.Payloads;
+using Application.Features.Users.Payloads;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

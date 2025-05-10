@@ -1,13 +1,14 @@
 using Application.Common.Abstraction;
+using Infrastructure.Services.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Infrastructure.Services;
 
 public class EventService : IEventService
 {
-    private readonly IHubContext<EventHub> _hubContext;
+    private readonly IHubContext<EventHubService> _hubContext;
 
-    public EventService(IHubContext<EventHub> hubContext)
+    public EventService(IHubContext<EventHubService> hubContext)
     {
         _hubContext = hubContext;
     }

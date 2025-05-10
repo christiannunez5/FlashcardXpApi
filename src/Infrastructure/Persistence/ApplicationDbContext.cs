@@ -53,6 +53,9 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     // folders
     public DbSet<Folder> Folders => Set<Folder>();
     
+    // user following
+    public DbSet<UserFollowing> UserFollowings => Set<UserFollowing>();
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

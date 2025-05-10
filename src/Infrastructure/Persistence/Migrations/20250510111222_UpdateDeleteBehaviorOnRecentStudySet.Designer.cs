@@ -4,6 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250510111222_UpdateDeleteBehaviorOnRecentStudySet")]
+    partial class UpdateDeleteBehaviorOnRecentStudySet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,7 +49,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Domain.Entities.Flashcards.CompletedFlashcard", b =>
@@ -66,7 +69,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CompletedFlashcards", (string)null);
+                    b.ToTable("CompletedFlashcards");
                 });
 
             modelBuilder.Entity("Domain.Entities.Flashcards.Flashcard", b =>
@@ -94,7 +97,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudySetId");
 
-                    b.ToTable("Flashcards", (string)null);
+                    b.ToTable("Flashcards");
                 });
 
             modelBuilder.Entity("Domain.Entities.Folders.Folder", b =>
@@ -122,7 +125,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ParentFolderId");
 
-                    b.ToTable("Folders", (string)null);
+                    b.ToTable("Folders");
                 });
 
             modelBuilder.Entity("Domain.Entities.Groups.Group", b =>
@@ -142,7 +145,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("Domain.Entities.Groups.GroupMembers", b =>
@@ -157,7 +160,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupMembers", (string)null);
+                    b.ToTable("GroupMembers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Quests.Quest", b =>
@@ -187,7 +190,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quests", (string)null);
+                    b.ToTable("Quests");
                 });
 
             modelBuilder.Entity("Domain.Entities.Quests.UserQuest", b =>
@@ -217,7 +220,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserQuests", (string)null);
+                    b.ToTable("UserQuests");
                 });
 
             modelBuilder.Entity("Domain.Entities.Studysets.GroupStudySet", b =>
@@ -232,7 +235,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupStudySets", (string)null);
+                    b.ToTable("GroupStudySets");
                 });
 
             modelBuilder.Entity("Domain.Entities.Studysets.RecentStudySet", b =>
@@ -252,7 +255,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudySetId");
 
-                    b.ToTable("RecentStudySets", (string)null);
+                    b.ToTable("RecentStudySets");
                 });
 
             modelBuilder.Entity("Domain.Entities.Studysets.StudySet", b =>
@@ -295,7 +298,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("FolderId");
 
-                    b.ToTable("StudySets", (string)null);
+                    b.ToTable("StudySets");
                 });
 
             modelBuilder.Entity("Domain.Entities.Studysets.StudySetParticipant", b =>
@@ -316,7 +319,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("StudySetParticipants", (string)null);
+                    b.ToTable("StudySetParticipants");
                 });
 
             modelBuilder.Entity("Domain.Entities.Studysets.StudySetRating", b =>
@@ -338,7 +341,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("RatedById");
 
-                    b.ToTable("StudySetRatings", (string)null);
+                    b.ToTable("StudySetRatings");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserExperiences.UserExperience", b =>
@@ -358,7 +361,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserExperiences", (string)null);
+                    b.ToTable("UserExperiences");
                 });
 
             modelBuilder.Entity("Domain.Entities.Users.User", b =>
