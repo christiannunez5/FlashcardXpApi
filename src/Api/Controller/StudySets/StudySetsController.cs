@@ -140,6 +140,29 @@ public class StudySetsController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
+    // study set records
+    [HttpGet("{id}/records")]
+    public async Task<IResult> GetStudySetRecord(string id)
+    {
+        var query = new GetStudySetRecordById.Query
+        {
+            StudySetId = id
+        };
+
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
     
+    [HttpPost("{id}/records")]
+    public async Task<IResult> CreateStudySetRecord(string id)
+    {
+        var query = new CreateStudySetRecord.Command
+        {
+            StudySetId = id
+        };
+
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
 
 }

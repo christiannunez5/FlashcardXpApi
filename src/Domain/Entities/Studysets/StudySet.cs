@@ -49,8 +49,8 @@ public class StudySet
     
     public Folder? Folder { get; init; }
     
-    /*
+    
     public ICollection<StudySetRecord> StudySetRecords { get; set; } =
         new List<StudySetRecord>();
-    */
+    
 }

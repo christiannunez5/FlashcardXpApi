@@ -1,6 +1,5 @@
 
 using Domain.Entities.Users;
-
 namespace Domain.Entities.Studysets;
 
 public class StudySetRecord

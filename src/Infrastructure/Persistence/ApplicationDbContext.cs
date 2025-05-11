@@ -31,6 +31,7 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     public DbSet<GroupStudySet> GroupStudySets => Set<GroupStudySet>();
     public DbSet<StudySetParticipant> StudySetParticipants => Set<StudySetParticipant>();
     public DbSet<StudySetRating> StudySetRatings => Set<StudySetRating>();
+    public DbSet<StudySetRecord> StudySetRecords => Set<StudySetRecord>();
     
     // auth
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
@@ -42,7 +43,6 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     // quests
     public DbSet<Quest> Quests => Set<Quest>();
     public DbSet<UserQuest> UserQuests => Set<UserQuest>();
-    
     
     // user experiences
     public DbSet<UserExperience> UserExperiences => Set<UserExperience>();
@@ -65,10 +65,12 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         modelBuilder.ApplyConfiguration(new RecentStudySetConfiguration());
         modelBuilder.ApplyConfiguration(new StudySetParticipantConfiguration());
         modelBuilder.ApplyConfiguration(new StudySetRatingConfiguration());
-        
-        modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
+        modelBuilder.ApplyConfiguration(new StudySetRecordConfiguration());
 
+        modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
+        
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserFollowingConfiguration());
         modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
         
         modelBuilder.ApplyConfiguration(new UserQuestConfiguration());
@@ -80,7 +82,6 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         modelBuilder.ApplyConfiguration(new FlashcardConfiguration());
 
         modelBuilder.ApplyConfiguration(new FolderConfiguration());
-        // modelBuilder.ApplyConfiguration(new StudySetRecordConfiguration());
         // modelBuilder.ApplyConfiguration(new StudySetProgressConfiguration());
     }
 

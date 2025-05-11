@@ -18,6 +18,7 @@ public interface IApplicationDbContext
     DbSet<GroupStudySet> GroupStudySets { get; }
     DbSet<StudySetParticipant> StudySetParticipants { get; }   
     DbSet<StudySetRating> StudySetRatings { get; }
+    DbSet<StudySetRecord> StudySetRecords { get; }
     
     // flashcards
     DbSet<Flashcard> Flashcards { get; }

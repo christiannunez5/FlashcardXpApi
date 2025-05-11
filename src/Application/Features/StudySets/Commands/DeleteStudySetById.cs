@@ -35,6 +35,7 @@ public static class DeleteStudySetById
                 .Include(s => s.RecentStudySets)
                 .Include(s => s.GroupStudySets)
                 .Include(s => s.StudySetRatings)
+                .Include(s => s.StudySetRecords)
                 .AsSingleQuery()
                 .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
             
@@ -54,6 +55,7 @@ public static class DeleteStudySetById
             _context.StudySetParticipants.RemoveRange(studySet.StudySetParticipants);
             _context.Flashcards.RemoveRange(studySet.Flashcards);
             _context.StudySetRatings.RemoveRange(studySet.StudySetRatings);
+            _context.StudySetRecords.RemoveRange(studySet.StudySetRecords);
             _context.StudySets.Remove(studySet);
             
             await _context.SaveChangesAsync(cancellationToken);

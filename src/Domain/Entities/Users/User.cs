@@ -24,10 +24,13 @@ public class User : IdentityUser
         new List<GroupMembers>();
         
     public ICollection<StudySetRating> StudySetRatings { get; init; } = new List<StudySetRating>();
+    
+    public ICollection<UserFollowing> Followings { get; set; } = new List<UserFollowing>();
 
-    /*
+    public ICollection<UserFollowing> Followers { get; set; } = new List<UserFollowing>();
+    
     public ICollection<StudySetRecord> StudySetRecords { get; set; } = new List<StudySetRecord>();
-    */
+    
     
     public UserExperience Experience { get; set; } = null!;
     public ICollection<StudySetParticipant> StudySetParticipants { get; set; } = new List<StudySetParticipant>();

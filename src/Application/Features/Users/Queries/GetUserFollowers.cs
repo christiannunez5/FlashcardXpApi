@@ -26,15 +26,16 @@ public static class GetUserFollowers
             _context = context;
             _userContext = userContext;
         }
-
+        
         public async Task<Result<List<UserDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
+
             var followers = await _context
                 .UserFollowings
                 .Where(uf => uf.FollowingId == _userContext.UserId())
                 .Select(uf => uf.User)
                 .ToListAsync(cancellationToken);
-
+                
             return Result.Success(_mapper.Map<List<UserDto>>(followers));
         }
     }

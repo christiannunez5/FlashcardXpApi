@@ -1,4 +1,5 @@
 using Application.Extensions;
+using Application.Features.Users.Command;
 using Application.Features.Users.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,45 @@ public class UsersController : ApiControllerBase
             Value = value
         };
         
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+
+    [HttpPost("{id}/follow")]
+    public async Task<IResult> FollowUser(string id)
+    {
+        var command = new CreateUserFollowing.Command
+        {
+            UserToFollowId = id
+        };
+        
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpGet("followers")]
+    public async Task<IResult> GetFollowers()
+    {
+        var query = new GetUserFollowers.Query();
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpGet("followings")]
+    public async Task<IResult> GetFollowings()
+    {
+        var query = new GetUserFollowing.Query();
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpGet("{id}/is-followed")]
+    public async Task<IResult> IsUserFollowed(string id)
+    {
+        var query = new IsUserAlreadyFollowed.Query
+        {
+            UserFollowingId = id
+        };
         var response = await Mediator.Send(query);
         return response.ToHttpResponse();
     }

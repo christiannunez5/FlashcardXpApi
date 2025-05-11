@@ -32,8 +32,7 @@ public static class GetUserByEmailOrUsername
             var users = await _userManager
                 .Users
                 .Where(u =>
-                    (u.Email != null && u.Email.Contains('@') &&
-                     u.Email.Substring(0, u.Email.IndexOf('@')).Contains(request.Value)) ||
+                    (u.Email != null && u.Email.Contains(request.Value)) ||
                     (u.UserName != null && u.UserName.Contains(request.Value)))
                 .ToListAsync(cancellationToken);
             

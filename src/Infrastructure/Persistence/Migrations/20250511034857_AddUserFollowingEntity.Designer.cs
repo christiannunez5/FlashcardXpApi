@@ -4,6 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250511034857_AddUserFollowingEntity")]
+    partial class AddUserFollowingEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,21 +342,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("RatedById");
 
                     b.ToTable("StudySetRatings");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Studysets.StudySetRecord", b =>
-                {
-                    b.Property<string>("StudiedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StudySetId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("StudiedById", "StudySetId");
-
-                    b.HasIndex("StudySetId");
-
-                    b.ToTable("StudySetRecords");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserExperiences.UserExperience", b =>
@@ -799,25 +787,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("StudySet");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Studysets.StudySetRecord", b =>
-                {
-                    b.HasOne("Domain.Entities.Users.User", "StudiedBy")
-                        .WithMany("StudySetRecords")
-                        .HasForeignKey("StudiedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Studysets.StudySet", "StudySet")
-                        .WithMany("StudySetRecords")
-                        .HasForeignKey("StudySetId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("StudiedBy");
-
-                    b.Navigation("StudySet");
-                });
-
             modelBuilder.Entity("Domain.Entities.UserExperiences.UserExperience", b =>
                 {
                     b.HasOne("Domain.Entities.Users.User", "User")
@@ -929,8 +898,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("StudySetParticipants");
 
                     b.Navigation("StudySetRatings");
-
-                    b.Navigation("StudySetRecords");
                 });
 
             modelBuilder.Entity("Domain.Entities.Users.User", b =>
@@ -953,8 +920,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("StudySetParticipants");
 
                     b.Navigation("StudySetRatings");
-
-                    b.Navigation("StudySetRecords");
 
                     b.Navigation("StudySets");
                 });

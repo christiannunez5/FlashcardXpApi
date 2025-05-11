@@ -13,7 +13,6 @@ namespace Api.Controller.StudySets;
 [Authorize]
 public class RecentStudySetsController : ApiControllerBase
 {
-
     [HttpGet]
     public async Task<IResult> GetRecentStudySets()
     {

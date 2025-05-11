@@ -53,7 +53,10 @@ public static class DeleteFolderById
             var folder = await _context.Folders
                 .Include(f => f.SubFolders)
                 .Include(f => f.StudySets)
-                .ThenInclude(s => s.Flashcards)
+                    .ThenInclude(s => s.Flashcards)
+                .Include(f => f.StudySets)
+                    .ThenInclude(s => s.StudySetRecords)
+                .AsSingleQuery()
                 .FirstAsync(f => f.Id == folderId, cancellationToken);
             
             foreach (var subFolder in folder.SubFolders)
@@ -66,6 +69,7 @@ public static class DeleteFolderById
                 _context.RecentStudySets.RemoveRange(studySet.RecentStudySets);
                 _context.StudySetParticipants.RemoveRange(studySet.StudySetParticipants);
                 _context.Flashcards.RemoveRange(studySet.Flashcards);
+                _context.StudySetRecords.RemoveRange(studySet.StudySetRecords);
                 _context.StudySetRatings.RemoveRange(studySet.StudySetRatings);
                 _context.StudySets.Remove(studySet);
             }

@@ -12,7 +12,7 @@ public class FlashcardConfiguration : IEntityTypeConfiguration<Flashcard>
             .HasOne(f => f.StudySet)
             .WithMany(s => s.Flashcards)
             .HasForeignKey(f => f.StudySetId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder
             .Property(f => f.CreatedAt)
