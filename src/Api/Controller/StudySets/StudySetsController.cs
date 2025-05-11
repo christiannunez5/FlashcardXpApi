@@ -20,6 +20,14 @@ public class StudySetsController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
+    [HttpGet("popular")]
+    public async Task<IResult> GetPopularStudySets()
+    {
+        var query = new GetPopularStudySets.Query();
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
     [HttpGet("{id}")]
     public async Task<IResult> GetStudySet(string id)
     {

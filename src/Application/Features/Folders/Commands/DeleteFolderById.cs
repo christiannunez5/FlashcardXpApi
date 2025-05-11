@@ -55,8 +55,11 @@ public static class DeleteFolderById
                 .Include(f => f.StudySets)
                     .ThenInclude(s => s.Flashcards)
                 .Include(f => f.StudySets)
+                    .ThenInclude(s => s.StudySetRatings)
+                .Include(f => f.StudySets)
                     .ThenInclude(s => s.StudySetRecords)
-                .AsSingleQuery()
+                .Include(f => f.StudySets)
+                    .ThenInclude(s => s.RecentStudySets)
                 .FirstAsync(f => f.Id == folderId, cancellationToken);
             
             foreach (var subFolder in folder.SubFolders)
