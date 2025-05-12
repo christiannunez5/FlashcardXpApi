@@ -12,4 +12,7 @@ public class StudySetErrors
     
     public static Error NotOwner =
         new Error(ErrorTypeConstant.FORBIDDEN, "Not authorized to perform this action");
+    
+    public static Error TagAlreadyAdded =
+        new Error(ErrorTypeConstant.BAD_REQUEST, "Tag is already added");
 }

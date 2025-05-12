@@ -22,7 +22,7 @@ public class UserExperienceDto
         {
             CreateMap<UserExperience, UserExperienceDto>()
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src =>
-                    new LevelDto(1, src.GetLevel.ToString())
+                    new LevelDto((int) src.GetLevel, src.GetLevel.ToString())
                 ))
                 .ForMember(dest => dest.CurrentExperience, opt => opt.MapFrom(src => src.Xp))
                 .ForMember(dest => dest.MaxXp, opt => opt.MapFrom(src => src.GetMaxXp));

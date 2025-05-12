@@ -4,6 +4,7 @@ using Domain.Entities.Folders;
 using Domain.Entities.Groups;
 using Domain.Entities.Quests;
 using Domain.Entities.Studysets;
+using Domain.Entities.Tags;
 using Domain.Entities.UserExperiences;
 using Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ public interface IApplicationDbContext
     DbSet<StudySetParticipant> StudySetParticipants { get; }   
     DbSet<StudySetRating> StudySetRatings { get; }
     DbSet<StudySetRecord> StudySetRecords { get; }
+    DbSet<StudySetTags>  StudySetTags { get; }
     
     // flashcards
     DbSet<Flashcard> Flashcards { get; }
@@ -42,6 +44,8 @@ public interface IApplicationDbContext
     
     // users following
     DbSet<UserFollowing> UserFollowings { get; }
-
+    
+    // tags
+    DbSet<Tag> Tags { get;  }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

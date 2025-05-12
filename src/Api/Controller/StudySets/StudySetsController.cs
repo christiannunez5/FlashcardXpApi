@@ -172,5 +172,35 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(query);
         return response.ToHttpResponse();
     }
+    
+    
+    // study set tags
+    [HttpGet("{id}/tags")]
+    public async Task<IResult> GetStudySetTags(string id)
+    {
+        var query = new GetStudySetTagsById.Query
+        {
+            StudySetId = id
+        };
+
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
+    // study set tags
+    [HttpPost("{id}/tags")]
+    public async Task<IResult> AddStudySetTag(string id, [FromBody] CreateStudySetTagRequest request)
+    {
+        var query = new CreateStudySetTag.Command()
+        {
+            StudySetId = id,
+            TagId = request.TagId
+        };
+
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+
+    
 
 }

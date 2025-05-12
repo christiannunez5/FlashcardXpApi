@@ -9,6 +9,15 @@ namespace Api.Controller.Users;
 [Authorize]
 public class UsersController : ApiControllerBase
 {
+    
+    [HttpGet("top-creators")]
+    public async Task<IResult> GetTopStudySetCreators()
+    {
+        var query = new GetTopStudySetCreator.Query();
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
     [HttpGet("search")]
     public async Task<IResult> GetUserByEmailOrUsername([FromQuery] string value)
     {

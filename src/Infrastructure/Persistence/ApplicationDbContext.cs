@@ -5,6 +5,7 @@ using Domain.Entities.Flashcards;
 using Domain.Entities.Folders;
 using Domain.Entities.Quests;
 using Domain.Entities.Studysets;
+using Domain.Entities.Tags;
 using Domain.Entities.UserExperiences;
 using Domain.Entities.Users;
 using Infrastructure.Persistence.Configurations;
@@ -32,6 +33,7 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     public DbSet<StudySetParticipant> StudySetParticipants => Set<StudySetParticipant>();
     public DbSet<StudySetRating> StudySetRatings => Set<StudySetRating>();
     public DbSet<StudySetRecord> StudySetRecords => Set<StudySetRecord>();
+    public DbSet<StudySetTags> StudySetTags => Set<StudySetTags>();
     
     // auth
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
@@ -56,6 +58,9 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     // user following
     public DbSet<UserFollowing> UserFollowings => Set<UserFollowing>();
     
+    // tags
+    public DbSet<Tag> Tags => Set<Tag>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -66,7 +71,8 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
         modelBuilder.ApplyConfiguration(new StudySetParticipantConfiguration());
         modelBuilder.ApplyConfiguration(new StudySetRatingConfiguration());
         modelBuilder.ApplyConfiguration(new StudySetRecordConfiguration());
-
+        modelBuilder.ApplyConfiguration(new StudySetTagsConfiguration());
+        
         modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
         
         modelBuilder.ApplyConfiguration(new UserConfiguration());
