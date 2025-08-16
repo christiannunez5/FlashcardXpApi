@@ -60,7 +60,7 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     
     // tags
     public DbSet<Tag> Tags => Set<Tag>();
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -17,28 +17,29 @@ public static class ResetDailyQuests
 
         private readonly IUserContext _userContext;
         private readonly IApplicationDbContext _context;
-
-        public Handler(IUserContext userContext, IApplicationDbContext context)
+        private readonly IDateTimeProvider _dateTimeProvider;
+        
+        public Handler(IUserContext userContext, IApplicationDbContext context, IDateTimeProvider dateTimeProvider)
         {
             _userContext = userContext;
             _context = context;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
         {
             var userQuests = await _context
                 .UserQuests
-                .Where(uq => uq.UserId == _userContext.UserId())
+                .Where(uq => uq.UserId == _userContext.UserId() &&
+                             uq.CurrentQuestDate < DateOnly.FromDateTime(_dateTimeProvider.Today()))
                 .ToListAsync(cancellationToken);
-
+            
             foreach (var quest in userQuests)
             {
                 quest.IsCompleted = false;
-                _context.UserQuests.Update(quest);
             }
-
+            
             await _context.SaveChangesAsync(cancellationToken);
-
             return Result.Success();
         }
     }

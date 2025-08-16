@@ -31,7 +31,7 @@ public class UserQuestsController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
-    [HttpPatch("/reset")]
+    [HttpPatch("reset")]
     public async Task<IResult> Reset()
     {
         var command = new ResetDailyQuests.Command();

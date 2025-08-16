@@ -50,6 +50,44 @@ public class StudySetsController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
+    [HttpPost("ai-upload")]
+    public async Task<IResult> CreateStudySetFromFile([FromForm] string? studySetId, [FromForm] IFormFile file)
+    {
+        var command = new CreateStudySetFromPdfFile.Command
+        {
+            StudySetId =studySetId,
+            File = file
+        };
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpPost("topic")]
+    public async Task<IResult> CreateStudySetFromTopic(
+        [FromBody] CreateStudySetFromTopicRequest request)
+    {
+        var command = new CreateStudySetFromTopic.Command
+        {
+            Topic = request.Topic
+        };
+        
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+    
+    [HttpPost("notes")]
+    public async Task<IResult> CreateStudySetFromNoteContent([FromBody] CreateStudySetFromNoteRequest request)
+    {
+        var command = new CreateStudySetFromNote.Command
+        {
+            NoteContent = request.NoteContent,
+            StudySetId = request.StudySetId,
+        };
+        
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
+    
     [HttpPut("{id}/full")]
     public async Task<IResult> UpdateFullStudySet([FromBody] UpdateFullStudySetRequest request, string id)
     {
@@ -63,7 +101,7 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(command);
         return response.ToHttpResponse();
     }
-
+    
     [HttpPatch("{id}")]
     public async Task<IResult> UpdateStudySetBasicInfo([FromBody] UpdateStudySetBasicInfoRequest request, string id)
     {
@@ -173,7 +211,6 @@ public class StudySetsController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
-    
     // study set tags
     [HttpGet("{id}/tags")]
     public async Task<IResult> GetStudySetTags(string id)
@@ -200,7 +237,18 @@ public class StudySetsController : ApiControllerBase
         var response = await Mediator.Send(query);
         return response.ToHttpResponse();
     }
-
     
+    // combine studyset
+    [HttpPost("combine")]
+    public async Task<IResult> CombineStudySets([FromBody] CombineStudySetRequest request)
+    {
+        var command = new CombineStudySets.Command
+        {
+            StudySetIds = request.StudySetIds
+        };
+
+        var response = await Mediator.Send(command);
+        return response.ToHttpResponse();
+    }
 
 }

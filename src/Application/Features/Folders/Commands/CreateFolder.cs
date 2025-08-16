@@ -16,6 +16,8 @@ public static class CreateFolder
         public string Name { get; init; } = string.Empty;
     }
     
+    
+    
     public class Handler : IRequestHandler<Command, Result<FolderBriefDto>>
     {
         private readonly IApplicationDbContext _context;
@@ -51,7 +53,6 @@ public static class CreateFolder
                 Name = request.Name,
                 ParentFolderId = request.FolderId,
                 CreatedAt = _dateTimeProvider.Today()
-                
             };
             
             _context.Folders.Add(newFolder);

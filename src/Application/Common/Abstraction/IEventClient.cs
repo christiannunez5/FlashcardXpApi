@@ -10,4 +10,6 @@ public interface IEventClient
     Task ConnectionMessage(string message);
     Task ReceiveMessage(string message);
     
+
+    
 }

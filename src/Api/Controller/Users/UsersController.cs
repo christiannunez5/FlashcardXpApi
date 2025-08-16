@@ -18,6 +18,14 @@ public class UsersController : ApiControllerBase
         return response.ToHttpResponse();
     }
     
+    [HttpGet("top-xp-earners")]
+    public async Task<IResult> GetTopPlayersByXp()
+    {
+        var query = new GetTopPlayersByXp.Query();
+        var response = await Mediator.Send(query);
+        return response.ToHttpResponse();
+    }
+    
     [HttpGet("search")]
     public async Task<IResult> GetUserByEmailOrUsername([FromQuery] string value)
     {

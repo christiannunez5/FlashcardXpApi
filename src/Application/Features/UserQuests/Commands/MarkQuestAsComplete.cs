@@ -57,6 +57,7 @@ public static class MarkQuestAsComplete
             }
             
             userQuest.IsCompleted = true;
+            userQuest.CurrentQuestDate = DateOnly.FromDateTime(_dateTimeProvider.Today());
             _context.UserQuests.Update(userQuest);
 
             var userExperience = await _context

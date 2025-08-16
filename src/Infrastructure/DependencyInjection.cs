@@ -1,6 +1,5 @@
 using System.Text;
 using Application.Common.Abstraction;
-using Domain.Entities.Auth;
 using Domain.Entities.Users;
 using Infrastructure.Authentication;
 using Infrastructure.Persistence;
@@ -20,9 +19,19 @@ public static class DependencyInjection
         services.AddAuthenticationInternal(config);
         services.AddIdentityExtensions();
         services
+            .AddTransient<AiAuthHandler>()
             .AddScoped<ICookieService, CookieService>()
             .AddScoped<IEventService, EventService>()
+            .AddScoped<IFileToTextService, FileToTextService>()
+            .AddScoped<IAiService, AiService>()
             .AddScoped<IDateTimeProvider, DateTimeProvider>();
+        
+        services
+            .AddHttpClient<IAiService, AiService>(httpClient =>
+            {
+                httpClient.BaseAddress = new Uri("https://api.openai.com/v1/");
+            })
+            .AddHttpMessageHandler<AiAuthHandler>();
         
         services.AddDatabase(config);
         services
@@ -33,7 +42,6 @@ public static class DependencyInjection
 
     private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration config)
     {
-        
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             const string FLASHCARDXP_CONTEXT_CONNSTRING = "DefaultConnection";
@@ -45,7 +53,6 @@ public static class DependencyInjection
     }
     private static IServiceCollection AddAuthenticationInternal(this IServiceCollection services,IConfiguration config)
     {
-    
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -93,19 +100,18 @@ public static class DependencyInjection
                     .AllowAnyMethod();
             });
         });
-        
+  
         services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<ITokenProvider, TokenProvider>();
 
         return services;
     }
-
+    
     private static IServiceCollection AddIdentityExtensions(this IServiceCollection services)
     {
         services.AddIdentityApiEndpoints<User>(options =>
         {
             options.User.RequireUniqueEmail = true;
-
             options.Password.RequireDigit = true;
             options.Password.RequireLowercase = true;
             options.Password.RequireNonAlphanumeric = false;

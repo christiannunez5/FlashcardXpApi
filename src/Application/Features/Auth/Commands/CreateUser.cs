@@ -34,11 +34,14 @@ public static class CreateUser
     {
         private readonly UserManager<User> _userManager;
         private readonly IApplicationDbContext _context;
-
-        public Handler(UserManager<User> userManager, IApplicationDbContext context)
+        private readonly IDateTimeProvider _dateTimeProvider;
+        
+        public Handler(UserManager<User> userManager, IApplicationDbContext context, 
+            IDateTimeProvider dateTimeProvider)
         {
             _userManager = userManager;
             _context = context;
+            _dateTimeProvider = dateTimeProvider;
         }
         
         public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
@@ -70,7 +73,8 @@ public static class CreateUser
                 return new UserQuest
                 {
                     UserId = newUser.Id,
-                    QuestId = q.Id
+                    QuestId = q.Id,
+                    CurrentQuestDate = DateOnly.FromDateTime(_dateTimeProvider.Today()),
                 };
             }).ToList();
             await _context.UserQuests.AddRangeAsync(userQuests);

@@ -15,4 +15,7 @@ public class StudySetErrors
     
     public static Error TagAlreadyAdded =
         new Error(ErrorTypeConstant.BAD_REQUEST, "Tag is already added");
+
+    public static Error InvalidFileTypePdf  =
+        new Error(ErrorTypeConstant.BAD_REQUEST, "Upload a pdf file");
 }

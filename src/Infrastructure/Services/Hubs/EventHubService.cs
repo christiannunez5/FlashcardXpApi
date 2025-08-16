@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Application.Common.Abstraction;
 using Application.Common.Models;
 using Microsoft.AspNetCore.SignalR;
@@ -5,17 +6,32 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Services.Hubs;
 
-public class EventHubService : Hub<IEventClient>
+public class GameRoom
 {
-    private readonly ILogger<EventHubService> _logger;
+    public required string Id { get; set; }
+    public List<string> Players { get; set; } = new();
+
+}
     
-    public EventHubService(ILogger<EventHubService> logger)
+
+public class EventHubService : Hub
+{
+    
+    private readonly ILogger<EventHubService> _logger;
+    private static Dictionary<string, GameRoom> Rooms = new();
+    private readonly IUserContext _userContext;
+    private readonly IApplicationDbContext _context;
+    
+    public EventHubService(ILogger<EventHubService> logger, IUserContext userContext, IApplicationDbContext context)
     {
         _logger = logger;
+        _userContext = userContext;
+        _context = context;
     }
+    
     public override async Task OnConnectedAsync()
     {
-        await Clients.Client(Context.ConnectionId).ConnectionMessage(
+        await Clients.Client(Context.ConnectionId).SendAsync("connection",
             $"Thank you for connecting {Context.ConnectionId}"
         );
         await base.OnConnectedAsync();
@@ -31,48 +47,39 @@ public class EventHubService : Hub<IEventClient>
         await base.OnDisconnectedAsync(exception);
     }
     
-    
-    public async Task Send(string message)
+    public async Task JoinRoom(string roomId)
     {
-        _logger.LogInformation($"Sending message: {message}");
-        await Clients.All.ReceiveMessage(message);
-    }
-    
-    public async Task SendToRoom(string roomId, string message)
-    {
-        _logger.LogInformation($"Sending message: {message} to room {roomId}");
-        await Clients.Groups(roomId).ReceiveMessage(message);
-    }
-    
-    public async Task MoveCar(string userId, double progress)
-    {
-        var eventMessage = new EventMessage<object>
-        {
-            Type = "MoveCar",
-            Payload = new EventPayload<object>()
-            {
-                Data = progress,
-                UserId = userId
-            }
-        };
+        await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
         
-        _logger.LogInformation($"Moving car");
-        await Clients.All.ReceiveMessage(eventMessage);
+        string userId = _userContext.UserId();
+        if (!Rooms.TryGetValue(roomId, out var room))
+        {
+            room = new GameRoom { Id = roomId };
+            Rooms[roomId] = room;
+        }
+        
+        if (!room.Players.Contains(userId))
+        {
+            room.Players.Add(userId);
+        }
+        
+        await Clients.Group(roomId).SendAsync("Joined", room.Players);
     }
     
-    public async Task JoinRoom(String roomId)
+    public async Task LeaveRoom(string roomId)
     {
-        await Groups.AddToGroupAsync(this.Context.ConnectionId, roomId);
-        _logger.LogInformation($"User {this.Context.ConnectionId} has joined the room {roomId}");
+        string userId = _userContext.UserId();
+        if (Rooms.TryGetValue(roomId, out var room))
+        {
+            if (room.Players.Contains(userId))
+            {
+                room.Players.Remove(userId);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
+
+                await Clients.Group(roomId).SendAsync("PlayerLeft", userId);
+            }
+          
+        }
     }
-    
-    /*
-    public async Task SendToOne(string userId, EventMessage<object> eventMessage)
-    {
-        eventMessage.Payload.UserId = _userContext.UserId();
-        _logger.LogInformation($"Sending message: {eventMessage.Payload.Data} to user: {userId}");
-        await Clients.User(userId).ReceiveMessage(eventMessage);
-    }
-    */
-   
+  
 }

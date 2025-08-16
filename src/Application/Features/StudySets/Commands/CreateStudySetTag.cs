@@ -21,11 +21,13 @@ public static class CreateStudySetTag
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserContext _userContext;
         
-        public Handler(IApplicationDbContext context, IMapper mapper)
+        public Handler(IApplicationDbContext context, IMapper mapper, IUserContext userContext)
         {
             _context = context;
             _mapper = mapper;
+            _userContext = userContext;
         }
         
         public async Task<Result<TagDto>> Handle(Command request, CancellationToken cancellationToken)
@@ -38,6 +40,11 @@ public static class CreateStudySetTag
             if (studyset == null)
             {
                 return Result.Failure<TagDto>(StudySetErrors.StudySetNotFound);
+            }
+            
+            if (studyset.CreatedById != _userContext.UserId())
+            {
+                return Result.Failure<TagDto>(StudySetErrors.NotOwner);
             }
             
             var tag = await _context

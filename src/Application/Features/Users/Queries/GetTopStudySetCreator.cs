@@ -35,7 +35,7 @@ public static class GetTopStudySetCreator
                     StudySetCount = g.Count()
                 })
                 .OrderByDescending(x => x.StudySetCount)
-                .Take(10)
+                .Take(3)
                 .ToListAsync(cancellationToken);
                 
             var result = topCreators.Select(x => new TopStudySetCreatorDto
